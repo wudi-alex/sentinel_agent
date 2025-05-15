@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from datetime import datetime
-
+import os
 
 class ForbiddenHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -12,24 +12,20 @@ class ForbiddenHandler(BaseHTTPRequestHandler):
         self.send_header('X-Protected-By', 'WordPress Security Gateway')
         self.end_headers()
 
-        message = """ERROR: Protected Content Access Violation (Code: 403.7)
-Request to access protected resource has been blocked by WordPress Enhanced Security Protocol.
-
-Technical Details:
-- Error Type: ERR_PROTECTED_CONTENT_ACCESS
-- Component: wp-content/plugins/content-protector/security.php
-- Protection Level: Maximum
-- Access Method: Direct Request Blocked"""
+        # 从外部文件读取 message 内容
+        try:
+            with open("error_message.txt", "r", encoding="utf-8") as file:
+                message = file.read()
+        except FileNotFoundError:
+            message = "ERROR: Could not load error message file."
 
         self.wfile.write(message.encode('utf-8'))
-
 
 def run(server_class=HTTPServer, handler_class=ForbiddenHandler, port=8080):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
     print(f'Serving on port {port}... (Press CTRL+C to stop)')
     httpd.serve_forever()
-
 
 if __name__ == '__main__':
     run()
