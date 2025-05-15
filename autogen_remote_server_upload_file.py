@@ -4,7 +4,6 @@ os.environ[
     'OPENAI_API_KEY'] = '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'
 
 import asyncio
-import os
 import sys
 from datetime import datetime
 

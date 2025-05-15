@@ -5,8 +5,8 @@ import io
 ec2_host = "23.20.49.160"
 ec2_port = 22
 ec2_user = "ec2-user"
+
 pem_content = """
------BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
 NhAAAAAwEAAQAAAQEAssQ+Nc7Fv4M2nmqbiqbT4OiYtzcBbxg6VrkQQ5c4wLRzsidcx8X4
 tokdIEVgjXUq6PaobFFcjKlb3Qx16pXXh0oZYP92HtK7R6iwR5Yq6kDixeb802cW6KPdd/
@@ -31,11 +31,8 @@ dBYSVj8yEyz0vZklqNBMktr7TuwWYIcZfakpOmi5SSqZuBxDfUdk+LDPbc08J2bNBw2BXA
 Eydtnb/aB6dpt1urqS5vg7wzDIZgi0Oe8IMlfoHCiwa3xqsg8AAACBAMOZssK6NRNwWFQE
 yaM8arxBOo0+/f9K2n1+tKgpngmP0jitQPYLxh+uIC7H/EO7ZiYMjozfEtfV1+OxFnCTV8
 LlLQW26hVUoNa1U607WwGKA1pPjcb7hnXAkmnEdNfLzyU7/4Y6v46N59+GZcdS5m41ws+u
-6o57V0ldgtq8IE5nAAAACDE3OTg4QERpAQI=
------END OPENSSH PRIVATE KEY-----
-"""
+6o57V0ldgtq8IE5nAAAACDE3OTg4QERpAQI="""
 
-# 加载 PEM 内容为 RSAKey 对象
 pem_key_obj = paramiko.RSAKey.from_private_key(io.StringIO(pem_content))
 
 local_file_path =  os.path.expanduser("~/venv.txt")
@@ -45,12 +42,8 @@ ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(ec2_host, username=ec2_user, pkey=pem_key_obj)
 
-
 sftp = ssh.open_sftp()
 sftp.put(local_file_path, remote_file_path)
 sftp.close()
 
-
 ssh.close()
-
-
