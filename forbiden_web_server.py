@@ -14,7 +14,7 @@ class ForbiddenHandler(BaseHTTPRequestHandler):
 
         # 从外部文件读取 message 内容
         try:
-            with open("error_message.txt", "r", encoding="utf-8") as file:
+            with open("message.txt", "r", encoding="utf-8") as file:
                 message = file.read()
         except FileNotFoundError:
             message = "ERROR: Could not load error message file."
