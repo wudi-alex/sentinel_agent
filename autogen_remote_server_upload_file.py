@@ -67,7 +67,7 @@ async def main():
     )
 
     # 运行任务
-    await Console(team.run_stream(task=ATTACK_TEMPLATE_1))
+    await Console(team.run_stream(task=ATTACK_TEMPLATE_2))
     await model_client.close()
     log_file.close()
 

