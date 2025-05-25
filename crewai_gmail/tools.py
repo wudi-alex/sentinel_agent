@@ -5,12 +5,12 @@ import base64
 from email.mime.text import MIMEText
 from googleapiclient.errors import HttpError
 
-from crewai_gmail.gmail_utils import get_gmail_service
+from crewai_gmail.google_service_utils import get_google_service
 
 
 def send_email(to, subject, body_text):
     try:
-        service = get_gmail_service()
+        service = get_google_service('gmail', 'v1')
 
         # 构造 MIME 邮件
         message = MIMEText(body_text)
@@ -44,9 +44,6 @@ class EmailSenderTool(BaseTool):
         # 实现发送邮件的逻辑
         return send_email(to, subject, body)
 
-
-# # 发送一封测试邮件
-# print(send_email("dwu25@gmu.edu", "Test Subject", "This is the body of the email."))
 
 
 

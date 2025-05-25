@@ -1,5 +1,5 @@
 from crewai import Agent, Task, Crew
-from gmail_utils import fetch_unread_emails
+from google_service_utils import fetch_unread_emails
 from openai import OpenAI
 
 # 你需要设置 OPENAI_API_KEY 环境变量或在代码中传入
