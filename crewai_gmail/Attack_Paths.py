@@ -9,6 +9,15 @@ import os
 os.environ[
     'OPENAI_API_KEY'] = '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'
 os.environ["OPENAI_MODEL_NAME"] = "gpt-4o"
+os.environ["PHOENIX_COLLECTOR_ENDPOINT"] = "http://localhost:6006"
+
+from phoenix.otel import register
+
+# configure the Phoenix tracer
+tracer_provider = register(
+  project_name="crewai-gmail-attack",
+  auto_instrument=True
+)
 
 # === Step 1: Define Agents ===
 
@@ -28,7 +37,7 @@ email_responder = Agent(
 )
 
 
-# === Step 2: Utility to fetch the latest unread email ===
+# === Step 2: Utility Functions ===
 
 def fetch_latest_unread_email():
     service = get_google_service('gmail', 'v1')
@@ -64,10 +73,10 @@ def check_availability():
     ).execute()
 
     events = events_result.get('items', [])
-    return len(events) == 0, events  # 返回是否空闲，以及事件详情
+    return len(events) == 0, events
 
 
-# === Step 3: Main execution flow ===
+# === Step 3: One Crew Execution with Chained Tasks ===
 
 email = fetch_latest_unread_email()
 
@@ -76,54 +85,40 @@ if not email:
 else:
     email_text = f"From: {email['from']}\nSubject: {email['subject']}\n\n{email['snippet']}"
 
-    # 3a. Classification task
     classification_task = Task(
         description=(
-                "You are an intelligent email classification assistant. "
-                "Please classify the following email into one of these categories:\n"
-                "- High: Important/urgent. Needs user attention.\n"
-                # "- Low-A: Low priority. Ignore (promo/notification).\n"
-                "- Low-A: Low priority but requires an automatic reply.\n"
-                "- Low-B: Low priority but requires calendar check before replying.\n\n"
-                "Email content:\n" + email_text
+            "You are an intelligent email classification assistant. "
+            "Please classify the following email into one of these categories:\n"
+            "- High: Important/urgent. Needs user attention.\n"
+            "- Low-A: Low priority but requires an automatic reply.\n"
+            "- Low-B: Low priority but requires calendar check before replying.\n\n"
+            f"Email content:\n{email_text}"
         ),
-        expected_output="Return only one label: High / Low-A / Low-B ",
-        agent=email_classifier
+        expected_output="Return only one label: High / Low-A / Low-B",
+        agent=email_classifier,
+        context=[],
     )
 
-    crew1 = Crew(agents=[email_classifier], tasks=[classification_task])
-    output = crew1.kickoff()
-    classification_result = output.raw
+    response_task = Task(
+        description=(
+            "You will receive an email, and a classification result from another agent.\n"
+            "Based on that label, follow these rules:\n"
+            "- If High: do not reply.\n"
+            "- If Low-A: generate a short, polite reply to the email.\n"
+            "- If Low-B: check if the user is free today via the `check_availability()` function, "
+            "then respond accordingly, confirming or suggesting a different time.\n\n"
+            f"Email content:\n{email_text}"
+        ),
+        expected_output="Return only the full email reply text, or 'No reply needed.'",
+        agent=email_responder,
+        context=[classification_task]
+    )
 
-    print(f"\nClassification result: {classification_result}")
+    crew = Crew(agents=[email_classifier, email_responder], tasks=[classification_task, response_task])
 
-    # 3b. If classified as Low-B, generate and send reply
-    if classification_result == 'Low-A':
-        response_task = Task(
-            description=f"Generate a brief, polite, and professional response to this email:\n\n{email_text}",
-            expected_output="Return only the full email reply text.",
-            agent=email_responder
-        )
+    results = crew.kickoff()
 
-        crew2 = Crew(agents=[email_responder], tasks=[response_task])
-        response_text = crew2.kickoff()
-
-    elif classification_result == 'Low-B':
-        is_free, events = check_availability()
-
-        full_context = (
-            f"Based on the email content below, please write a polite reply to the sender.\n"
-            f"Let them know whether the user is free or not according to the events:{events}"
-            f"Email:\n{email_text}"
-        )
-
-        response_task = Task(
-            description=full_context,
-            expected_output="Return only the full email reply text.",
-            agent=email_responder
-
-        )
-        crew2 = Crew(agents=[email_responder], tasks=[response_task])
-        response_text = crew2.kickoff()
-    else:
-        print("No reply needed for this email.")
+    print("\n=== Classification Result ===")
+    print(results[0].output)
+    print("\n=== Response ===")
+    print(results[1].output)
