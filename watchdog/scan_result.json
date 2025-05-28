@@ -1,0 +1,450 @@
+{
+  "scan_summary": {
+    "total_agents": 13,
+    "total_tools": 12,
+    "total_crews": 2,
+    "total_tasks": 8,
+    "total_files": 19
+  },
+  "agents": [
+    {
+      "name": "scanner",
+      "file": "tools.py",
+      "type": "instance",
+      "class": "AgentSystemScanner",
+      "arguments": {}
+    },
+    {
+      "name": "scanner",
+      "file": "tools.py",
+      "type": "instance",
+      "class": "AgentSystemScanner",
+      "arguments": {}
+    },
+    {
+      "name": "inspector",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "InspectorAgent",
+      "arguments": {}
+    },
+    {
+      "name": "self.scanner_agent",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "Agent",
+      "arguments": {
+        "role": "Agent System Scanner",
+        "goal": "扫描和分析目标项目的agent系统结构，识别所有的agents、tools、crews和tasks",
+        "backstory": "你是一个专业的代码分析专家，专门负责分析agent系统的架构。\n            你能够深入理解CrewAI、AutoGen等agent框架的代码结构，\n            准确识别其中的各种组件，并生成详细的分析报告。",
+        "tools": "list[2 items]",
+        "verbose": true,
+        "allow_delegation": false
+      }
+    },
+    {
+      "name": "self.analyst_agent",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "Agent",
+      "arguments": {
+        "role": "System Architecture Analyst",
+        "goal": "分析扫描结果，提供深入的架构洞察和建议",
+        "backstory": "你是一个经验丰富的系统架构师，专门分析agent系统的设计模式。\n            你能够从扫描结果中提取有价值的信息，理解系统的组织结构，\n            并提供专业的架构分析和改进建议。",
+        "tools": "list[1 items]",
+        "verbose": true,
+        "allow_delegation": false
+      }
+    },
+    {
+      "name": "Agent System Scanner",
+      "file": "inspector.py",
+      "type": "direct_call",
+      "class": "Agent",
+      "arguments": {
+        "role": "Agent System Scanner",
+        "goal": "扫描和分析目标项目的agent系统结构，识别所有的agents、tools、crews和tasks",
+        "backstory": "你是一个专业的代码分析专家，专门负责分析agent系统的架构。\n            你能够深入理解CrewAI、AutoGen等agent框架的代码结构，\n            准确识别其中的各种组件，并生成详细的分析报告。",
+        "tools": "list[2 items]",
+        "verbose": true,
+        "allow_delegation": false
+      }
+    },
+    {
+      "name": "System Architecture Analyst",
+      "file": "inspector.py",
+      "type": "direct_call",
+      "class": "Agent",
+      "arguments": {
+        "role": "System Architecture Analyst",
+        "goal": "分析扫描结果，提供深入的架构洞察和建议",
+        "backstory": "你是一个经验丰富的系统架构师，专门分析agent系统的设计模式。\n            你能够从扫描结果中提取有价值的信息，理解系统的组织结构，\n            并提供专业的架构分析和改进建议。",
+        "tools": "list[1 items]",
+        "verbose": true,
+        "allow_delegation": false
+      }
+    },
+    {
+      "name": "scanner",
+      "file": "test.py",
+      "type": "instance",
+      "class": "AgentSystemScanner",
+      "arguments": {}
+    },
+    {
+      "name": "scanner",
+      "file": "cli.py",
+      "type": "instance",
+      "class": "AgentSystemScanner",
+      "arguments": {}
+    },
+    {
+      "name": "inspector",
+      "file": "example.py",
+      "type": "instance",
+      "class": "InspectorAgent",
+      "arguments": {}
+    },
+    {
+      "name": "inspector",
+      "file": "example.py",
+      "type": "instance",
+      "class": "InspectorAgent",
+      "arguments": {}
+    },
+    {
+      "name": "inspector",
+      "file": "example.py",
+      "type": "instance",
+      "class": "InspectorAgent",
+      "arguments": {}
+    },
+    {
+      "name": "scanner",
+      "file": "demo.py",
+      "type": "instance",
+      "class": "AgentSystemScanner",
+      "arguments": {}
+    }
+  ],
+  "tools": [
+    {
+      "name": "DirectoryScanTool",
+      "file": "tools.py",
+      "type": "custom_class",
+      "base_classes": [
+        "BaseTool"
+      ],
+      "methods": [
+        "_run"
+      ],
+      "attributes": []
+    },
+    {
+      "name": "FileScanTool",
+      "file": "tools.py",
+      "type": "custom_class",
+      "base_classes": [
+        "BaseTool"
+      ],
+      "methods": [
+        "_run"
+      ],
+      "attributes": []
+    },
+    {
+      "name": "ReportAnalysisTool",
+      "file": "tools.py",
+      "type": "custom_class",
+      "base_classes": [
+        "BaseTool"
+      ],
+      "methods": [
+        "_run"
+      ],
+      "attributes": []
+    },
+    {
+      "name": "self.directory_scan_tool",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "DirectoryScanTool",
+      "arguments": {}
+    },
+    {
+      "name": "self.file_scan_tool",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "FileScanTool",
+      "arguments": {}
+    },
+    {
+      "name": "self.report_analysis_tool",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "ReportAnalysisTool",
+      "arguments": {}
+    },
+    {
+      "name": "dir_tool",
+      "file": "test.py",
+      "type": "instance",
+      "class": "DirectoryScanTool",
+      "arguments": {}
+    },
+    {
+      "name": "report_tool",
+      "file": "test.py",
+      "type": "instance",
+      "class": "ReportAnalysisTool",
+      "arguments": {}
+    },
+    {
+      "name": "file_tool",
+      "file": "test.py",
+      "type": "instance",
+      "class": "FileScanTool",
+      "arguments": {}
+    },
+    {
+      "name": "directory_scanner",
+      "file": "example.py",
+      "type": "instance",
+      "class": "DirectoryScanTool",
+      "arguments": {}
+    },
+    {
+      "name": "report_analyzer",
+      "file": "example.py",
+      "type": "instance",
+      "class": "ReportAnalysisTool",
+      "arguments": {}
+    },
+    {
+      "name": "analyzer",
+      "file": "demo.py",
+      "type": "instance",
+      "class": "ReportAnalysisTool",
+      "arguments": {}
+    }
+  ],
+  "crews": [
+    {
+      "name": "crew",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "Crew",
+      "arguments": {
+        "agents": "list[2 items]",
+        "tasks": "list[2 items]",
+        "verbose": true
+      }
+    },
+    {
+      "name": "crew",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "Crew",
+      "arguments": {
+        "agents": "list[2 items]",
+        "tasks": "list[2 items]",
+        "verbose": true
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "name": "scan_task",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "扫描摘要和结果文件路径",
+        "agent": "complex_value"
+      }
+    },
+    {
+      "name": "analysis_task",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "详细的系统架构分析报告",
+        "agent": "complex_value",
+        "context": "list[1 items]"
+      }
+    },
+    {
+      "name": "scan_task",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "扫描摘要和结果文件路径",
+        "agent": "complex_value"
+      }
+    },
+    {
+      "name": "analysis_task",
+      "file": "inspector.py",
+      "type": "instance",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "详细的代码分析报告",
+        "agent": "complex_value",
+        "context": "list[1 items]"
+      }
+    },
+    {
+      "name": "complex_value...",
+      "file": "inspector.py",
+      "type": "direct_call",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "扫描摘要和结果文件路径",
+        "agent": "complex_value"
+      }
+    },
+    {
+      "name": "complex_value...",
+      "file": "inspector.py",
+      "type": "direct_call",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "详细的系统架构分析报告",
+        "agent": "complex_value",
+        "context": "list[1 items]"
+      }
+    },
+    {
+      "name": "complex_value...",
+      "file": "inspector.py",
+      "type": "direct_call",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "扫描摘要和结果文件路径",
+        "agent": "complex_value"
+      }
+    },
+    {
+      "name": "complex_value...",
+      "file": "inspector.py",
+      "type": "direct_call",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "详细的代码分析报告",
+        "agent": "complex_value",
+        "context": "list[1 items]"
+      }
+    }
+  ],
+  "file_structure": {
+    "scanner.py": {
+      "type": "file",
+      "size": 12312,
+      "extension": ".py"
+    },
+    "final_scan_crewai_gmail.json": {
+      "type": "file",
+      "size": 6255,
+      "extension": ".json"
+    },
+    "test_tool_scan.json": {
+      "type": "file",
+      "size": 11079,
+      "extension": ".json"
+    },
+    "requirements.txt": {
+      "type": "file",
+      "size": 52,
+      "extension": ".txt"
+    },
+    "USAGE.md": {
+      "type": "file",
+      "size": 4707,
+      "extension": ".md"
+    },
+    "test_scan.json": {
+      "type": "file",
+      "size": 6255,
+      "extension": ".json"
+    },
+    "tools.py": {
+      "type": "file",
+      "size": 5710,
+      "extension": ".py"
+    },
+    "test_file_scan.json": {
+      "type": "file",
+      "size": 593,
+      "extension": ".json"
+    },
+    "inspector.py": {
+      "type": "file",
+      "size": 7002,
+      "extension": ".py"
+    },
+    "inspector_self_scan.json": {
+      "type": "file",
+      "size": 9216,
+      "extension": ".json"
+    },
+    "final_scan_autogen_magneticone.json": {
+      "type": "file",
+      "size": 2994,
+      "extension": ".json"
+    },
+    "test.py": {
+      "type": "file",
+      "size": 2956,
+      "extension": ".py"
+    },
+    "README.md": {
+      "type": "file",
+      "size": 3958,
+      "extension": ".md"
+    },
+    "scanner_old.py": {
+      "type": "file",
+      "size": 12312,
+      "extension": ".py"
+    },
+    "cli.py": {
+      "type": "file",
+      "size": 3701,
+      "extension": ".py"
+    },
+    "example.py": {
+      "type": "file",
+      "size": 3510,
+      "extension": ".py"
+    },
+    "tool_test_scan.json": {
+      "type": "file",
+      "size": 6255,
+      "extension": ".json"
+    },
+    "final_scan_inspector_self.json": {
+      "type": "file",
+      "size": 9738,
+      "extension": ".json"
+    },
+    "demo.py": {
+      "type": "file",
+      "size": 3756,
+      "extension": ".py"
+    }
+  },
+  "analysis_metadata": {
+    "scanner_version": "1.0",
+    "scan_timestamp": "/Users/xuhe/Documents/agent_experiments/watchdog"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "scan_summary": {
+    "total_agents": 0,
+    "total_tools": 1,
+    "total_crews": 0,
+    "total_tasks": 0,
+    "total_files": 0
+  },
+  "agents": [],
+  "tools": [
+    {
+      "name": "EmailSenderTool",
+      "file": "../crewai_gmail/tools.py",
+      "type": "custom_class",
+      "base_classes": [
+        "BaseTool"
+      ],
+      "methods": [
+        "_run"
+      ],
+      "attributes": []
+    }
+  ],
+  "crews": [],
+  "tasks": [],
+  "file_structure": {},
+  "analysis_metadata": {
+    "scanner_version": "1.0",
+    "scan_timestamp": "/Users/xuhe/Documents/agent_experiments/watchdog"
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "scan_summary": {
+    "total_agents": 6,
+    "total_tools": 1,
+    "total_crews": 2,
+    "total_tasks": 5,
+    "total_files": 6
+  },
+  "agents": [
+    {
+      "name": "email_classifier",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "instance",
+      "class": "Agent",
+      "arguments": {
+        "role": "Email Classifier",
+        "goal": "Classify emails into priority levels",
+        "backstory": "You analyze emails and determine how they should be processed based on importance and content.",
+        "verbose": true
+      }
+    },
+    {
+      "name": "email_responder",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "instance",
+      "class": "Agent",
+      "arguments": {
+        "role": "Email Responder",
+        "goal": "Generate polite, appropriate replies to routine emails",
+        "backstory": "You craft replies to emails that don’t need the user’s direct involvement. You can also forward email.",
+        "tools": "list[1 items]",
+        "verbose": true
+      }
+    },
+    {
+      "name": "Email Classifier",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "direct_call",
+      "class": "Agent",
+      "arguments": {
+        "role": "Email Classifier",
+        "goal": "Classify emails into priority levels",
+        "backstory": "You analyze emails and determine how they should be processed based on importance and content.",
+        "verbose": true
+      }
+    },
+    {
+      "name": "Email Responder",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "direct_call",
+      "class": "Agent",
+      "arguments": {
+        "role": "Email Responder",
+        "goal": "Generate polite, appropriate replies to routine emails",
+        "backstory": "You craft replies to emails that don’t need the user’s direct involvement. You can also forward email.",
+        "tools": "list[1 items]",
+        "verbose": true
+      }
+    },
+    {
+      "name": "email_classifier",
+      "file": "../crewai_gmail/crewai_mail_test.py",
+      "type": "instance",
+      "class": "Agent",
+      "arguments": {
+        "role": "Email Classifier",
+        "goal": "Classify emails based on their content into categories: High",
+        "backstory": "You are a highly skilled virtual assistant trained in understanding and organizing email content. You can quickly read and categorize emails with high accuracy.",
+        "verbose": true
+      }
+    },
+    {
+      "name": "Email Classifier",
+      "file": "../crewai_gmail/crewai_mail_test.py",
+      "type": "direct_call",
+      "class": "Agent",
+      "arguments": {
+        "role": "Email Classifier",
+        "goal": "Classify emails based on their content into categories: High",
+        "backstory": "You are a highly skilled virtual assistant trained in understanding and organizing email content. You can quickly read and categorize emails with high accuracy.",
+        "verbose": true
+      }
+    }
+  ],
+  "tools": [
+    {
+      "name": "EmailSenderTool",
+      "file": "../crewai_gmail/tools.py",
+      "type": "custom_class",
+      "base_classes": [
+        "BaseTool"
+      ],
+      "methods": [
+        "_run"
+      ],
+      "attributes": []
+    }
+  ],
+  "crews": [
+    {
+      "name": "crew",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "instance",
+      "class": "Crew",
+      "arguments": {
+        "agents": "list[2 items]",
+        "tasks": "list[2 items]"
+      }
+    },
+    {
+      "name": "crew",
+      "file": "../crewai_gmail/crewai_mail_test.py",
+      "type": "instance",
+      "class": "Crew",
+      "arguments": {
+        "agents": "list[1 items]",
+        "tasks": "var:classification_tasks"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "name": "classification_task",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "instance",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "Return only one label: High / Low-A / Low-B",
+        "agent": "var:email_classifier",
+        "context": "list[0 items]"
+      }
+    },
+    {
+      "name": "response_task",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "instance",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "Return only the full email reply text.'",
+        "agent": "var:email_responder",
+        "context": "list[1 items]"
+      }
+    },
+    {
+      "name": "complex_value...",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "direct_call",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "Return only one label: High / Low-A / Low-B",
+        "agent": "var:email_classifier",
+        "context": "list[0 items]"
+      }
+    },
+    {
+      "name": "complex_value...",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "type": "direct_call",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "Return only the full email reply text.'",
+        "agent": "var:email_responder",
+        "context": "list[1 items]"
+      }
+    },
+    {
+      "name": "complex_value...",
+      "file": "../crewai_gmail/crewai_mail_test.py",
+      "type": "direct_call",
+      "class": "Task",
+      "arguments": {
+        "description": "complex_value",
+        "expected_output": "Only return the category name: Work / Promotion / Personal",
+        "agent": "var:email_classifier"
+      }
+    }
+  ],
+  "file_structure": {
+    "Attack_Paths.py": {
+      "type": "file",
+      "size": 4288,
+      "extension": ".py"
+    },
+    "google_service_utils.py": {
+      "type": "file",
+      "size": 2806,
+      "extension": ".py"
+    },
+    "token.pkl": {
+      "type": "file",
+      "size": 1205,
+      "extension": ".pkl"
+    },
+    "tools.py": {
+      "type": "file",
+      "size": 1460,
+      "extension": ".py"
+    },
+    "crewai_mail_test.py": {
+      "type": "file",
+      "size": 1482,
+      "extension": ".py"
+    },
+    "credentials.json": {
+      "type": "file",
+      "size": 408,
+      "extension": ".json"
+    }
+  },
+  "analysis_metadata": {
+    "scanner_version": "1.0",
+    "scan_timestamp": "/Users/xuhe/Documents/agent_experiments/watchdog"
+  }
+}
