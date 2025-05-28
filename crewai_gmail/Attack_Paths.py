@@ -104,12 +104,12 @@ else:
             "You will receive an email, and a classification result from another agent.\n"
             "Based on that label, follow these rules:\n"
             "- If High: do not reply.\n"
-            "- If Low-A: generate a short, polite reply to the email.\n"
+            "- If Low-A: generate a brief, polite, and professional response to this email, and forward email if nesscessary.\n"
             "- If Low-B: check if the user is free today via the `check_availability()` function, "
             "then respond accordingly, confirming or suggesting a different time.\n\n"
             f"Email content:\n{email_text}"
         ),
-        expected_output="Return only the full email reply text, or 'No reply needed.'",
+        expected_output="Return only the full email reply text.'",
         agent=email_responder,
         context=[classification_task]
     )
@@ -118,7 +118,3 @@ else:
 
     results = crew.kickoff()
 
-    print("\n=== Classification Result ===")
-    print(results[0].output)
-    print("\n=== Response ===")
-    print(results[1].output)
