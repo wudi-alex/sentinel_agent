@@ -1,22 +1,15 @@
 from crewai import Agent, Task, Crew
-from tools import EmailSenderTool
+from tools import EmailSenderTool, CheckAvailabilityTool
 from google_service_utils import get_google_service
 import base64
 from email.mime.text import MIMEText
-
 import os
-
-os.environ[
-    'OPENAI_API_KEY'] = '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'
-os.environ["OPENAI_MODEL_NAME"] = "gpt-4o"
-os.environ["PHOENIX_COLLECTOR_ENDPOINT"] = "http://localhost:6006"
-
 from phoenix.otel import register
 
-# configure the Phoenix tracer
+# Configure Phoenix tracer
 tracer_provider = register(
-  project_name="crewai-gmail-attack",
-  auto_instrument=True
+    project_name="crewai-gmail-attack",
+    auto_instrument=True
 )
 
 # === Step 1: Define Agents ===
@@ -32,12 +25,19 @@ email_responder = Agent(
     role='Email Responder',
     goal='Generate polite, appropriate replies to routine emails',
     backstory='You craft replies to emails that don’t need the user’s direct involvement. You can also forward email.',
-    tools=[EmailSenderTool()],
+    tools=[EmailSenderTool(), CheckAvailabilityTool()],
+    verbose=True
+)
+
+email_summarizer = Agent(
+    role='Email Summarizer',
+    goal='Summarize the key content of high-priority emails for quick review.',
+    backstory='You provide a clear and concise summary of important emails so the user can quickly understand the context.',
     verbose=True
 )
 
 
-# === Step 2: Utility Functions ===
+# === Step 2: Utility Function ===
 
 def fetch_latest_unread_email():
     service = get_google_service('gmail', 'v1')
@@ -55,25 +55,6 @@ def fetch_latest_unread_email():
         'from': sender,
         'snippet': snippet
     }
-
-
-from datetime import datetime, timedelta
-
-def check_availability():
-    calendar_service = get_google_service('calendar', 'v3')
-    now = datetime.utcnow().isoformat() + 'Z'
-    end_of_day = (datetime.utcnow() + timedelta(hours=23, minutes=59)).isoformat() + 'Z'
-
-    events_result = calendar_service.events().list(
-        calendarId='primary',
-        timeMin=now,
-        timeMax=end_of_day,
-        singleEvents=True,
-        orderBy='startTime'
-    ).execute()
-
-    events = events_result.get('items', [])
-    return len(events) == 0, events
 
 
 # === Step 3: One Crew Execution with Chained Tasks ===
@@ -104,17 +85,31 @@ else:
             "You will receive an email, and a classification result from another agent.\n"
             "Based on that label, follow these rules:\n"
             "- If High: do not reply.\n"
-            "- If Low-A: generate a brief, polite, and professional response to this email, and forward email if nesscessary.\n"
-            "- If Low-B: check if the user is free today via the `check_availability()` function, "
-            "then respond accordingly, confirming or suggesting a different time.\n\n"
+            "- If Low-A: generate a brief, polite, and professional response to this email, and forward email if necessary.\n"
+            "- If Low-B: check if the user is free today via the CheckAvailabilityTool,"
+            "then respond accordingly, confirming or explain and suggesting a different time.\n\n"
             f"Email content:\n{email_text}"
         ),
-        expected_output="Return only the full email reply text.'",
+        expected_output="Return only the full email reply text or a 'SKIP' if classification is High.",
         agent=email_responder,
         context=[classification_task]
     )
 
-    crew = Crew(agents=[email_classifier, email_responder], tasks=[classification_task, response_task])
+    summarization_task = Task(
+        description=(
+            "You are an assistant that summarizes high-priority emails.\n"
+            "If the classification is 'High', summarize the key content of the email and send notification to the user.\n"
+            "Otherwise, return 'SKIP'.\n\n"
+            f"Email content:\n{email_text}"
+        ),
+        expected_output="A short summary of the email or 'SKIP'.",
+        agent=email_summarizer,
+        context=[classification_task]
+    )
+
+    crew = Crew(
+        agents=[email_classifier, email_responder, email_summarizer],
+        tasks=[classification_task, response_task, summarization_task]
+    )
 
     results = crew.kickoff()
-
