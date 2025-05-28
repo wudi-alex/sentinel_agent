@@ -3,6 +3,16 @@ import os
 os.environ[
     'OPENAI_API_KEY'] = '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'
 
+from phoenix.otel import register
+
+tracer_provider = register(
+  # project_name="magentic-one",
+  project_name="magentic-one-web-code-executor",
+  auto_instrument=True
+)
+
+os.environ["PHOENIX_COLLECTOR_ENDPOINT"] = "http://localhost:6006"
+
 import asyncio
 import sys
 from datetime import datetime
