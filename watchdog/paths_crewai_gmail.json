@@ -1,0 +1,4579 @@
+{
+  "analysis_info": {
+    "timestamp": "2025-05-29T01:15:04.899765",
+    "analyzer_version": "1.0",
+    "rules_applied": 7
+  },
+  "overall_assessment": {
+    "total_risk_score": 0.0,
+    "risk_level": "low",
+    "total_paths_analyzed": 316,
+    "suspicious_patterns_found": 2
+  },
+  "node_analysis": {
+    "total_nodes": 6,
+    "node_state_distribution": {
+      "normal": 6
+    },
+    "nodes_with_states": {
+      "agent_0": "normal",
+      "agent_1": "normal",
+      "agent_2": "normal",
+      "agent_3": "normal",
+      "agent_4": "normal",
+      "agent_5": "normal"
+    }
+  },
+  "edge_analysis": {
+    "total_edges": 28,
+    "edge_state_distribution": {
+      "normal": 28
+    },
+    "edges_with_states": {
+      "0": "normal",
+      "1": "normal",
+      "2": "normal",
+      "3": "normal",
+      "4": "normal",
+      "5": "normal",
+      "6": "normal",
+      "7": "normal",
+      "8": "normal",
+      "9": "normal",
+      "10": "normal",
+      "11": "normal",
+      "12": "normal",
+      "13": "normal",
+      "14": "normal",
+      "15": "normal",
+      "16": "normal",
+      "17": "normal",
+      "18": "normal",
+      "19": "normal",
+      "20": "normal",
+      "21": "normal",
+      "22": "normal",
+      "23": "normal",
+      "24": "normal",
+      "25": "normal",
+      "26": "normal",
+      "27": "normal"
+    }
+  },
+  "path_analysis": {
+    "path_type_distribution": {
+      "agent_collaboration": 316
+    },
+    "risk_score_distribution": {
+      "low": 316,
+      "medium": 0,
+      "high": 0
+    },
+    "detailed_paths": [
+      {
+        "path": [
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 4,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_4",
+          "agent_5"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_4",
+          "agent_5"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_5",
+          "agent_4"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_5",
+          "agent_4"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      }
+    ]
+  },
+  "suspicious_patterns": [
+    {
+      "pattern_type": "circular_dependencies",
+      "affected_nodes": [
+        "agent_1",
+        "agent_0"
+      ],
+      "risk_level": "high",
+      "details": "Detected circular dependencies in the graph",
+      "rule": "circular_dependencies",
+      "severity": "high",
+      "description": "检测循环依赖"
+    },
+    {
+      "pattern_type": "complex_collaborations",
+      "affected_paths": [
+        [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_1",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_2",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_0",
+          "agent_3",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_2",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_0",
+          "agent_3",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_2",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_1",
+          "agent_3",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_1",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_0",
+          "agent_3",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_0",
+          "agent_3"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_1",
+          "agent_3",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_2",
+          "agent_3",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        [
+          "agent_3",
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ]
+      ],
+      "risk_level": "medium",
+      "details": "Found 192 complex collaboration chain(s)",
+      "rule": "complex_collaboration_chains",
+      "severity": "medium",
+      "description": "检测复杂的agent协作链"
+    }
+  ],
+  "recommendations": [
+    "CRITICAL: Resolve circular dependencies to prevent infinite loops",
+    "Simplify complex agent collaboration chains if possible"
+  ]
+}

@@ -1,0 +1,447 @@
+{
+  "graph_info": {
+    "source_scan": {
+      "target": "../crewai_gmail",
+      "scan_type": "directory",
+      "timestamp": "2025-05-29T01:15:04.897494",
+      "scanner_version": "2.0-simplified"
+    },
+    "build_timestamp": "2025-05-29T01:15:04.898724",
+    "builder_version": "1.0"
+  },
+  "graph_summary": {
+    "total_nodes": 6,
+    "total_edges": 28,
+    "node_types": {
+      "agent": 6
+    },
+    "relationship_types": {
+      "file_proximity": 14,
+      "same_crew_collaboration": 14
+    },
+    "average_degree": 4.666666666666667
+  },
+  "nodes": [
+    {
+      "id": "agent_0",
+      "type": "agent",
+      "name": "Agent_1",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "line": 24,
+      "metadata": {
+        "role": "Email Classifier",
+        "goal": "Classify emails into priority levels",
+        "backstory": "You analyze emails and determine how they should be processed based on importance and content.",
+        "crews": [
+          {
+            "name": "Crew_1",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 117
+          },
+          {
+            "name": "Crew_2",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 117
+          }
+        ],
+        "tasks": [
+          {
+            "name": "Task_1",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 88
+          },
+          {
+            "name": "Task_2",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 102
+          },
+          {
+            "name": "Task_3",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 88
+          },
+          {
+            "name": "Task_4",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 102
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_1",
+      "type": "agent",
+      "name": "Agent_2",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "line": 31,
+      "metadata": {
+        "role": "Email Responder",
+        "goal": "Generate polite, appropriate replies to routine emails",
+        "backstory": "You craft replies to emails that don’t need the user’s direct involvement. You can also forward email.",
+        "crews": [
+          {
+            "name": "Crew_1",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 117
+          },
+          {
+            "name": "Crew_2",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 117
+          }
+        ],
+        "tasks": [
+          {
+            "name": "Task_1",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 88
+          },
+          {
+            "name": "Task_2",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 102
+          },
+          {
+            "name": "Task_3",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 88
+          },
+          {
+            "name": "Task_4",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 102
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_2",
+      "type": "agent",
+      "name": "Agent_3",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "line": 24,
+      "metadata": {
+        "role": "Email Classifier",
+        "goal": "Classify emails into priority levels",
+        "backstory": "You analyze emails and determine how they should be processed based on importance and content.",
+        "crews": [
+          {
+            "name": "Crew_1",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 117
+          },
+          {
+            "name": "Crew_2",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 117
+          }
+        ],
+        "tasks": [
+          {
+            "name": "Task_1",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 88
+          },
+          {
+            "name": "Task_2",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 102
+          },
+          {
+            "name": "Task_3",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 88
+          },
+          {
+            "name": "Task_4",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 102
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_3",
+      "type": "agent",
+      "name": "Agent_4",
+      "file": "../crewai_gmail/Attack_Paths.py",
+      "line": 31,
+      "metadata": {
+        "role": "Email Responder",
+        "goal": "Generate polite, appropriate replies to routine emails",
+        "backstory": "You craft replies to emails that don’t need the user’s direct involvement. You can also forward email.",
+        "crews": [
+          {
+            "name": "Crew_1",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 117
+          },
+          {
+            "name": "Crew_2",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 117
+          }
+        ],
+        "tasks": [
+          {
+            "name": "Task_1",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 88
+          },
+          {
+            "name": "Task_2",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 102
+          },
+          {
+            "name": "Task_3",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 88
+          },
+          {
+            "name": "Task_4",
+            "file": "../crewai_gmail/Attack_Paths.py",
+            "line": 102
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_4",
+      "type": "agent",
+      "name": "Agent_5",
+      "file": "../crewai_gmail/crewai_mail_test.py",
+      "line": 10,
+      "metadata": {
+        "role": "Email Classifier",
+        "goal": "Classify emails based on their content into categories: High",
+        "backstory": "You are a highly skilled virtual assistant trained in understanding and organizing email content. You can quickly read and categorize emails with high accuracy.",
+        "crews": [
+          {
+            "name": "Crew_3",
+            "file": "../crewai_gmail/crewai_mail_test.py",
+            "line": 34
+          },
+          {
+            "name": "Crew_4",
+            "file": "../crewai_gmail/crewai_mail_test.py",
+            "line": 34
+          }
+        ],
+        "tasks": [
+          {
+            "name": "Task_5",
+            "file": "../crewai_gmail/crewai_mail_test.py",
+            "line": 22
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_5",
+      "type": "agent",
+      "name": "Agent_6",
+      "file": "../crewai_gmail/crewai_mail_test.py",
+      "line": 10,
+      "metadata": {
+        "role": "Email Classifier",
+        "goal": "Classify emails based on their content into categories: High",
+        "backstory": "You are a highly skilled virtual assistant trained in understanding and organizing email content. You can quickly read and categorize emails with high accuracy.",
+        "crews": [
+          {
+            "name": "Crew_3",
+            "file": "../crewai_gmail/crewai_mail_test.py",
+            "line": 34
+          },
+          {
+            "name": "Crew_4",
+            "file": "../crewai_gmail/crewai_mail_test.py",
+            "line": 34
+          }
+        ],
+        "tasks": [
+          {
+            "name": "Task_5",
+            "file": "../crewai_gmail/crewai_mail_test.py",
+            "line": 22
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "agent_0",
+      "target": "agent_1",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_0",
+      "target": "agent_2",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_0",
+      "target": "agent_3",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_0",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_2",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_3",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_0",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_1",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_3",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_0",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_1",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_2",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_4",
+      "target": "agent_5",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_5",
+      "target": "agent_4",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_0",
+      "target": "agent_1",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_0",
+      "target": "agent_2",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_0",
+      "target": "agent_3",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_0",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_2",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_3",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_0",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_1",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_3",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_0",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_1",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_2",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_4",
+      "target": "agent_5",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_5",
+      "target": "agent_4",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    }
+  ],
+  "graph_metadata": {
+    "directed": true,
+    "weighted": true,
+    "description": "Agent system component relationship graph"
+  }
+}
