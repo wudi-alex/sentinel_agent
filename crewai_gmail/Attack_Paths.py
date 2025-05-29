@@ -12,6 +12,8 @@ tracer_provider = register(
     auto_instrument=True
 )
 
+os.environ["PHOENIX_COLLECTOR_ENDPOINT"] = "http://localhost:6006"
+
 # === Step 1: Define Agents ===
 
 email_classifier = Agent(
