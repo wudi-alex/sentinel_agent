@@ -7,7 +7,7 @@ from phoenix.otel import register
 
 tracer_provider = register(
   # project_name="magentic-one",
-  project_name="magentic-one-web-code-executor",
+  project_name="magentic-one-web-code-generator",
   auto_instrument=True
 )
 
