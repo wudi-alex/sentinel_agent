@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentinelAgent - AI Agent System Analysis & Monitoring Platform</title>
+    
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Element Plus -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+    <script src="https://unpkg.com/element-plus"></script>
+    <script src="https://unpkg.com/@element-plus/icons-vue"></script>
+    
+    <!-- D3.js for visualization -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div id="app">
+        <el-container class="main-container">
+            <!-- 头部 -->
+            <el-header class="header">
+                <div class="header-content">
+                    <h1 class="title">
+                        🤖 SentinelAgent
+                        <span class="subtitle">AI Agent System Analysis & Monitoring Platform</span>
+                    </h1>
+                    <div class="header-actions">
+                        <el-button type="primary" @click="showAbout = true">
+                            About
+                        </el-button>
+                    </div>
+                </div>
+            </el-header>
+
+            <el-container>
+                <!-- 侧边栏 -->
+                <el-aside width="300px" class="sidebar">
+                    <el-menu 
+                        :default-active="activeTab" 
+                        @select="handleMenuSelect"
+                        class="sidebar-menu">
+                        
+                        <el-menu-item index="scanner">
+                            <el-icon><Search /></el-icon>
+                            <span>System Scan</span>
+                        </el-menu-item>
+                        
+                        <el-menu-item index="graph">
+                            <el-icon><Connection /></el-icon>
+                            <span>Relationship Graph</span>
+                        </el-menu-item>
+                        
+                        <el-menu-item index="paths">
+                            <el-icon><Guide /></el-icon>
+                            <span>Path Analysis</span>
+                        </el-menu-item>
+                        
+                        <el-menu-item index="logs">
+                            <el-icon><Document /></el-icon>
+                            <span>Log Analysis</span>
+                        </el-menu-item>
+                        
+                        <el-menu-item index="results">
+                            <el-icon><Folder /></el-icon>
+                            <span>Analysis Results</span>
+                        </el-menu-item>
+                    </el-menu>
+
+                    <!-- 示例项目 -->
+                    <div class="examples-section">
+                        <h3>Example Projects</h3>
+                        <el-card 
+                            v-for="example in examples" 
+                            :key="example.name"
+                            class="example-card"
+                            @click="loadExample(example)">
+                            <div class="example-info">
+                                <h4 v-text="example.name"></h4>
+                                <p v-text="example.description"></p>
+                                <el-tag :type="example.type === 'crewai' ? 'success' : 'warning'"
+                                        v-text="example.type">
+                                </el-tag>
+                            </div>
+                        </el-card>
+                    </div>
+                </el-aside>
+
+                <!-- 主内容区 -->
+                <el-main class="main-content">
+                    <!-- 系统扫描 -->
+                    <div v-show="activeTab === 'scanner'" class="tab-content">
+                        <el-card class="content-card">
+                            <template #header>
+                                <h2>🔍 System Scan</h2>
+                            </template>
+                            
+                            <el-form :model="scanForm" label-width="120px">
+                                <el-form-item label="Scan Path">
+                                    <el-input 
+                                        v-model="scanForm.path" 
+                                        placeholder="Enter directory or file path to scan"
+                                        class="path-input">
+                                        <template #append>
+                                            <el-button @click="selectPath">Browse</el-button>
+                                        </template>
+                                    </el-input>
+                                </el-form-item>
+                                
+                                <el-form-item label="Scan Type">
+                                    <el-radio-group v-model="scanForm.type">
+                                        <el-radio label="directory">Directory</el-radio>
+                                        <el-radio label="file">Single File</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                                
+                                <el-form-item>
+                                    <el-button 
+                                        type="primary" 
+                                        @click="executeScan"
+                                        :loading="scanLoading">
+                                        Start Scan
+                                    </el-button>
+                                    <el-button @click="clearScanResult">Clear Results</el-button>
+                                    <el-button type="info" @click="loadDemoData">Load Demo Data</el-button>
+                                </el-form-item>
+                            </el-form>
+
+                            <!-- 扫描结果 -->
+                            <div v-if="scanResult" class="result-section">
+                                <h3>Scan Results</h3>
+                                <el-row :gutter="20">
+                                    <el-col :span="8">
+                                        <el-statistic title="Agents" :value="scanResult.scan_summary?.total_agents || 0" />
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-statistic title="Tools" :value="scanResult.scan_summary?.total_tools || 0" />
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-statistic title="Files" :value="scanResult.scan_summary?.total_files || 0" />
+                                    </el-col>
+                                </el-row>
+
+                                <el-divider />
+
+                                <!-- Agents列表 -->
+                                <div v-if="scanResult.agents && scanResult.agents.length > 0">
+                                    <h4>Discovered Agents</h4>
+                                    <el-table :data="scanResult.agents" style="width: 100%">
+                                        <el-table-column prop="name" label="Name" width="150" />
+                                        <el-table-column prop="arguments.role" label="Role" width="200" />
+                                        <el-table-column prop="file" label="File" show-overflow-tooltip />
+                                        <el-table-column prop="line" label="Line" width="80" />
+                                    </el-table>
+                                </div>
+                            </div>
+                        </el-card>
+                    </div>
+
+                    <!-- 关系图构建 -->
+                    <div v-show="activeTab === 'graph'" class="tab-content">
+                        <el-card class="content-card">
+                            <template #header>
+                                <h2>🔗 Relationship Graph</h2>
+                            </template>
+                            
+                            <el-form :model="graphForm" label-width="120px">
+                                <el-form-item label="Data Source">
+                                    <el-radio-group v-model="graphForm.dataSource">
+                                        <el-radio label="scan">Use Scan Results</el-radio>
+                                        <el-radio label="path">Direct Path Scan</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                                
+                                <el-form-item v-if="graphForm.dataSource === 'path'" label="Scan Path">
+                                    <el-input v-model="graphForm.path" placeholder="Enter path" />
+                                </el-form-item>
+                                
+                                <el-form-item>
+                                    <el-button 
+                                        type="primary" 
+                                        @click="buildGraph"
+                                        :loading="graphLoading"
+                                        :disabled="graphForm.dataSource === 'scan' && !scanResult">
+                                        Build Graph
+                                    </el-button>
+                                    <el-button type="info" @click="loadDemoGraph">Load Demo Graph</el-button>
+                                </el-form-item>
+                            </el-form>
+
+                            <!-- 图可视化 -->
+                            <div v-if="graphResult" class="graph-visualization">
+                                <h3>Relationship Graph</h3>
+                                <div id="graph-container" class="graph-container"></div>
+                                
+                                <!-- 图统计信息 -->
+                                <el-row :gutter="20" class="graph-stats">
+                                    <el-col :span="6">
+                                        <el-statistic title="Nodes" :value="graphResult.metadata?.total_nodes || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic title="Edges" :value="graphResult.metadata?.total_edges || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic title="Components" :value="graphResult.metadata?.components || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic title="Density" :value="graphResult.metadata?.density || 0" :precision="3" />
+                                    </el-col>
+                                </el-row>
+                            </div>
+                        </el-card>
+                    </div>
+
+                    <!-- 路径分析 -->
+                    <div v-show="activeTab === 'paths'" class="tab-content">
+                        <el-card class="content-card">
+                            <template #header>
+                                <h2>🛣️ Path Analysis</h2>
+                            </template>
+                            
+                            <el-form :model="pathsForm" label-width="120px">
+                                <el-form-item label="Data Source">
+                                    <el-radio-group v-model="pathsForm.dataSource">
+                                        <el-radio label="graph">Use Graph Data</el-radio>
+                                        <el-radio label="file">Graph File</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                                
+                                <el-form-item v-if="pathsForm.dataSource === 'file'" label="Graph File">
+                                    <el-input v-model="pathsForm.graphFile" placeholder="Enter graph file path" />
+                                </el-form-item>
+                                
+                                <el-form-item>
+                                    <el-button 
+                                        type="primary" 
+                                        @click="analyzePaths"
+                                        :loading="pathsLoading"
+                                        :disabled="pathsForm.dataSource === 'graph' && !graphResult">
+                                        Analyze Paths
+                                    </el-button>
+                                    <el-button type="info" @click="loadDemoPaths">Load Demo Paths</el-button>
+                                </el-form-item>
+                            </el-form>
+
+                            <!-- 路径分析结果 -->
+                            <div v-if="pathsResult" class="paths-result">
+                                <h3>Path Analysis Results</h3>
+                                
+                                <!-- 路径统计 -->
+                                <el-row :gutter="20">
+                                    <el-col :span="8">
+                                        <el-statistic 
+                                            title="Total Paths" 
+                                            :value="pathsResult.analysis_summary?.total_paths || 0" />
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-statistic 
+                                            title="Critical Paths" 
+                                            :value="pathsResult.analysis_summary?.critical_paths || 0" />
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-statistic 
+                                            title="Average Length" 
+                                            :value="pathsResult.analysis_summary?.average_length || 0" 
+                                            :precision="2" />
+                                    </el-col>
+                                </el-row>
+
+                                <!-- 关键路径列表 -->
+                                <div v-if="pathsResult.critical_paths">
+                                    <h4>Critical Paths</h4>
+                                    <el-collapse>
+                                        <el-collapse-item 
+                                            v-for="(path, index) in pathsResult.critical_paths.slice(0, 10)" 
+                                            :key="index"
+                                            :title="`Path ${index + 1} - Length: ${path.length}`">
+                                            <el-tag 
+                                                v-for="(node, nodeIndex) in path.path" 
+                                                :key="nodeIndex"
+                                                class="path-node"
+                                                v-text="node">
+                                            </el-tag>
+                                        </el-collapse-item>
+                                    </el-collapse>
+                                </div>
+                            </div>
+                        </el-card>
+                    </div>
+
+                    <!-- 日志分析 -->
+                    <div v-show="activeTab === 'logs'" class="tab-content">
+                        <el-card class="content-card">
+                            <template #header>
+                                <h2>📊 Log Analysis</h2>
+                            </template>
+                            
+                            <el-form :model="logsForm" label-width="120px">
+                                <el-form-item label="Log File">
+                                    <el-input v-model="logsForm.logFile" placeholder="Enter log file path" />
+                                </el-form-item>
+                                
+                                <el-form-item label="Log Format">
+                                    <el-select v-model="logsForm.format">
+                                        <el-option label="Auto Detect" value="auto" />
+                                        <el-option label="CSV Format" value="csv" />
+                                        <el-option label="Text Format" value="txt" />
+                                    </el-select>
+                                </el-form-item>
+                                
+                                <el-form-item label="Graph File">
+                                    <el-input v-model="logsForm.graphFile" placeholder="Optional: Graph file for path validation" />
+                                </el-form-item>
+                                
+                                <el-form-item>
+                                    <el-button 
+                                        type="primary" 
+                                        @click="analyzeLogs"
+                                        :loading="logsLoading">
+                                        Analyze Logs
+                                    </el-button>
+                                    <el-button type="info" @click="loadDemoLogs">Load Demo Logs</el-button>
+                                </el-form-item>
+                            </el-form>
+
+                            <!-- 日志分析结果 -->
+                            <div v-if="logsResult" class="logs-result">
+                                <h3>Log Analysis Results</h3>
+                                
+                                <!-- 执行统计 -->
+                                <el-row :gutter="20">
+                                    <el-col :span="6">
+                                        <el-statistic 
+                                            title="Total Entries" 
+                                            :value="logsResult.log_summary?.total_entries || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic 
+                                            title="Execution Paths" 
+                                            :value="logsResult.execution_paths?.length || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic 
+                                            title="Anomalies" 
+                                            :value="logsResult.anomalies?.length || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic 
+                                            title="Success Rate" 
+                                            :value="calculateSuccessRate(logsResult)" 
+                                            suffix="%" />
+                                    </el-col>
+                                </el-row>
+
+                                <!-- 异常列表 -->
+                                <div v-if="logsResult.anomalies && logsResult.anomalies.length > 0">
+                                    <h4>Detected Anomalies</h4>
+                                    <el-alert 
+                                        v-for="(anomaly, index) in logsResult.anomalies" 
+                                        :key="index"
+                                        :title="anomaly.type"
+                                        :description="anomaly.description"
+                                        type="warning"
+                                        class="anomaly-alert" />
+                                </div>
+
+                                <!-- 建议 -->
+                                <div v-if="logsResult.recommendations && logsResult.recommendations.length > 0">
+                                    <h4>Optimization Recommendations</h4>
+                                    <ul class="recommendations-list">
+                                        <li v-for="(rec, index) in logsResult.recommendations" :key="index"
+                                            v-text="rec">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </el-card>
+                    </div>
+
+                    <!-- 分析结果 -->
+                    <div v-show="activeTab === 'results'" class="tab-content">
+                        <el-card class="content-card">
+                            <template #header>
+                                <h2>📁 Analysis Results</h2>
+                            </template>
+                            
+                            <el-button @click="loadResults" type="primary" class="refresh-btn">
+                                Refresh List
+                            </el-button>
+                            <el-button @click="loadDemoResults" type="info" class="demo-btn">
+                                Load Demo Results
+                            </el-button>
+
+                            <el-table :data="resultFiles" style="width: 100%">
+                                <el-table-column prop="filename" label="File Name" show-overflow-tooltip />
+                                <el-table-column prop="type" label="Type" width="100">
+                                    <template #default="scope">
+                                        <el-tag :type="getResultTypeColor(scope.row.type)"
+                                                v-text="scope.row.type">
+                                        </el-tag>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="size" label="Size" width="100">
+                                    <template #default="scope">
+                                        <span v-text="formatFileSize(scope.row.size)"></span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="modified" label="Modified Time" width="200">
+                                    <template #default="scope">
+                                        <span v-text="formatDate(scope.row.modified)"></span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="Actions" width="150">
+                                    <template #default="scope">
+                                        <el-button 
+                                            size="small" 
+                                            @click="viewResult(scope.row)">
+                                            View
+                                        </el-button>
+                                        <el-button 
+                                            size="small" 
+                                            type="danger" 
+                                            @click="deleteResult(scope.row)">
+                                            Delete
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-card>
+                    </div>
+                </el-main>
+            </el-container>
+        </el-container>
+
+        <!-- 关于对话框 -->
+        <el-dialog v-model="showAbout" title="About SentinelAgent" width="50%">
+            <div class="about-content">
+                <h3>🔍 SentinelAgent - AI Agent System Analysis & Monitoring Tool</h3>
+                <p>SentinelAgent is a comprehensive tool designed for analyzing and detecting AI Agent systems, providing the following features:</p>
+                <ul>
+                    <li>🔍 <strong>System Scanning</strong>: Automatically identify Agents, Tools, Crews and other components</li>
+                    <li>🔗 <strong>Relationship Graph</strong>: Build relationship graphs between system components</li>
+                    <li>🛣️ <strong>Path Analysis</strong>: Analyze execution paths and critical paths</li>
+                    <li>📊 <strong>Log Analysis</strong>: Deep analysis of execution logs and anomaly detection</li>
+                </ul>
+                <p>Supported frameworks: CrewAI, AutoGen, LangChain and other mainstream Agent frameworks</p>
+            </div>
+        </el-dialog>
+
+        <!-- 结果查看对话框 -->
+        <el-dialog v-model="showResultDialog" :title="currentResult?.filename" width="80%">
+            <pre class="result-content" v-text="JSON.stringify(currentResultData, null, 2)"></pre>
+        </el-dialog>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

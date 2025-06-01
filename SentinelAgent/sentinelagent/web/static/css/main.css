@@ -1,0 +1,264 @@
+/* Watchdog Web UI 样式 */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+}
+
+.main-container {
+    height: 100vh;
+}
+
+/* 头部样式 */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 20px;
+}
+
+.title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 14px;
+    font-weight: normal;
+    opacity: 0.9;
+    margin-left: 10px;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    background: white;
+    border-right: 1px solid #e4e7ed;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-menu {
+    border: none;
+}
+
+.sidebar-menu .el-menu-item {
+    height: 50px;
+    line-height: 50px;
+}
+
+.sidebar-menu .el-menu-item.is-active {
+    background-color: #ecf5ff;
+    color: #409eff;
+}
+
+/* 示例项目区域 */
+.examples-section {
+    padding: 20px;
+    border-top: 1px solid #e4e7ed;
+}
+
+.examples-section h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #303133;
+}
+
+.example-card {
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.example-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.example-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    color: #303133;
+}
+
+.example-info p {
+    margin: 0 0 8px 0;
+    font-size: 12px;
+    color: #909399;
+}
+
+/* 主内容区样式 */
+.main-content {
+    background: #f5f7fa;
+    padding: 20px;
+}
+
+.tab-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.content-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.content-card .el-card__header {
+    background: #fafbfc;
+    border-bottom: 1px solid #e4e7ed;
+}
+
+.content-card h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #303133;
+}
+
+/* 表单样式 */
+.path-input {
+    width: 100%;
+}
+
+/* 结果展示样式 */
+.result-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fafbfc;
+    border-radius: 6px;
+    border: 1px solid #e4e7ed;
+}
+
+.result-section h3 {
+    margin: 0 0 20px 0;
+    color: #303133;
+}
+
+/* 图可视化样式 */
+.graph-visualization {
+    margin-top: 30px;
+}
+
+.graph-container {
+    width: 100%;
+    height: 500px;
+    border: 1px solid #e4e7ed;
+    border-radius: 6px;
+    background: white;
+    margin-bottom: 20px;
+}
+
+.graph-stats {
+    margin-top: 20px;
+}
+
+/* 路径分析样式 */
+.paths-result {
+    margin-top: 30px;
+}
+
+.path-node {
+    margin: 2px;
+}
+
+/* 日志分析样式 */
+.logs-result {
+    margin-top: 30px;
+}
+
+.anomaly-alert {
+    margin-bottom: 10px;
+}
+
+.recommendations-list {
+    padding-left: 20px;
+}
+
+.recommendations-list li {
+    margin-bottom: 8px;
+    color: #606266;
+}
+
+/* 结果文件列表样式 */
+.refresh-btn {
+    margin-bottom: 20px;
+}
+
+/* 对话框样式 */
+.about-content h3 {
+    color: #303133;
+    margin-bottom: 15px;
+}
+
+.about-content ul {
+    padding-left: 20px;
+}
+
+.about-content li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.result-content {
+    background: #f5f7fa;
+    padding: 15px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .el-aside {
+        width: 250px !important;
+    }
+    
+    .title {
+        font-size: 20px;
+    }
+    
+    .subtitle {
+        display: none;
+    }
+}
+
+/* 加载状态 */
+.el-loading-mask {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

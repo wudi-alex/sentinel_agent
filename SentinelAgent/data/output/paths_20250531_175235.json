@@ -1,0 +1,187 @@
+{
+  "analysis_info": {
+    "timestamp": "2025-05-31T17:52:35.079270",
+    "analyzer_version": "1.0",
+    "rules_applied": 7
+  },
+  "overall_assessment": {
+    "total_risk_score": 0.0,
+    "risk_level": "low",
+    "total_paths_analyzed": 12,
+    "suspicious_patterns_found": 1
+  },
+  "node_analysis": {
+    "total_nodes": 5,
+    "node_state_distribution": {
+      "normal": 3,
+      "suspicious": 2
+    },
+    "nodes_with_states": {
+      "agent_0": "normal",
+      "agent_1": "normal",
+      "agent_2": "normal",
+      "tool_0": "suspicious",
+      "tool_1": "suspicious"
+    }
+  },
+  "edge_analysis": {
+    "total_edges": 8,
+    "edge_state_distribution": {
+      "normal": 8
+    },
+    "edges_with_states": {
+      "0": "normal",
+      "1": "normal",
+      "2": "normal",
+      "3": "normal",
+      "4": "normal",
+      "5": "normal",
+      "6": "normal",
+      "7": "normal"
+    }
+  },
+  "path_analysis": {
+    "path_type_distribution": {
+      "agent_collaboration": 12
+    },
+    "risk_score_distribution": {
+      "low": 12,
+      "medium": 0,
+      "high": 0
+    },
+    "detailed_paths": [
+      {
+        "path": [
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_0",
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_0",
+          "agent_2"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_1",
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_0",
+          "agent_1"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1"
+        ],
+        "length": 2,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      },
+      {
+        "path": [
+          "agent_2",
+          "agent_1",
+          "agent_0"
+        ],
+        "length": 3,
+        "path_type": "agent_collaboration",
+        "risk_score": 0.0
+      }
+    ]
+  },
+  "suspicious_patterns": [
+    {
+      "pattern_type": "circular_dependencies",
+      "affected_nodes": [
+        "agent_0",
+        "agent_1"
+      ],
+      "risk_level": "high",
+      "details": "Detected circular dependencies in the graph",
+      "rule": "circular_dependencies",
+      "severity": "high",
+      "description": "检测循环依赖"
+    }
+  ],
+  "recommendations": [
+    "CRITICAL: Resolve circular dependencies to prevent infinite loops",
+    "Review 2 suspicious node(s) for potential issues"
+  ]
+}
