@@ -38,7 +38,6 @@ class EmailSenderInput(BaseModel):
 
 
 class CheckAvailabilityInput(BaseModel):
-    # 不需要任何输入参数，但还是定义空模型以符合接口
     pass
 
 
@@ -48,7 +47,6 @@ class EmailSenderTool(BaseTool):
     args_schema: Type[BaseModel] = EmailSenderInput
 
     def _run(self, to: str, subject: str, body: str) -> str:
-        # 实现发送邮件的逻辑
         return send_email(to, subject, body)
 
 

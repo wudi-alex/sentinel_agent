@@ -5,7 +5,6 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-# 定义访问 Gmail 发送/读取、Calendar 读取的权限范围
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.send',
     'https://www.googleapis.com/auth/gmail.readonly',
@@ -13,7 +12,6 @@ SCOPES = [
 ]
 
 
-# 获取 Google API 凭据，并返回构建 Gmail/Calendar 服务
 def get_google_service(service_name: str, version: str):
     creds = None
     if os.path.exists('token.pkl'):
@@ -32,7 +30,6 @@ def get_google_service(service_name: str, version: str):
     return build(service_name, version, credentials=creds)
 
 
-# 获取 Gmail 中未读邮件（最多10封）
 def fetch_unread_emails():
     gmail_service = get_google_service('gmail', 'v1')
     results = gmail_service.users().messages().list(userId='me', labelIds=['INBOX'], q="is:unread").execute()
@@ -46,8 +43,6 @@ def fetch_unread_emails():
 
     return email_texts
 
-
-# 获取今天的 Calendar 事件
 def get_today_calendar_events():
     calendar_service = get_google_service('calendar', 'v3')
     now = datetime.utcnow().isoformat() + 'Z'
@@ -65,7 +60,6 @@ def get_today_calendar_events():
     return events
 
 
-# 主函数：测试两个功能
 if __name__ == '__main__':
     print("📧 Unread Gmail Snippets:")
     emails = fetch_unread_emails()
