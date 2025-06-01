@@ -1,123 +1,124 @@
 #!/usr/bin/env python3
 """
-日志分析工具演示
+Log Analysis Tool Demo
 
-展示如何使用ExecutionLogAnalyzer和LogAnalysisTool进行日志分析
+Demonstrates how to use ExecutionLogAnalyzer and LogAnalysisTool for log analysis
 """
 
 import sys
 import os
 from pathlib import Path
 
-# 添加src目录到路径
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-from log_analyzer import ExecutionLogAnalyzer
-from tools import LogAnalysisTool
+from sentinelagent.core.log_analyzer import ExecutionLogAnalyzer
+from sentinelagent.core.tools import LogAnalysisTool
 
 def demo_direct_analysis():
-    """直接使用ExecutionLogAnalyzer进行分析"""
-    print("=== 直接分析演示 ===")
+    """Direct analysis using ExecutionLogAnalyzer"""
+    print("=== Direct Analysis Demo ===")
     
-    # 创建分析器
+    # Create analyzer
     analyzer = ExecutionLogAnalyzer()
     
-    # 分析TXT格式日志
+    # Analyze TXT format logs
     txt_log = "../../autogen_magneticone/logs/log_2025-05-17_17-47-03.txt"
     if Path(txt_log).exists():
-        print(f"\n📊 分析TXT日志: {txt_log}")
+        print(f"\n📊 Analyzing TXT log: {txt_log}")
         result = analyzer.analyze_log_file(txt_log)
         
-        print(f"✅ 分析完成:")
-        print(f"  - 执行路径: {len(result.execution_paths)}")
-        print(f"  - 错误数量: {len(result.errors)}")
-        print(f"  - 警告数量: {len(result.warnings)}")
+        print(f"✅ Analysis complete:")
+        print(f"  - Execution paths: {len(result.execution_paths)}")
+        print(f"  - Error count: {len(result.errors)}")
+        print(f"  - Warning count: {len(result.warnings)}")
         
         if result.errors:
-            print("\n❌ 主要错误:")
+            print("\n❌ Major errors:")
             for i, error in enumerate(result.errors[:3], 1):
                 print(f"  {i}. {error.error_type} ({error.severity.value}): {error.description}")
         
-        # 生成报告
+        # generatereport
         report = analyzer.generate_report(result, "txt_analysis_report.md")
-        print(f"\n📄 详细报告已生成: txt_analysis_report.md")
+        print(f"\n📄 Detailed report generated: txt_analysis_report.md")
     
-    # 分析CSV格式日志
+    # Analyze CSV format logs
     csv_log = "../../magentic-one-file-code-execution.csv"
     if Path(csv_log).exists():
-        print(f"\n📊 分析CSV日志: {csv_log}")
+        print(f"\n📊 Analyzing CSV log: {csv_log}")
         result = analyzer.analyze_log_file(csv_log)
         
-        print(f"✅ 分析完成:")
-        print(f"  - 执行路径: {len(result.execution_paths)}")
-        print(f"  - 错误数量: {len(result.errors)}")
-        print(f"  - 警告数量: {len(result.warnings)}")
+        print(f"✅ Analysis complete:")
+        print(f"  - Execution paths: {len(result.execution_paths)}")
+        print(f"  - Error count: {len(result.errors)}")
+        print(f"  - Warning count: {len(result.warnings)}")
         
         if result.execution_paths:
-            print("\n🛣️  执行路径:")
+            print("\n🛣️  Execution paths:")
             for i, path in enumerate(result.execution_paths[:3], 1):
-                print(f"  路径 {i}: {len(path.nodes)} 个节点, {len(path.log_entries)} 个条目")
+                print(f"  Path {i}: {len(path.nodes)} nodes, {len(path.log_entries)} entries")
 
 
 def demo_crewai_tool():
-    """演示CrewAI工具的使用"""
-    print("\n\n=== CrewAI工具演示 ===")
+    """Demonstrate CrewAI tool usage"""
+    print("\n\n=== CrewAI Tool Demo ===")
     
-    # 创建工具实例
+    # Create tool instance
     tool = LogAnalysisTool()
     
-    # 使用工具分析日志
+    # Use tool to analyze logs
     txt_log = "../../autogen_magneticone/logs/log_2025-05-17_17-47-03.txt"
     if Path(txt_log).exists():
-        print(f"\n🔧 使用CrewAI工具分析: {txt_log}")
+        print(f"\n🔧 Using CrewAI tool to analyze: {txt_log}")
         result = tool._run(
             log_file_path=txt_log,
             log_format="auto",
             output_file="crewai_analysis_result.json"
         )
         
-        print("📋 工具分析结果:")
+        print("📋 Tool analysis results:")
         print(result)
 
 
 def demo_batch_analysis():
-    """批量分析演示"""
-    print("\n\n=== 批量分析演示 ===")
+    """Batch analysis demo"""
+    print("\n\n=== Batch Analysis Demo ===")
     
     analyzer = ExecutionLogAnalyzer()
     
-    # 查找所有日志文件
+    # Find all log files
     log_dir = Path("../../autogen_magneticone/logs")
     if log_dir.exists():
         log_files = list(log_dir.glob("*.txt"))
-        print(f"📁 发现 {len(log_files)} 个日志文件")
+        print(f"📁 Found {len(log_files)} log files")
         
         total_errors = 0
         total_warnings = 0
         total_paths = 0
         
-        for log_file in log_files[:3]:  # 分析前3个文件
+        for log_file in log_files[:3]:  # Analyze first 3 files
             try:
-                print(f"\n📊 分析: {log_file.name}")
+                print(f"\n📊 Analyzing: {log_file.name}")
                 result = analyzer.analyze_log_file(str(log_file))
                 
                 total_errors += len(result.errors)
                 total_warnings += len(result.warnings)
                 total_paths += len(result.execution_paths)
                 
-                print(f"  - 路径: {len(result.execution_paths)}, 错误: {len(result.errors)}, 警告: {len(result.warnings)}")
+                print(f"  - Paths: {len(result.execution_paths)}, Errors: {len(result.errors)}, Warnings: {len(result.warnings)}")
                 
             except Exception as e:
-                print(f"  ❌ 分析失败: {e}")
+                print(f"  ❌ Analysis failed: {e}")
         
-        print(f"\n📈 总计:")
-        print(f"  - 执行路径: {total_paths}")
-        print(f"  - 错误数量: {total_errors}")
-        print(f"  - 警告数量: {total_warnings}")
+        print(f"\n📈 Total:")
+        print(f"  - Execution paths: {total_paths}")
+        print(f"  - Error count: {total_errors}")
+        print(f"  - Warning count: {total_warnings}")
 
 
 if __name__ == "__main__":
-    print("🔍 日志分析工具演示")
+    print("🔍 Log Analysis Tool Demo")
     print("=" * 50)
     
     try:
@@ -125,13 +126,13 @@ if __name__ == "__main__":
         demo_crewai_tool()
         demo_batch_analysis()
         
-        print("\n✅ 演示完成!")
-        print("\n💡 提示:")
-        print("  - 生成的报告文件可以用Markdown编辑器查看")
-        print("  - JSON分析结果可以进一步处理和可视化")
-        print("  - 可以集成到CI/CD流程中进行自动化分析")
+        print("\n✅ Demo complete!")
+        print("\n💡 Tips:")
+        print("  - Generated report files can be viewed with a Markdown editor")
+        print("  - JSON analysis results can be further processed and visualized")
+        print("  - Can be integrated into CI/CD pipelines for automated analysis")
         
     except Exception as e:
-        print(f"❌ 演示过程中发生错误: {e}")
+        print(f"❌ Error occurred during demo: {e}")
         import traceback
         traceback.print_exc()

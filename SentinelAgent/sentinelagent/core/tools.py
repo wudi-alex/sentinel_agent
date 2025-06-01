@@ -8,19 +8,19 @@ from .log_analyzer import ExecutionLogAnalyzer
 
 
 class DirectoryScanInput(BaseModel):
-    directory_path: str = Field(..., description="要扫描的目录路径")
-    output_file: str = Field(default="scan_result.json", description="输出文件名")
+    directory_path: str = Field(..., description="Directory path to scan")
+    output_file: str = Field(default="scan_result.json", description="Output file name")
 
 
 class FileScanInput(BaseModel):
-    file_path: str = Field(..., description="要扫描的文件路径")
-    output_file: str = Field(default="scan_result.json", description="输出文件名")
+    file_path: str = Field(..., description="File path to scan")
+    output_file: str = Field(default="scan_result.json", description="Output file name")
 
 
 class DirectoryScanTool(BaseTool):
-    """目录扫描工具"""
+    """Directory scan tool"""
     name: str = "directory_scanner"
-    description: str = "扫描目录中的agent系统组件"
+    description: str = "Scan agent system components in directory"
     args_schema: Type[BaseModel] = DirectoryScanInput
 
     def _run(self, directory_path: str, output_file: str = "scan_result.json") -> str:
@@ -28,21 +28,21 @@ class DirectoryScanTool(BaseTool):
             scanner = AgentSystemScanner()
             result = scanner.scan_directory(directory_path)
             
-            # 保存结果
+            # Save result
             with open(output_file, 'w', encoding='utf-8') as f:
                 json.dump(result, f, indent=2, ensure_ascii=False)
             
             summary = result['scan_summary']
-            return f"扫描完成: {summary['total_agents']} agents, {summary['total_tools']} tools"
+            return f"Scan completed: {summary['total_agents']} agents, {summary['total_tools']} tools"
         
         except Exception as e:
-            return f"扫描失败: {e}"
+            return f"Scan failed: {e}"
 
 
 class FileScanTool(BaseTool):
-    """文件扫描工具"""
+    """File scan tool"""
     name: str = "file_scanner"
-    description: str = "扫描单个文件中的agent组件"
+    description: str = "Scan agent components in a single file"
     args_schema: Type[BaseModel] = FileScanInput
 
     def _run(self, file_path: str, output_file: str = "scan_result.json") -> str:
@@ -50,7 +50,7 @@ class FileScanTool(BaseTool):
             scanner = AgentSystemScanner()
             result = scanner.scan_file(file_path)
             
-            # 保存结果
+            # saveresult
             with open(output_file, 'w', encoding='utf-8') as f:
                 json.dump(result, f, indent=2, ensure_ascii=False)
             
@@ -80,7 +80,7 @@ class FileScanTool(BaseTool):
 
 
 class FileScanTool(BaseTool):
-    """扫描单个文件中agent系统的工具"""
+    """scan单个file中agentsystem的tool"""
     name: str = "file_scanner"
     description: str = "扫描指定文件，分析其中的agent系统结构，识别agents、tools等组件"
     args_schema: Type[BaseModel] = FileScanInput
@@ -90,7 +90,7 @@ class FileScanTool(BaseTool):
             scanner = AgentSystemScanner()
             result = scanner.scan_file(file_path)
             
-            # 保存结果到JSON文件
+            # saveresult到JSONfile
             output_path = Path(output_file)
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(result, f, indent=2, ensure_ascii=False)
@@ -112,7 +112,7 @@ class FileScanTool(BaseTool):
 
 
 class ReportAnalysisTool(BaseTool):
-    """分析扫描报告的工具"""
+    """analyzescanreport的tool"""
     name: str = "report_analyzer"
     description: str = "分析扫描结果JSON文件，提供详细的agent系统架构分析"
     
@@ -129,7 +129,7 @@ class ReportAnalysisTool(BaseTool):
             analysis = []
             analysis.append("=== Agent系统架构分析 ===\n")
             
-            # 分析agents
+            # analyzeagents
             if data['agents']:
                 analysis.append("🤖 发现的Agents:")
                 for agent in data['agents']:
@@ -139,7 +139,7 @@ class ReportAnalysisTool(BaseTool):
                             analysis.append(f"    {key}: {value}")
                 analysis.append("")
             
-            # 分析tools
+            # analyzetools
             if data['tools']:
                 analysis.append("🔧 发现的Tools:")
                 for tool in data['tools']:
@@ -149,21 +149,21 @@ class ReportAnalysisTool(BaseTool):
                             analysis.append(f"    {key}: {value}")
                 analysis.append("")
             
-            # 分析crews
+            # analyzecrews
             if data['crews']:
                 analysis.append("👥 发现的Crews:")
                 for crew in data['crews']:
                     analysis.append(f"  - {crew['name']} ({crew['type']}) - {crew['file']}")
                 analysis.append("")
             
-            # 分析tasks
+            # analyzetasks
             if data['tasks']:
                 analysis.append("📋 发现的Tasks:")
                 for task in data['tasks']:
                     analysis.append(f"  - {task['name']} ({task['type']}) - {task['file']}")
                 analysis.append("")
             
-            # 文件结构分析
+            # file结构analyze
             analysis.append("📁 文件结构:")
             for file_path, file_info in data['file_structure'].items():
                 if file_info['type'] == 'file' and file_path.endswith('.py'):
@@ -182,7 +182,7 @@ class LogAnalysisInput(BaseModel):
 
 
 class LogAnalysisTool(BaseTool):
-    """执行日志分析工具"""
+    """execution日志analyzetool"""
     name: str = "log_analyzer"
     description: str = "分析Agent系统的执行日志，检测错误和异常模式"
     args_schema: Type[BaseModel] = LogAnalysisInput
@@ -192,13 +192,13 @@ class LogAnalysisTool(BaseTool):
             if not Path(log_file_path).exists():
                 return f"❌ 错误: 日志文件不存在 '{log_file_path}'"
             
-            # 创建分析器
+            # createanalyze器
             analyzer = ExecutionLogAnalyzer()
             
-            # 分析日志
+            # analyze日志
             analysis_result = analyzer.analyze_log_file(log_file_path, log_format)
             
-            # 构建结果报告
+            # buildresultreport
             report_lines = []
             report_lines.append("=== 执行日志分析报告 ===\n")
             
@@ -212,7 +212,7 @@ class LogAnalysisTool(BaseTool):
             report_lines.append(f"  - 活跃Agents: {stats.get('active_agents', 0)}")
             report_lines.append("")
             
-            # 错误信息
+            # 错误information
             if analysis_result.errors:
                 report_lines.append("❌ 发现的错误:")
                 for i, error in enumerate(analysis_result.errors[:10], 1):  # 最多显示10个
@@ -227,7 +227,7 @@ class LogAnalysisTool(BaseTool):
                     report_lines.append(f"  ... 还有 {len(analysis_result.errors) - 10} 个错误")
                 report_lines.append("")
             
-            # 警告信息
+            # 警告information
             if analysis_result.warnings:
                 report_lines.append("⚠️  警告信息:")
                 for i, warning in enumerate(analysis_result.warnings[:5], 1):
@@ -245,7 +245,7 @@ class LogAnalysisTool(BaseTool):
                     report_lines.append(f"  ... 还有 {len(analysis_result.recommendations) - 5} 个建议")
                 report_lines.append("")
             
-            # 执行路径概览
+            # executionpath概览
             if analysis_result.execution_paths:
                 report_lines.append("🛣️  执行路径概览:")
                 for i, path in enumerate(analysis_result.execution_paths[:3], 1):
@@ -263,7 +263,7 @@ class LogAnalysisTool(BaseTool):
                 report_lines.append(f"  {analysis_result.summary}")
                 report_lines.append("")
             
-            # 保存详细结果
+            # savedetailedresult
             if output_file:
                 analysis_dict = {
                     'execution_paths': [

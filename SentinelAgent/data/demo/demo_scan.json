@@ -1,0 +1,114 @@
+{
+  "scan_info": {
+    "target": "/Users/xuhe/Documents/agent_experiments/SentinelAgent",
+    "scan_type": "directory",
+    "timestamp": "2025-06-01T10:24:01.434397",
+    "scanner_version": "2.0-simplified"
+  },
+  "scan_summary": {
+    "total_agents": 2,
+    "total_tools": 0,
+    "total_crews": 4,
+    "total_tasks": 4,
+    "total_files": 67,
+    "python_files": 25
+  },
+  "agents": [
+    {
+      "name": "Agent_1",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 17,
+      "arguments": {
+        "role": "Agent System Scanner and Analyzer",
+        "goal": "Scan and analyze agent system structure, build relationship graphs and analyze execution paths",
+        "backstory": "Professional code analysis expert capable of identifying various agent components, building relationship graphs and detecting abnormal patterns"
+      }
+    },
+    {
+      "name": "Agent_2",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 17,
+      "arguments": {
+        "role": "Agent System Scanner and Analyzer",
+        "goal": "Scan and analyze agent system structure, build relationship graphs and analyze execution paths",
+        "backstory": "Professional code analysis expert capable of identifying various agent components, building relationship graphs and detecting abnormal patterns"
+      }
+    }
+  ],
+  "tools": [],
+  "crews": [
+    {
+      "name": "Crew_1",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 122
+    },
+    {
+      "name": "Crew_2",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 136
+    },
+    {
+      "name": "Crew_3",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 122
+    },
+    {
+      "name": "Crew_4",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 136
+    }
+  ],
+  "tasks": [
+    {
+      "name": "Task_1",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 116
+    },
+    {
+      "name": "Task_2",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 130
+    },
+    {
+      "name": "Task_3",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 116
+    },
+    {
+      "name": "Task_4",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 130
+    }
+  ],
+  "file_structure": {
+    "total_files": 67,
+    "python_files": 25,
+    "directories": 27,
+    "file_types": {
+      ".txt": 1,
+      "": 3,
+      ".in": 1,
+      ".md": 6,
+      ".py": 25,
+      ".yml": 1,
+      ".example": 1,
+      ".conf": 1,
+      ".sh": 3,
+      ".pyc": 19,
+      ".html": 1,
+      ".css": 1,
+      ".js": 2,
+      ".json": 2
+    }
+  }
+}

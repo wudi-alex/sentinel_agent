@@ -1,5 +1,5 @@
 # filepath: /Users/xuhe/Documents/agent_experiments/SentinelAgent/.dockerignore
-# SentinelAgent Docker忽略文件
+# SentinelAgent Docker ignore file
 
 # Git
 .git

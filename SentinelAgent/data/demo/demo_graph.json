@@ -1,0 +1,169 @@
+{
+  "graph_info": {
+    "source_scan": {
+      "target": "/Users/xuhe/Documents/agent_experiments/SentinelAgent",
+      "scan_type": "directory",
+      "timestamp": "2025-06-01T10:24:01.434397",
+      "scanner_version": "2.0-simplified"
+    },
+    "build_timestamp": "2025-06-01T10:24:01.434626",
+    "builder_version": "1.0"
+  },
+  "graph_summary": {
+    "total_nodes": 2,
+    "total_edges": 4,
+    "node_types": {
+      "agent": 2
+    },
+    "relationship_types": {
+      "file_proximity": 2,
+      "same_crew_collaboration": 2
+    },
+    "average_degree": 2.0
+  },
+  "nodes": [
+    {
+      "id": "agent_0",
+      "type": "agent",
+      "name": "Agent_1",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 17,
+      "metadata": {
+        "role": "Agent System Scanner and Analyzer",
+        "goal": "Scan and analyze agent system structure, build relationship graphs and analyze execution paths",
+        "backstory": "Professional code analysis expert capable of identifying various agent components, building relationship graphs and detecting abnormal patterns",
+        "crews": [
+          {
+            "name": "Crew_1",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 122
+          },
+          {
+            "name": "Crew_2",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 136
+          },
+          {
+            "name": "Crew_3",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 122
+          },
+          {
+            "name": "Crew_4",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 136
+          }
+        ],
+        "tasks": [
+          {
+            "name": "Task_1",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 116
+          },
+          {
+            "name": "Task_2",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 130
+          },
+          {
+            "name": "Task_3",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 116
+          },
+          {
+            "name": "Task_4",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 130
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_1",
+      "type": "agent",
+      "name": "Agent_2",
+      "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+      "line": 17,
+      "metadata": {
+        "role": "Agent System Scanner and Analyzer",
+        "goal": "Scan and analyze agent system structure, build relationship graphs and analyze execution paths",
+        "backstory": "Professional code analysis expert capable of identifying various agent components, building relationship graphs and detecting abnormal patterns",
+        "crews": [
+          {
+            "name": "Crew_1",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 122
+          },
+          {
+            "name": "Crew_2",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 136
+          },
+          {
+            "name": "Crew_3",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 122
+          },
+          {
+            "name": "Crew_4",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 136
+          }
+        ],
+        "tasks": [
+          {
+            "name": "Task_1",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 116
+          },
+          {
+            "name": "Task_2",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 130
+          },
+          {
+            "name": "Task_3",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 116
+          },
+          {
+            "name": "Task_4",
+            "file": "/Users/xuhe/Documents/agent_experiments/SentinelAgent/sentinelagent/core/inspector.py",
+            "line": 130
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "agent_0",
+      "target": "agent_1",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_0",
+      "relationship": "file_proximity",
+      "weight": 0.3
+    },
+    {
+      "source": "agent_0",
+      "target": "agent_1",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_0",
+      "relationship": "same_crew_collaboration",
+      "weight": 0.7
+    }
+  ],
+  "graph_metadata": {
+    "directed": true,
+    "weighted": true,
+    "description": "Agent system component relationship graph"
+  }
+}
