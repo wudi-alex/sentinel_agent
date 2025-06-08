@@ -81,7 +81,12 @@ pip install -r requirements.txt
 
 #### Launch Web Interface
 ```bash
-python scripts/start_web_ui.py
+# Option A: Using Python module (Recommended)
+python -m sentinelagent.cli.start_web_ui
+
+# Option B: Install as package and use entry points
+pip install -e .
+sentinelagent-web
 ```
 
 Visit: **http://localhost:5002**
@@ -89,38 +94,50 @@ Visit: **http://localhost:5002**
 ### Command Line Usage
 ```bash
 # Scan an agent system
-python src/core/scanner.py --path /path/to/agent/project
+python -m sentinelagent.cli.main /path/to/agent/project
 
 # Build execution graph
-python src/core/graph_builder.py --input scan_results.json
+python -m sentinelagent.cli.main /path/to/project --graph graph_results.json
 
 # Analyze execution paths
-python src/core/path_analyzer.py --graph graph_results.json
+python -m sentinelagent.cli.main /path/to/project --paths path_analysis.json
 
 # Analyze runtime logs
-python src/core/log_analyzer.py --logs /path/to/logs
+python -m sentinelagent.cli.main --analyze-logs /path/to/logs/logfile.txt
+
+# Full analysis
+python -m sentinelagent.cli.main /path/to/project --all
 ```
 
 ## 📁 Project Structure
 
 ```
 SentinelAgent/
-├── 📁 src/                    # Core source code
+├── 📁 sentinelagent/          # Main package
+│   ├── 📁 cli/               # Command line interface
+│   │   ├── main.py           # Main CLI entry point
+│   │   └── start_web_ui.py   # Web UI launcher
 │   ├── 📁 core/              # Core analysis engines
+│   │   ├── scanner.py        # System scanner
+│   │   ├── graph_builder.py  # Graph builder
+│   │   ├── path_analyzer.py  # Path analyzer
+│   │   └── log_analyzer.py   # Log analyzer
 │   ├── 📁 web/               # Web application
+│   │   ├── app.py            # Flask application
+│   │   ├── 📁 static/        # CSS, JS, images
+│   │   └── 📁 templates/     # HTML templates
 │   └── 📁 utils/             # Utility functions
-├── 📁 web/                   # Web interface assets
-│   ├── 📁 static/            # CSS, JS, images
-│   └── 📁 templates/         # HTML templates
 ├── 📁 docs/                  # Documentation
-├── 📁 examples/              # Example usage
+├── 📁 examples/              # Example usage and demos
 ├── 📁 tests/                 # Test suite
 ├── 📁 data/                  # Data storage
 │   ├── 📁 output/            # Analysis results
 │   ├── 📁 uploads/           # Uploaded files
 │   └── 📁 demo/              # Demo data
 ├── 📁 config/                # Configuration files
-└── 📁 scripts/               # Utility scripts
+├── 📁 scripts/               # Utility scripts
+├── setup.py                  # Package setup
+└── requirements.txt          # Dependencies
 ```
 
 ## 🛠️ Technology Stack
@@ -148,15 +165,14 @@ SentinelAgent includes rich demo data to explore features:
 
 ## 📖 Documentation
 
-- [📚 User Guide](docs/USER_GUIDE.md)
-- [🔧 API Reference](docs/API_REFERENCE.md)
+- [📚 CLI Usage Guide](docs/CLI_USAGE.md)
 - [🎯 Quick Start](docs/QUICK_START.md)
-- [🐳 Docker Deployment](docs/DOCKER_DEPLOYMENT.md)
-- [⚙️ Configuration](docs/CONFIGURATION.md)
+- [🐳 Docker Deployment](docs/deployment/DOCKER_DEPLOYMENT.md)
+- [📁 Directory Structure](docs/DIRECTORY_STRUCTURE.md)
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md).
+We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) (coming soon).
 
 ## 📄 License
 

@@ -20,7 +20,7 @@ def example_scan_crewai_project():
     print("🔍 Example 1: Scan CrewAI Gmail project")
     print("-" * 50)
     
-    # scancrewai_gmaildirectory
+    # Scan crewai_gmail directory
     target_dir = "../crewai_gmail"
     if Path(target_dir).exists():
         result = scan_directory(target_dir)
@@ -28,6 +28,59 @@ def example_scan_crewai_project():
         print(f"📊 Found: {result['scan_summary']['total_agents']} agents, {result['scan_summary']['total_tools']} tools")
     else:
         print(f"❌ Directory does not exist: {target_dir}")
+        print("💡 This example expects a crewai_gmail project in the parent directory")
+
+
+def example_scan_single_file():
+    """Example: Scan single Python file"""
+    print("\n🔍 Example 2: Scan single file")
+    print("-" * 50)
+    
+    # Scan a single Python file
+    target_file = "../crewai_gmail/tools.py"
+    if Path(target_file).exists():
+        result = scan_file(target_file)
+        print("✅ File scan completed")
+        print(f"📊 Found: {result['scan_summary']['total_tools']} tools")
+        
+        # Display found tools
+        if result['tools']:
+            print("\n🔧 Discovered Tools:")
+            for tool in result['tools']:
+                print(f"  - {tool['name']} ({tool['type']})")
+    else:
+        print(f"❌ File does not exist: {target_file}")
+
+
+def example_cli_equivalent():
+    """Example: Show CLI equivalent commands"""
+    print("\n💻 CLI Equivalent Commands")
+    print("-" * 50)
+    print("To run the same analysis using CLI:")
+    print()
+    print("# Scan directory:")
+    print("python -m sentinelagent.cli.main ../crewai_gmail")
+    print()
+    print("# Scan with custom output:")
+    print("python -m sentinelagent.cli.main ../crewai_gmail --output gmail_scan.json")
+    print()
+    print("# Full analysis:")
+    print("python -m sentinelagent.cli.main ../crewai_gmail --all")
+    print()
+    print("# After installing as package:")
+    print("sentinelagent ../crewai_gmail --all")
+
+
+if __name__ == "__main__":
+    print("🤖 SentinelAgent Examples")
+    print("=" * 50)
+    
+    example_scan_crewai_project()
+    example_scan_single_file()
+    example_cli_equivalent()
+    
+    print("\n✨ Examples completed!")
+    print("💡 Try the web interface: python -m sentinelagent.cli.start_web_ui")
 
 
 def example_scan_autogen_project():

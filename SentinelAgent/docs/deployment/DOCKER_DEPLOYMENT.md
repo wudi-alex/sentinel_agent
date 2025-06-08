@@ -49,6 +49,30 @@ docker stop sentinel-agent && docker rm sentinel-agent
 - `sentinel_logs`: Application logs storage
 - `examples`: Read-only examples directory
 
+## Local Development Commands
+
+### Start Web Interface (Non-Docker)
+```bash
+# Using Python module
+python -m sentinelagent.cli.start_web_ui
+
+# Or install and use entry points
+pip install -e .
+sentinelagent-web
+```
+
+### CLI Usage (Non-Docker)
+```bash
+# Scan a project
+python -m sentinelagent.cli.main /path/to/project
+
+# Full analysis
+python -m sentinelagent.cli.main /path/to/project --all
+
+# Analyze logs
+python -m sentinelagent.cli.main --analyze-logs /path/to/logfile.txt
+```
+
 ### Health Monitoring
 The application includes a health endpoint at `/health` that returns:
 ```json

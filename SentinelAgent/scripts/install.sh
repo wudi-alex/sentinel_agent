@@ -41,17 +41,21 @@ mkdir -p data/{output,uploads,demo}
 mkdir -p logs
 echo "✅ Directories created successfully"
 
-# Set permissions
-chmod +x scripts/start_web_ui.py
-chmod +x sentinel_agent.py
+# Set permissions (if installed as editable package)
+chmod +x sentinelagent/cli/start_web_ui.py
+chmod +x sentinelagent/cli/main.py
 
 echo ""
 echo "🎉 SentinelAgent installation completed!"
 echo "=================================="
 echo ""
 echo "🚀 Launch methods:"
-echo "  Web interface: python scripts/start_web_ui.py"
-echo "  Command line: python sentinel_agent.py --help"
+echo "  Web interface: python -m sentinelagent.cli.start_web_ui"
+echo "  Command line: python -m sentinelagent.cli.main --help"
+echo ""
+echo "🔧 Alternative (after pip install -e .):"
+echo "  Web interface: sentinelagent-web"
+echo "  Command line: sentinelagent --help"
 echo ""
 echo "📍 Web access URL: http://localhost:5002"
 echo ""

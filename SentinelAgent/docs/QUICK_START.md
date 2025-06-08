@@ -8,19 +8,24 @@ git clone <repository-url>
 cd SentinelAgent
 ```
 
-### 2. Install Dependencies
+### 2. Install as Package (Recommended)
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
+
+**For detailed installation options, see [Installation Guide](INSTALLATION.md)**
 
 ### 3. Start the Web Interface
+
+#### Option A: Using Python Module (Recommended)
 ```bash
-python scripts/start_web_ui.py
+python -m sentinelagent.cli.start_web_ui
 ```
 
-Or use the main program:
+#### Option B: Install as Package and Use Entry Points
 ```bash
-python sentinel_agent.py --web
+pip install -e .
+sentinelagent-web
 ```
 
 Visit: **http://localhost:5002**
@@ -29,33 +34,42 @@ Visit: **http://localhost:5002**
 
 ### System Scan
 ```bash
-# Scan a directory
-python sentinel_agent.py scan --path /path/to/agent/project
+# Using Python module
+python -m sentinelagent.cli.main /path/to/agent/project
 
-# Scan a single file
-python sentinel_agent.py scan --path /path/to/agent/file.py --type file
+# Or after installing as package
+sentinelagent /path/to/agent/project
+
+# Scan with specific output file
+python -m sentinelagent.cli.main /path/to/agent/project --output my_scan.json
 ```
 
 ### Build Execution Graph
 ```bash
 # Build graph from scan results
-python sentinel_agent.py build-graph --input scan_results.json
+python -m sentinelagent.cli.main /path/to/project --graph graph_results.json
 
-# Build graph directly from project
-python sentinel_agent.py build-graph --path /path/to/project
+# Build both scan and graph
+python -m sentinelagent.cli.main /path/to/project --output scan.json --graph graph.json
 ```
 
 ### Path Analysis
 ```bash
 # Analyze execution paths
-python sentinel_agent.py analyze-paths --graph graph_results.json
+python -m sentinelagent.cli.main /path/to/project --paths path_analysis.json
+
+# Full analysis (scan + graph + paths)
+python -m sentinelagent.cli.main /path/to/project --all
 ```
 
-### Log Analysis
+### Specialized Analysis
 ```bash
+# Analyze existing graph file
+python -m sentinelagent.cli.main --analyze-graph graph_results.json
+
 # Analyze runtime logs
-python sentinel_agent.py analyze-logs --logs /path/to/logfile.txt
-python sentinel_agent.py analyze-logs --logs /path/to/logfile.txt --graph graph_results.json
+python -m sentinelagent.cli.main --analyze-logs /path/to/logfile.txt
+python -m sentinelagent.cli.main --analyze-logs /path/to/logfile.csv --log-format csv
 ```
 
 ## 🌐 Web Interface Features
@@ -91,14 +105,16 @@ The web interface provides built-in demo data, allowing you to experience all fe
 ```bash
 # Batch scan multiple projects
 for project in /path/to/projects/*; do
-    python sentinel_agent.py scan --path "$project" --output "scan_$(basename $project).json"
+    python -m sentinelagent.cli.main "$project" --output "scan_$(basename $project).json"
 done
 ```
 
 ### Export Results
 All analysis results are automatically saved in the `data/output/` directory, supporting:
 - JSON format results
-- Image export
+- Graph visualization exports
+- Path analysis reports
+- Log analysis summaries
 - CSV data export
 
 ## 🔧 Configuration
