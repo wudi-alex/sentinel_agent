@@ -39,13 +39,12 @@ SentinelAgent/
 ├── examples/                     # Usage examples
 │   ├── example.py                # Basic usage examples
 │   └── demos/                    # Demo scripts
-│       ├── complete_demo.py      # Comprehensive demo
-│       ├── scan_demo.py          # Scanning demo
-│       ├── graph_demo.py         # Graph analysis demo
-│       ├── path_demo.py          # Path analysis demo
-│       └── log_analysis_demo.py  # Log analysis demo
+│       ├── unified_demo.py       # Main comprehensive demo (start here)
+│       ├── graph_demo.py         # Advanced graph analysis demo
+│       ├── path_demo.py          # Security-focused path analysis demo
+│       └── log_analysis_demo.py  # Specialized log analysis demo
 ├── docs/                         # Documentation
-│   ├── DEMO_COMPLETE.md          # Demo completion guide
+│   ├── DEMO_GUIDE.md             # Comprehensive demo guide and instructions
 │   ├── PROJECT_REORGANIZATION_COMPLETE.md
 │   ├── QUICK_START.md            # Quick start guide
 │   └── deployment/               # Deployment documentation

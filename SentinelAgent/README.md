@@ -157,16 +157,20 @@ SentinelAgent/
 
 ## 🎮 Demo Mode
 
-SentinelAgent includes rich demo data to explore features:
-- Sample agent configurations
-- Pre-built execution graphs
-- Simulated runtime logs
-- Interactive examples
+SentinelAgent includes comprehensive demo scripts to explore features:
+
+- **Unified Demo**: Complete feature showcase and interactive demonstrations
+- **Graph Analysis Demo**: Advanced graph structure analysis and metrics  
+- **Path Analysis Demo**: Security-focused path analysis and vulnerability detection
+- **Log Analysis Demo**: Specialized log analysis and anomaly detection
+
+**🚀 Get started**: See the [Demo Guide](docs/DEMO_GUIDE.md) for step-by-step instructions.
 
 ## 📖 Documentation
 
-- [📚 CLI Usage Guide](docs/CLI_USAGE.md)
 - [🎯 Quick Start](docs/QUICK_START.md)
+- [🎮 Demo Guide](docs/DEMO_GUIDE.md) - **Step-by-step demo instructions**
+- [📚 CLI Usage Guide](docs/CLI_USAGE.md)
 - [🐳 Docker Deployment](docs/deployment/DOCKER_DEPLOYMENT.md)
 - [📁 Directory Structure](docs/DIRECTORY_STRUCTURE.md)
 

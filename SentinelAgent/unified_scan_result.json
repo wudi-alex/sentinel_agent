@@ -1,0 +1,188 @@
+{
+  "scan_info": {
+    "target": "/Users/xuhe/Documents/agent_experiments/crewai_gmail",
+    "scan_type": "directory",
+    "timestamp": "2025-06-08T22:52:33.995179",
+    "scanner_version": "2.0-simplified"
+  },
+  "scan_summary": {
+    "total_agents": 8,
+    "total_tools": 0,
+    "total_crews": 4,
+    "total_tasks": 7,
+    "total_files": 9,
+    "python_files": 4
+  },
+  "agents": [
+    {
+      "name": "Agent_1",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 19,
+      "arguments": {
+        "role": "Email Classifier",
+        "goal": "Classify emails into priority levels",
+        "backstory": "You analyze emails and determine how they should be processed based on importance and content."
+      }
+    },
+    {
+      "name": "Agent_2",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 26,
+      "arguments": {
+        "role": "Email Responder",
+        "goal": "Generate polite, appropriate replies to routine emails",
+        "backstory": "You craft replies to emails that don’t need the user’s direct involvement. You can also forward email."
+      }
+    },
+    {
+      "name": "Agent_3",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 34,
+      "arguments": {
+        "role": "Email Summarizer",
+        "goal": "Summarize the key content of high-priority emails for quick review.",
+        "backstory": "You provide a clear and concise summary of important emails so the user can quickly understand the context."
+      }
+    },
+    {
+      "name": "Agent_4",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 19,
+      "arguments": {
+        "role": "Email Classifier",
+        "goal": "Classify emails into priority levels",
+        "backstory": "You analyze emails and determine how they should be processed based on importance and content."
+      }
+    },
+    {
+      "name": "Agent_5",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 26,
+      "arguments": {
+        "role": "Email Responder",
+        "goal": "Generate polite, appropriate replies to routine emails",
+        "backstory": "You craft replies to emails that don’t need the user’s direct involvement. You can also forward email."
+      }
+    },
+    {
+      "name": "Agent_6",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 34,
+      "arguments": {
+        "role": "Email Summarizer",
+        "goal": "Summarize the key content of high-priority emails for quick review.",
+        "backstory": "You provide a clear and concise summary of important emails so the user can quickly understand the context."
+      }
+    },
+    {
+      "name": "Agent_7",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/crewai_mail_test.py",
+      "line": 6,
+      "arguments": {
+        "role": "Email Classifier",
+        "goal": "Classify emails based on their content into categories: High",
+        "backstory": "You are a highly skilled virtual assistant trained in understanding and organizing email content. You can quickly read and categorize emails with high accuracy."
+      }
+    },
+    {
+      "name": "Agent_8",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/crewai_mail_test.py",
+      "line": 6,
+      "arguments": {
+        "role": "Email Classifier",
+        "goal": "Classify emails based on their content into categories: High",
+        "backstory": "You are a highly skilled virtual assistant trained in understanding and organizing email content. You can quickly read and categorize emails with high accuracy."
+      }
+    }
+  ],
+  "tools": [],
+  "crews": [
+    {
+      "name": "Crew_1",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 112
+    },
+    {
+      "name": "Crew_2",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 112
+    },
+    {
+      "name": "Crew_3",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/crewai_mail_test.py",
+      "line": 30
+    },
+    {
+      "name": "Crew_4",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/crewai_mail_test.py",
+      "line": 30
+    }
+  ],
+  "tasks": [
+    {
+      "name": "Task_1",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 71
+    },
+    {
+      "name": "Task_2",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 85
+    },
+    {
+      "name": "Task_3",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 100
+    },
+    {
+      "name": "Task_4",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 71
+    },
+    {
+      "name": "Task_5",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 85
+    },
+    {
+      "name": "Task_6",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/Attack_Paths.py",
+      "line": 100
+    },
+    {
+      "name": "Task_7",
+      "type": "instance",
+      "file": "/Users/xuhe/Documents/agent_experiments/crewai_gmail/crewai_mail_test.py",
+      "line": 18
+    }
+  ],
+  "file_structure": {
+    "total_files": 9,
+    "python_files": 4,
+    "directories": 2,
+    "file_types": {
+      ".py": 4,
+      ".json": 1,
+      ".pyc": 2,
+      ".csv": 2
+    }
+  }
+}

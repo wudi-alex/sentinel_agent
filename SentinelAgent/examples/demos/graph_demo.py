@@ -1,141 +1,310 @@
 #!/usr/bin/env python3
 """
-Graph Building Demo
-Demonstrates how to build agent system relationship graphs from scan results
+Advanced Graph Analysis Demo
+============================
+
+This demo focuses on advanced graph structure analysis and metrics.
+For basic graph building, use unified_demo.py.
+
+This demo provides:
+- Advanced graph structure analysis
+- Node importance ranking (in-degree/out-degree)  
+- Graph topology insights
+- Detailed graph metrics
 """
 
 import sys
 import json
 from pathlib import Path
 
-# Add src directory to Python path
-project_root = Path(__file__).parent.parent
-# removed src_path
-# removed src_path insert
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-from sentinelagent.core.scanner import scan_directory
-from sentinelagent.core.graph_builder import build_graph_from_scan, build_and_save_graph, scan_and_build_graph
-
-
-def demo_graph_building():
-    """Demonstrate graph building functionality"""
-    print("=== Agent System Graph Builder Demo ===\n")
-    
-    # 1. Scan current directory
-    print("1. Scanning current directory...")
-    scan_result = scan_directory('.')
-    print(f"   Scan complete: Found {scan_result['scan_summary']['total_agents']} agents, "
-          f"{scan_result['scan_summary']['total_tools']} tools, "
-          f"{scan_result['scan_summary']['total_crews']} crews, "
-          f"{scan_result['scan_summary']['total_tasks']} tasks")
-    
-    # 2. Build relationship graph
-    print("\n2. Building relationship graph...")
-    graph_data = build_graph_from_scan(scan_result)
-    print(f"   Graph construction complete: {graph_data['graph_summary']['total_nodes']} nodes, "
-          f"{graph_data['graph_summary']['total_edges']} edges")
-    
-    # 3. Display graph statistics
-    print("\n3. Graph statistics:")
-    summary = graph_data['graph_summary']
-    print(f"   - Node type distribution: {summary['node_types']}")
-    print(f"   - Relationship type distribution: {summary['relationship_types']}")
-    print(f"   - Average degree: {summary['average_degree']:.2f}")
-    
-    # 4. Display some specific nodes and edges
-    print("\n4. Graph structure preview:")
-    print("   Node examples:")
-    for i, node in enumerate(graph_data['nodes'][:3]):  # Show first 3 nodes
-        print(f"     [{i+1}] {node['type']}: {node['name']} (in {node['file']})")
-        if node['type'] == 'agent':
-            crews = node['metadata'].get('crews', [])
-            tasks = node['metadata'].get('tasks', [])
-            if crews:
-                print(f"         Belongs to Crew: {[c['name'] for c in crews]}")
-            if tasks:
-                print(f"         Executes Tasks: {[t['name'] for t in tasks]}")
-    
-    if len(graph_data['nodes']) > 3:
-        print(f"     ... and {len(graph_data['nodes']) - 3} more nodes")
-    
-    print("\n   Edge examples:")
-    for i, edge in enumerate(graph_data['edges'][:5]):  # Show first 5 edges
-        source_node = next(n for n in graph_data['nodes'] if n['id'] == edge['source'])
-        target_node = next(n for n in graph_data['nodes'] if n['id'] == edge['target'])
-        print(f"     [{i+1}] {source_node['name']} -> {target_node['name']} "
-              f"({edge['relationship']}, weight: {edge['weight']})")
-    
-    if len(graph_data['edges']) > 5:
-        print(f"     ... and {len(graph_data['edges']) - 5} more edges")
-    
-    # 5. Save graph to file
-    print("\n5. Saving graph to file...")
-    output_file = "agent_system_graph.json"
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(graph_data, f, indent=2, ensure_ascii=False)
-    print(f"   Graph saved to: {output_file}")
-    
-    return graph_data
+try:
+    from sentinelagent.core.graph_builder import scan_and_build_graph
+    GRAPH_BUILDER_AVAILABLE = True
+except ImportError:
+    GRAPH_BUILDER_AVAILABLE = False
+    print("⚠️  Graph builder not available - using pre-existing graph files only")
 
 
-def demo_direct_scan_and_build():
-    """Demonstrate integrated scan and build functionality"""
-    print("\n=== Integrated Scanning and Building Demo ===\n")
+def load_or_create_graph():
+    """Load existing graph or create new one"""
+    graph_files = ['unified_demo_graph.json', 'agent_system_graph.json', 'complete_agent_graph.json']
     
-    print("Executing integrated scanning and graph building...")
-    graph_data = scan_and_build_graph('.', 'complete_agent_graph.json')
+    # Try to load existing graph
+    for graph_file in graph_files:
+        if Path(graph_file).exists():
+            print(f"📊 Loading existing graph: {graph_file}")
+            with open(graph_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
     
-    print(f"Complete! Built graph with {graph_data['graph_summary']['total_nodes']} nodes and "
-          f"{graph_data['graph_summary']['total_edges']} edges")
-    print("Graph saved to: complete_agent_graph.json")
-    
-    return graph_data
+    # Create new graph if none exist and builder is available
+    if GRAPH_BUILDER_AVAILABLE:
+        print("📊 No existing graph found, creating new one...")
+        graph_data = scan_and_build_graph('.', 'graph_analysis_demo.json')
+        print("✅ Graph created and saved to: graph_analysis_demo.json")
+        return graph_data
+    else:
+        print("❌ No graph files found and builder unavailable")
+        return None
 
 
 def analyze_graph_structure(graph_data):
-    """Analyze graph structure"""
-    print("\n=== Graph Structure Analysis ===\n")
+    """Analyze advanced graph structure and metrics"""
+    if not graph_data:
+        print("❌ No graph data available for analysis")
+        return
+        
+    print("=" * 60)
+    print("🔍 Advanced Graph Structure Analysis")
+    print("=" * 60)
+    
+    # Basic statistics
+    nodes = graph_data.get('nodes', [])
+    edges = graph_data.get('edges', [])
+    
+    print(f"\n📊 Basic Graph Statistics:")
+    print(f"   • Total nodes: {len(nodes)}")
+    print(f"   • Total edges: {len(edges)}")
+    
+    if len(nodes) == 0:
+        print("⚠️  No nodes found in graph")
+        return
     
     # Calculate in-degree and out-degree
     in_degree = {}
     out_degree = {}
     
     # Initialize degrees
-    for node in graph_data['nodes']:
+    for node in nodes:
         node_id = node['id']
         in_degree[node_id] = 0
         out_degree[node_id] = 0
     
     # Calculate degrees
-    for edge in graph_data['edges']:
-        out_degree[edge['source']] += 1
-        in_degree[edge['target']] += 1
+    for edge in edges:
+        source = edge.get('source')
+        target = edge.get('target')
+        if source in out_degree:
+            out_degree[source] += 1
+        if target in in_degree:
+            in_degree[target] += 1
     
-    # Find important nodes
-    print("Most important nodes (by out-degree):")
+    # Calculate graph metrics
+    total_degree = sum(out_degree.values())
+    avg_degree = total_degree / len(nodes) if len(nodes) > 0 else 0
+    max_in_degree = max(in_degree.values()) if in_degree else 0
+    max_out_degree = max(out_degree.values()) if out_degree else 0
+    
+    print(f"   • Average degree: {avg_degree:.2f}")
+    print(f"   • Maximum in-degree: {max_in_degree}")
+    print(f"   • Maximum out-degree: {max_out_degree}")
+    
+    # Calculate density
+    possible_edges = len(nodes) * (len(nodes) - 1)
+    density = len(edges) / possible_edges if possible_edges > 0 else 0
+    print(f"   • Graph density: {density:.3f}")
+    
+    # Node type analysis
+    node_types = {}
+    for node in nodes:
+        node_type = node.get('type', 'unknown')
+        node_types[node_type] = node_types.get(node_type, 0) + 1
+    
+    print(f"\n📋 Node Type Distribution:")
+    for node_type, count in sorted(node_types.items()):
+        percentage = (count / len(nodes)) * 100
+        print(f"   • {node_type}: {count} ({percentage:.1f}%)")
+    
+    # Relationship type analysis  
+    relationship_types = {}
+    for edge in edges:
+        rel_type = edge.get('relationship', 'unknown')
+        relationship_types[rel_type] = relationship_types.get(rel_type, 0) + 1
+    
+    if relationship_types:
+        print(f"\n🔗 Relationship Type Distribution:")
+        for rel_type, count in sorted(relationship_types.items()):
+            percentage = (count / len(edges)) * 100
+            print(f"   • {rel_type}: {count} ({percentage:.1f}%)")
+    
+    # Find most important nodes by out-degree (influence)
+    print(f"\n🌟 Most Influential Nodes (by out-degree):")
     sorted_by_out = sorted(out_degree.items(), key=lambda x: x[1], reverse=True)
-    for i, (node_id, degree) in enumerate(sorted_by_out[:3]):
-        node = next(n for n in graph_data['nodes'] if n['id'] == node_id)
-        print(f"  {i+1}. {node['name']} ({node['type']}) - out-degree: {degree}")
+    for i, (node_id, degree) in enumerate(sorted_by_out[:5]):
+        node = next((n for n in nodes if n['id'] == node_id), None)
+        if node:
+            node_name = node.get('name', node_id)
+            node_type = node.get('type', 'unknown')
+            print(f"   {i+1}. {node_name} ({node_type}) - out-degree: {degree}")
     
-    print("\nMost important nodes (by in-degree):")
+    # Find most important nodes by in-degree (popularity)
+    print(f"\n🎯 Most Popular Nodes (by in-degree):")
     sorted_by_in = sorted(in_degree.items(), key=lambda x: x[1], reverse=True)
-    for i, (node_id, degree) in enumerate(sorted_by_in[:3]):
-        node = next(n for n in graph_data['nodes'] if n['id'] == node_id)
-        print(f"  {i+1}. {node['name']} ({node['type']}) - in-degree: {degree}")
+    for i, (node_id, degree) in enumerate(sorted_by_in[:5]):
+        node = next((n for n in nodes if n['id'] == node_id), None)
+        if node:
+            node_name = node.get('name', node_id)
+            node_type = node.get('type', 'unknown')
+            print(f"   {i+1}. {node_name} ({node_type}) - in-degree: {degree}")
+    
+    # Find isolated nodes (no connections)
+    isolated_nodes = [node_id for node_id in in_degree 
+                     if in_degree[node_id] == 0 and out_degree[node_id] == 0]
+    
+    if isolated_nodes:
+        print(f"\n🔍 Isolated Nodes ({len(isolated_nodes)}):")
+        for node_id in isolated_nodes[:5]:  # Show first 5
+            node = next((n for n in nodes if n['id'] == node_id), None)
+            if node:
+                node_name = node.get('name', node_id)
+                node_type = node.get('type', 'unknown')
+                print(f"   • {node_name} ({node_type})")
+        if len(isolated_nodes) > 5:
+            print(f"   ... and {len(isolated_nodes) - 5} more")
+    
+    # Calculate betweenness approximation (simplified)
+    print(f"\n📈 Graph Topology Insights:")
+    
+    # Estimate connectivity
+    connected_nodes = len([node_id for node_id in in_degree 
+                          if in_degree[node_id] > 0 or out_degree[node_id] > 0])
+    connectivity_ratio = connected_nodes / len(nodes) if len(nodes) > 0 else 0
+    
+    print(f"   • Connected nodes: {connected_nodes}/{len(nodes)} ({connectivity_ratio:.1%})")
+    
+    # Identify potential hubs (nodes with high degree)
+    hub_threshold = avg_degree * 2
+    hubs = [node_id for node_id in out_degree 
+            if (in_degree[node_id] + out_degree[node_id]) > hub_threshold]
+    
+    if hubs:
+        print(f"   • Potential hubs: {len(hubs)} nodes")
+        print(f"   • Hub threshold: {hub_threshold:.1f} total degree")
+    
+    # Edge weight analysis if available
+    edge_weights = [edge.get('weight', 1.0) for edge in edges if 'weight' in edge]
+    if edge_weights:
+        avg_weight = sum(edge_weights) / len(edge_weights)
+        min_weight = min(edge_weights)
+        max_weight = max(edge_weights)
+        
+        print(f"\n⚖️  Edge Weight Analysis:")
+        print(f"   • Average weight: {avg_weight:.3f}")
+        print(f"   • Weight range: {min_weight:.3f} - {max_weight:.3f}")
+    
+    return {
+        'in_degree': in_degree,
+        'out_degree': out_degree,
+        'metrics': {
+            'avg_degree': avg_degree,
+            'density': density,
+            'connectivity_ratio': connectivity_ratio,
+            'isolated_nodes': len(isolated_nodes),
+            'hubs': len(hubs)
+        }
+    }
+
+
+def generate_graph_report(graph_data, analysis_result, output_file="graph_analysis_report.md"):
+    """Generate a detailed graph analysis report"""
+    if not graph_data or not analysis_result:
+        print("❌ Cannot generate report - missing data")
+        return
+    
+    print(f"\n📄 Generating detailed report: {output_file}")
+    
+    nodes = graph_data.get('nodes', [])
+    edges = graph_data.get('edges', [])
+    metrics = analysis_result.get('metrics', {})
+    
+    report_content = f"""# Graph Analysis Report
+Generated: {Path().cwd()}
+
+## Summary
+- **Total Nodes**: {len(nodes)}
+- **Total Edges**: {len(edges)}
+- **Average Degree**: {metrics.get('avg_degree', 0):.2f}
+- **Graph Density**: {metrics.get('density', 0):.3f}
+- **Connectivity**: {metrics.get('connectivity_ratio', 0):.1%}
+
+## Key Insights
+- **Isolated Nodes**: {metrics.get('isolated_nodes', 0)}
+- **Hub Nodes**: {metrics.get('hubs', 0)}
+
+## Node Analysis
+"""
+    
+    # Add node type breakdown
+    node_types = {}
+    for node in nodes:
+        node_type = node.get('type', 'unknown')
+        node_types[node_type] = node_types.get(node_type, 0) + 1
+    
+    report_content += "### Node Types\n"
+    for node_type, count in sorted(node_types.items()):
+        percentage = (count / len(nodes)) * 100 if nodes else 0
+        report_content += f"- **{node_type}**: {count} ({percentage:.1f}%)\n"
+    
+    # Add relationship analysis
+    relationship_types = {}
+    for edge in edges:
+        rel_type = edge.get('relationship', 'unknown')
+        relationship_types[rel_type] = relationship_types.get(rel_type, 0) + 1
+    
+    if relationship_types:
+        report_content += "\n### Relationship Types\n"
+        for rel_type, count in sorted(relationship_types.items()):
+            percentage = (count / len(edges)) * 100 if edges else 0
+            report_content += f"- **{rel_type}**: {count} ({percentage:.1f}%)\n"
+    
+    # Save report
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(report_content)
+    
+    print(f"✅ Report saved: {output_file}")
+
+
+def main():
+    """Main demo function"""
+    print("🔍 SentinelAgent - Advanced Graph Analysis Demo")
+    print("=" * 60)
+    print("Note: For basic graph building, use unified_demo.py")
+    print("This demo focuses on advanced graph structure analysis.")
+    print("=" * 60)
+    
+    try:
+        # Load or create graph
+        graph_data = load_or_create_graph()
+        
+        if not graph_data:
+            print("\n❌ No graph data available. Please:")
+            print("1. Run unified_demo.py first to create a graph, or")
+            print("2. Ensure graph builder modules are available")
+            return
+        
+        # Perform advanced analysis
+        analysis_result = analyze_graph_structure(graph_data)
+        
+        if analysis_result:
+            # Generate detailed report
+            generate_graph_report(graph_data, analysis_result)
+            
+            print("\n✅ Advanced graph analysis complete!")
+            print("\n💡 Next steps:")
+            print("   • Review the generated graph_analysis_report.md")
+            print("   • Use insights for system optimization")
+            print("   • Run path_demo.py for security-focused analysis")
+        
+    except KeyboardInterrupt:
+        print("\n\n⏹️  Analysis interrupted by user.")
+    except Exception as e:
+        print(f"\n❌ Error during analysis: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 if __name__ == "__main__":
-    # Run basic demo
-    graph_data = demo_graph_building()
-    
-    # Analyze graph structure
-    analyze_graph_structure(graph_data)
-    
-    # Run integrated demo
-    demo_direct_scan_and_build()
-    
-    print("\n=== Demo Complete ===")
-    print("Generated files:")
-    print("- agent_system_graph.json: Basic graph build results")
-    print("- complete_agent_graph.json: Integrated scanning and build results")
+    main()

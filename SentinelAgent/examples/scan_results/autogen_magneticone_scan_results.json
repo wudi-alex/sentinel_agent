@@ -1,0 +1,30 @@
+{
+  "scan_info": {
+    "target": "/Users/xuhe/Documents/agent_experiments/autogen_magneticone",
+    "scan_type": "directory",
+    "timestamp": "2025-06-08T23:51:32.455796",
+    "scanner_version": "2.0-simplified"
+  },
+  "scan_summary": {
+    "total_agents": 0,
+    "total_tools": 0,
+    "total_crews": 0,
+    "total_tasks": 0,
+    "total_files": 14,
+    "python_files": 3
+  },
+  "agents": [],
+  "tools": [],
+  "crews": [],
+  "tasks": [],
+  "file_structure": {
+    "total_files": 14,
+    "python_files": 3,
+    "directories": 1,
+    "file_types": {
+      ".py": 3,
+      ".txt": 7,
+      ".csv": 4
+    }
+  }
+}

@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 """
-Path Analysis Demo
-Demonstrates agent system path analysis functionality
+Advanced Path Analysis Demo
+===========================
+
+This demo focuses on specialized path analysis features that complement unified_demo.py.
+For basic path analysis, use unified_demo.py.
+
+This demo provides:
+- Advanced path security analysis
+- Risk assessment methodologies
+- Path traversal vulnerability detection
+- Security-focused path insights
 """
 
 import sys
@@ -12,272 +21,316 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from sentinelagent.core.inspector import InspectorAgent
-from sentinelagent.core.graph_builder import scan_and_build_graph
-from sentinelagent.core.path_analyzer import analyze_paths_from_file, analyze_graph_paths
+try:
+    from sentinelagent.core.inspector import InspectorAgent
+    from sentinelagent.core.path_analyzer import analyze_paths_from_file, analyze_graph_paths
+    PATH_ANALYSIS_AVAILABLE = True
+except ImportError:
+    PATH_ANALYSIS_AVAILABLE = False
+    print("⚠️  Path analysis modules not available - using pre-existing analysis files only")
 
 
-def demo_complete_analysis():
-    """Demonstrate complete analysis workflow"""
-    print("=" * 60)
-    print("Path Analysis Demo - Complete Analysis Workflow")
-    print("=" * 60)
+def load_or_create_path_analysis():
+    """Load existing path analysis or create new one"""
+    path_files = ['unified_demo_paths.json', 'demo_paths.json', 'agent_system_paths.json']
     
-    # createInspector
-    inspector = InspectorAgent()
+    # Try to load existing analysis
+    for path_file in path_files:
+        if Path(path_file).exists():
+            print(f"📊 Loading existing path analysis: {path_file}")
+            with open(path_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
     
-    # Analyze current directory
-    current_dir = str(Path.cwd())
-    print(f"Analyzing directory: {current_dir}")
+    # Create new analysis if none exist and modules are available
+    if PATH_ANALYSIS_AVAILABLE:
+        print("📊 No existing path analysis found, creating new one...")
+        try:
+            inspector = InspectorAgent()
+            result = inspector.comprehensive_analysis(
+                target_path='.',
+                path_output="specialized_path_analysis.json"
+            )
+            path_analysis = result.get('path_analysis', {})
+            print("✅ Path analysis created and saved to: specialized_path_analysis.json")
+            return path_analysis
+        except Exception as e:
+            print(f"❌ Failed to create path analysis: {e}")
+            return None
+    else:
+        print("❌ No path analysis files found and modules unavailable")
+        return None
     
-    # Execute complete analysis
-    result = inspector.comprehensive_analysis(
-        target_path=current_dir,
-        scan_output="demo_scan.json",
-        graph_output="demo_graph.json", 
-        path_output="demo_paths.json"
-    )
-    
-    # displaypathanalyzeresultsummary
-    path_analysis = result['path_analysis']
-    overall = path_analysis.get('overall_assessment', {})
-    
-    print("\n" + "=" * 40)
-    print("Path Analysis Results Summary")
-    print("=" * 40)
-    print(f"Overall risk score: {overall.get('total_risk_score', 0)}")
-    print(f"Risk level: {overall.get('risk_level', 'unknown')}")
-    print(f"Paths analyzed: {overall.get('total_paths_analyzed', 0)}")
-    print(f"Suspicious patterns found: {overall.get('suspicious_patterns_found', 0)}")
-    
-    # Display node state distribution
-    node_analysis = path_analysis.get('node_analysis', {})
-    node_states = node_analysis.get('node_state_distribution', {})
-    print(f"\nNode state distribution:")
-    for state, count in node_states.items():
-        print(f"  {state}: {count}")
-    
-    # Display suspicious patterns
-    patterns = path_analysis.get('suspicious_patterns', [])
-    if patterns:
-        print(f"\nDetected suspicious patterns:")
-        for i, pattern in enumerate(patterns, 1):
-            print(f"  {i}. {pattern.get('pattern_type', 'unknown')} "
-                  f"(severity: {pattern.get('severity', 'unknown')})")
-            print(f"     {pattern.get('details', '')}")
-    
-    # Display recommendations
-    recommendations = path_analysis.get('recommendations', [])
-    if recommendations:
-        print(f"\nImprovement recommendations:")
-        for i, rec in enumerate(recommendations, 1):
-            print(f"  {i}. {rec}")
-    
-    return result
-
-
-def demo_path_types_analysis():
-    """Demonstrate path type analysis"""
-    print("\n" + "=" * 60)
-    print("Path Type Analysis Demo")
-    print("=" * 60)
-    
-    # Check if existing graph file exists
-    graph_file = "demo_graph.json"
-    if not Path(graph_file).exists():
-        print(f"Graph file {graph_file} does not exist, running complete analysis first...")
-        demo_complete_analysis()
-    
-    # Read graph data
-    with open(graph_file, 'r', encoding='utf-8') as f:
-        graph_data = json.load(f)
-    
-    # Execute path analysis
-    path_analysis = analyze_graph_paths(graph_data)
-    
-    # Display path type distribution
-    path_types = path_analysis.get('path_analysis', {}).get('path_type_distribution', {})
-    print("Path type distribution:")
-    for path_type, count in path_types.items():
-        print(f"  {path_type}: {count}")
-    
-    # Display detailed path information
-    detailed_paths = path_analysis.get('path_analysis', {}).get('detailed_paths', [])
-    print(f"\nDetailed path information (total {len(detailed_paths)} paths):")
-    
-    for i, path_info in enumerate(detailed_paths[:5], 1):  # Show only first 5
-        print(f"\nPath {i}:")
-        print(f"  Path: {' -> '.join(path_info['path'])}")
-        print(f"  Type: {path_info['path_type']}")
-        print(f"  Length: {path_info['length']}")
-        print(f"  Risk score: {path_info['risk_score']:.3f}")
-    
-    if len(detailed_paths) > 5:
-        print(f"\n... {len(detailed_paths) - 5} more paths")
-
-
-def demo_anomaly_detection():
-    """Demonstrate anomaly detection functionality"""
-    print("\n" + "=" * 60)
-    print("Anomaly Detection Demo")
-    print("=" * 60)
-    
-    # Check if path analysis file exists
-    paths_file = "demo_paths.json"
-    if not Path(paths_file).exists():
-        print(f"Path analysis file {paths_file} does not exist, running complete analysis first...")
-        demo_complete_analysis()
-    
-    # Read path analysis data
-    with open(paths_file, 'r', encoding='utf-8') as f:
-        path_analysis = json.load(f)
-    
-    # Analyze anomaly patterns
-    patterns = path_analysis.get('suspicious_patterns', [])
-    
-    print(f"Detected {len(patterns)} suspicious patterns:")
-    
-    for i, pattern in enumerate(patterns, 1):
-        print(f"\nAnomaly pattern {i}:")
-        print(f"  Type: {pattern.get('pattern_type', 'unknown')}")
-        print(f"  Severity: {pattern.get('severity', 'unknown')}")
-        print(f"  Description: {pattern.get('description', '')}")
-        print(f"  Details: {pattern.get('details', '')}")
+def analyze_security_vulnerabilities(path_analysis):
+    """Analyze security vulnerabilities in path analysis"""
+    if not path_analysis:
+        print("❌ No path analysis data available for security analysis")
+        return
         
-        # Display affected nodes/edges
-        if 'affected_nodes' in pattern:
-            print(f"  Affected nodes: {', '.join(pattern['affected_nodes'])}")
-        if 'affected_edges' in pattern:
-            print(f"  Affected edge count: {len(pattern['affected_edges'])}")
-        if 'affected_paths' in pattern:
-            print(f"  Affected path count: {len(pattern['affected_paths'])}")
-    
-    # Analyze risk distribution
-    risk_dist = path_analysis.get('path_analysis', {}).get('risk_score_distribution', {})
-    total_paths = sum(risk_dist.values())
-    
-    if total_paths > 0:
-        print(f"\nRisk score distribution:")
-        print(f"  Low risk (<0.3): {risk_dist.get('low', 0)} ({risk_dist.get('low', 0)/total_paths*100:.1f}%)")
-        print(f"  Medium risk (0.3-0.7): {risk_dist.get('medium', 0)} ({risk_dist.get('medium', 0)/total_paths*100:.1f}%)")
-        print(f"  High risk (>0.7): {risk_dist.get('high', 0)} ({risk_dist.get('high', 0)/total_paths*100:.1f}%)")
-
-
-def demo_security_insights():
-    """Demonstrate security insight functionality"""
-    print("\n" + "=" * 60)
-    print("Security Insights Demo")
+    print("=" * 60)
+    print("🔒 Advanced Security Vulnerability Analysis")
     print("=" * 60)
     
-    # Check if path analysis file exists
-    paths_file = "demo_paths.json"
-    if not Path(paths_file).exists():
-        print(f"Path analysis file {paths_file} does not exist, running complete analysis first...")
-        demo_complete_analysis()
+    # Analyze suspicious patterns with security focus
+    patterns = path_analysis.get('suspicious_patterns', [])
     
-    # Read path analysis data
-    with open(paths_file, 'r', encoding='utf-8') as f:
-        path_analysis = json.load(f)
+    if patterns:
+        print(f"\n🚨 Security Threat Analysis ({len(patterns)} patterns detected):")
+        
+        # Categorize threats by severity
+        critical_threats = [p for p in patterns if p.get('severity') == 'critical']
+        high_threats = [p for p in patterns if p.get('severity') == 'high']
+        medium_threats = [p for p in patterns if p.get('severity') == 'medium']
+        
+        if critical_threats:
+            print(f"\n🔴 CRITICAL Threats ({len(critical_threats)}):")
+            for threat in critical_threats:
+                print(f"   • {threat.get('pattern_type', 'Unknown')}")
+                print(f"     Description: {threat.get('description', 'No description')}")
+                if 'affected_nodes' in threat:
+                    print(f"     Affected nodes: {len(threat['affected_nodes'])}")
+        
+        if high_threats:
+            print(f"\n🟠 HIGH Risk Threats ({len(high_threats)}):")
+            for threat in high_threats:
+                print(f"   • {threat.get('pattern_type', 'Unknown')}")
+                print(f"     Description: {threat.get('description', 'No description')}")
+        
+        if medium_threats:
+            print(f"\n🟡 MEDIUM Risk Threats ({len(medium_threats)}):")
+            for threat in medium_threats[:3]:  # Show first 3
+                print(f"   • {threat.get('pattern_type', 'Unknown')}")
+            if len(medium_threats) > 3:
+                print(f"   ... and {len(medium_threats) - 3} more")
     
-    overall = path_analysis.get('overall_assessment', {})
-    
-    print("Security Assessment Summary:")
-    print(f"  Overall risk score: {overall.get('total_risk_score', 0):.3f}")
-    print(f"  Risk level: {overall.get('risk_level', 'unknown').upper()}")
-    
-    # Security recommendations
+    # Security recommendations analysis
     recommendations = path_analysis.get('recommendations', [])
     if recommendations:
-        print(f"\nSecurity recommendations:")
-        for i, rec in enumerate(recommendations, 1):
-            # Determine priority based on recommendation content
-            priority = "HIGH" if "CRITICAL" in rec else "MEDIUM" if "Review" in rec else "LOW"
-            print(f"  [{priority}] {rec}")
+        print(f"\n🛡️  Security Hardening Recommendations:")
+        
+        # Categorize recommendations by urgency
+        security_recs = [r for r in recommendations if any(keyword in r.lower() 
+                        for keyword in ['security', 'vulnerability', 'access', 'permission', 'encryption'])]
+        
+        for i, rec in enumerate(security_recs, 1):
+            priority = "🔴 URGENT" if "critical" in rec.lower() else "🟠 HIGH" if "important" in rec.lower() else "🟡 STANDARD"
+            print(f"   {i}. [{priority}] {rec}")
     
-    # Node security state
+    # Path traversal risk analysis
+    overall = path_analysis.get('overall_assessment', {})
+    risk_score = overall.get('total_risk_score', 0)
+    
+    print(f"\n📊 Risk Assessment Summary:")
+    print(f"   • Overall Risk Score: {risk_score:.3f}")
+    print(f"   • Risk Level: {overall.get('risk_level', 'unknown').upper()}")
+    
+    if risk_score > 0.7:
+        print("   🚨 SECURITY ALERT: High risk system detected!")
+        print("      Immediate security review recommended")
+    elif risk_score > 0.4:
+        print("   ⚠️  CAUTION: Medium risk system")
+        print("      Security improvements recommended")
+    else:
+        print("   ✅ Low risk system - good security posture")
+
+
+def analyze_path_traversal_patterns(path_analysis):
+    """Analyze path traversal and access patterns"""
+    if not path_analysis:
+        print("❌ No path analysis data available")
+        return
+        
+    print("=" * 60)
+    print("🛣️  Path Traversal Security Analysis")
+    print("=" * 60)
+    
+    # Analyze detailed paths for security patterns
+    detailed_paths = path_analysis.get('path_analysis', {}).get('detailed_paths', [])
+    
+    if detailed_paths:
+        print(f"📋 Analyzing {len(detailed_paths)} paths for security vulnerabilities...")
+        
+        # Find high-risk paths
+        high_risk_paths = [p for p in detailed_paths if p.get('risk_score', 0) > 0.7]
+        medium_risk_paths = [p for p in detailed_paths if 0.4 <= p.get('risk_score', 0) <= 0.7]
+        
+        print(f"\n🚨 High-Risk Paths ({len(high_risk_paths)}):")
+        for i, path in enumerate(high_risk_paths[:5], 1):  # Show first 5
+            path_str = ' → '.join(path['path'])
+            print(f"   {i}. Risk: {path['risk_score']:.3f} | {path_str}")
+            print(f"      Type: {path.get('path_type', 'unknown')} | Length: {path.get('length', 0)}")
+        
+        if len(high_risk_paths) > 5:
+            print(f"   ... and {len(high_risk_paths) - 5} more high-risk paths")
+        
+        if medium_risk_paths:
+            print(f"\n⚠️  Medium-Risk Paths ({len(medium_risk_paths)}):")
+            for i, path in enumerate(medium_risk_paths[:3], 1):  # Show first 3
+                path_str = ' → '.join(path['path'])
+                print(f"   {i}. Risk: {path['risk_score']:.3f} | {path_str}")
+        
+        # Analyze path types for security implications
+        path_types = path_analysis.get('path_analysis', {}).get('path_type_distribution', {})
+        print(f"\n📊 Path Type Security Analysis:")
+        
+        for path_type, count in path_types.items():
+            risk_level = "HIGH" if "admin" in path_type.lower() or "root" in path_type.lower() else \
+                        "MEDIUM" if "execute" in path_type.lower() or "write" in path_type.lower() else "LOW"
+            print(f"   • {path_type}: {count} paths [{risk_level} risk]")
+
+
+def analyze_node_security_states(path_analysis):
+    """Analyze node security states and access patterns"""
+    if not path_analysis:
+        print("❌ No path analysis data available")
+        return
+        
+    print("=" * 60)
+    print("🔍 Node Security State Analysis")
+    print("=" * 60)
+    
     node_analysis = path_analysis.get('node_analysis', {})
+    
+    # Node state distribution analysis
+    node_states = node_analysis.get('node_state_distribution', {})
+    print(f"📊 Node Security State Distribution:")
+    
+    total_nodes = sum(node_states.values())
+    if total_nodes > 0:
+        for state, count in node_states.items():
+            percentage = (count / total_nodes) * 100
+            risk_indicator = "🚨" if state == "suspicious" else "⚠️" if state == "warning" else "✅"
+            print(f"   {risk_indicator} {state.title()}: {count} ({percentage:.1f}%)")
+    
+    # Detailed node state analysis
     nodes_with_states = node_analysis.get('nodes_with_states', {})
+    
     suspicious_nodes = [nid for nid, state in nodes_with_states.items() if state == 'suspicious']
+    warning_nodes = [nid for nid, state in nodes_with_states.items() if state == 'warning']
     
     if suspicious_nodes:
-        print(f"\nSuspicious nodes requiring attention:")
-        for node_id in suspicious_nodes[:5]:  # Show only first 5
-            print(f"  - {node_id}")
+        print(f"\n🚨 Suspicious Nodes Requiring Immediate Attention:")
+        for i, node_id in enumerate(suspicious_nodes[:5], 1):  # Show first 5
+            print(f"   {i}. {node_id}")
         if len(suspicious_nodes) > 5:
-            print(f"  ... {len(suspicious_nodes) - 5} more")
+            print(f"   ... and {len(suspicious_nodes) - 5} more")
     
-    # Edge security state
+    if warning_nodes:
+        print(f"\n⚠️  Warning Nodes for Review:")
+        for i, node_id in enumerate(warning_nodes[:3], 1):  # Show first 3
+            print(f"   {i}. {node_id}")
+        if len(warning_nodes) > 3:
+            print(f"   ... and {len(warning_nodes) - 3} more")
+    
+    # Edge security analysis
     edge_analysis = path_analysis.get('edge_analysis', {})
-    edge_dist = edge_analysis.get('edge_state_distribution', {})
+    edge_states = edge_analysis.get('edge_state_distribution', {})
     
-    print(f"\nConnection security state:")
-    for state, count in edge_dist.items():
-        print(f"  {state}: {count}")
+    if edge_states:
+        print(f"\n🔗 Connection Security Analysis:")
+        total_edges = sum(edge_states.values())
+        for state, count in edge_states.items():
+            percentage = (count / total_edges) * 100 if total_edges > 0 else 0
+            risk_indicator = "🚨" if "suspicious" in state else "⚠️" if "warning" in state else "✅"
+            print(f"   {risk_indicator} {state.title()}: {count} ({percentage:.1f}%)")
 
 
-def interactive_demo():
-    """Interactive demo"""
-    print("\n" + "=" * 60)
-    print("Interactive Path Analysis Demo")
+def generate_security_report(path_analysis, output_file="path_security_report.md"):
+    """Generate a detailed security-focused path analysis report"""
+    if not path_analysis:
+        print("❌ Cannot generate security report - missing data")
+        return
+    
+    print(f"\n📄 Generating security report: {output_file}")
+    
+    overall = path_analysis.get('overall_assessment', {})
+    patterns = path_analysis.get('suspicious_patterns', [])
+    recommendations = path_analysis.get('recommendations', [])
+    
+    report_content = f"""# Path Security Analysis Report
+Generated: {Path().cwd()}
+
+## 🚨 Security Assessment Summary
+- **Overall Risk Score**: {overall.get('total_risk_score', 0):.3f}
+- **Risk Level**: {overall.get('risk_level', 'unknown').upper()}
+- **Suspicious Patterns**: {len(patterns)}
+- **Security Recommendations**: {len(recommendations)}
+
+## 🔒 Critical Security Findings
+"""
+    
+    # Add critical threats
+    critical_threats = [p for p in patterns if p.get('severity') == 'critical']
+    if critical_threats:
+        report_content += f"\n### Critical Threats ({len(critical_threats)})\n"
+        for threat in critical_threats:
+            report_content += f"- **{threat.get('pattern_type', 'Unknown')}**\n"
+            report_content += f"  - Description: {threat.get('description', 'No description')}\n"
+            report_content += f"  - Severity: {threat.get('severity', 'unknown').upper()}\n\n"
+    
+    # Add security recommendations
+    security_recs = [r for r in recommendations if any(keyword in r.lower() 
+                    for keyword in ['security', 'vulnerability', 'access', 'permission'])]
+    
+    if security_recs:
+        report_content += "\n### Security Recommendations\n"
+        for i, rec in enumerate(security_recs, 1):
+            priority = "🔴 URGENT" if "critical" in rec.lower() else "🟠 HIGH" if "important" in rec.lower() else "🟡 STANDARD"
+            report_content += f"{i}. [{priority}] {rec}\n"
+    
+    # Save report
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(report_content)
+    
+    print(f"✅ Security report saved: {output_file}")
+
+
+def main():
+    """Main demo function"""
+    print("🔒 SentinelAgent - Advanced Path Security Analysis Demo")
+    print("=" * 60)
+    print("Note: For basic path analysis, use unified_demo.py")
+    print("This demo focuses on security-specific path analysis features.")
     print("=" * 60)
     
-    while True:
-        print("\nSelect demo option:")
-        print("1. Complete analysis workflow")
-        print("2. Path type analysis")
-        print("3. Anomaly detection demo")
-        print("4. Security insights demo")
-        print("5. Analyze custom directory")
-        print("0. Exit")
+    try:
+        # Load or create path analysis
+        path_analysis = load_or_create_path_analysis()
         
-        choice = input("\nPlease select (0-5): ").strip()
+        if not path_analysis:
+            print("\n❌ No path analysis data available. Please:")
+            print("1. Run unified_demo.py first to create path analysis, or")
+            print("2. Ensure path analysis modules are available")
+            return
         
-        if choice == '0':
-            print("Demo finished!")
-            break
-        elif choice == '1':
-            demo_complete_analysis()
-        elif choice == '2':
-            demo_path_types_analysis()
-        elif choice == '3':
-            demo_anomaly_detection()
-        elif choice == '4':
-            demo_security_insights()
-        elif choice == '5':
-            target_dir = input("Please enter the directory path to analyze: ").strip()
-            if target_dir and Path(target_dir).exists():
-                inspector = InspectorAgent()
-                inspector.comprehensive_analysis(target_dir)
-            else:
-                print("Directory does not exist!")
-        else:
-            print("Invalid selection, please try again.")
+        # Perform security-focused analysis
+        print("\n🔍 Performing advanced security analysis...")
+        
+        # 1. Security vulnerability analysis
+        analyze_security_vulnerabilities(path_analysis)
+        
+        # 2. Path traversal analysis
+        analyze_path_traversal_patterns(path_analysis)
+        
+        # 3. Node security state analysis
+        analyze_node_security_states(path_analysis)
+        
+        # 4. Generate security report
+        generate_security_report(path_analysis)
+        
+        print("\n✅ Advanced security analysis complete!")
+        print("\n💡 Next steps:")
+        print("   • Review the generated path_security_report.md")
+        print("   • Address critical security findings immediately")
+        print("   • Implement recommended security measures")
+        print("   • Run graph_demo.py for structural analysis")
+        
+    except KeyboardInterrupt:
+        print("\n\n⏹️  Analysis interrupted by user.")
+    except Exception as e:
+        print(f"\n❌ Error during security analysis: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 if __name__ == "__main__":
-    # Run all demos
-    print("Path Analysis System Demo")
-    print("This demo will showcase various features of the agent system path analysis")
-    
-    try:
-        # 1. Complete analysis
-        demo_complete_analysis()
-        
-        # 2. Path type analysis
-        demo_path_types_analysis()
-        
-        # 3. Anomaly detection
-        demo_anomaly_detection()
-        
-        # 4. Security insights
-        demo_security_insights()
-        
-        # 5. Interactive demo
-        interactive_demo()
-        
-    except KeyboardInterrupt:
-        print("\n\nDemo interrupted by user.")
-    except Exception as e:
-        print(f"\nError occurred during demo: {e}")
-        import traceback
-        traceback.print_exc()
+    main()
