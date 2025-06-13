@@ -72,7 +72,26 @@ open http://localhost:5002
 
 ### 📦 Local Installation
 
-#### Installation
+#### 🐍 Python Virtual Environment (Recommended)
+
+For better dependency management and isolation from system packages:
+
+```bash
+git clone https://github.com/your-repo/SentinelAgent.git
+cd SentinelAgent
+
+# Setup virtual environment
+./setup_venv.sh
+
+# Activate environment
+source venv/bin/activate
+
+# Start web interface
+sentinelagent-web
+```
+
+#### 📋 Direct Installation (Alternative)
+
 ```bash
 git clone https://github.com/your-repo/SentinelAgent.git
 cd SentinelAgent
