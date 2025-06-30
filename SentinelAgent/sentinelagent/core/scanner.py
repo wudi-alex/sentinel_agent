@@ -22,6 +22,8 @@ class AgentSystemScanner:
         self.crews = []
         self.tasks = []
         self.file_structure = {}
+        self.variable_assignments = {}  # Track variable assignments to agents
+        self.task_variables = {}  # Track task variable assignments
     
     def scan_directory(self, directory_path: str) -> Dict[str, Any]:
         """Scan directory and analyze agent system structure"""
@@ -68,6 +70,8 @@ class AgentSystemScanner:
         self.crews = []
         self.tasks = []
         self.file_structure = {}
+        self.variable_assignments = {}
+        self.task_variables = {}
     
     def _scan_file_structure(self, directory: Path):
         """Scan file structure"""
@@ -98,6 +102,8 @@ class AgentSystemScanner:
             try:
                 tree = ast.parse(content)
                 self._analyze_ast(tree, file_path)
+                # Resolve task dependencies after AST analysis
+                self._resolve_task_dependencies()
             except SyntaxError:
                 # Use regex when AST fails
                 self._analyze_with_regex(content, file_path)
@@ -107,18 +113,143 @@ class AgentSystemScanner:
     
     def _analyze_ast(self, tree: ast.AST, file_path: Path):
         """Analyze code using AST"""
+        # First pass: collect variable assignments that create agents and tasks
+        agent_variables = {}  # variable_name -> agent_info
+        task_variables = {}   # variable_name -> task_info
+        
         for node in ast.walk(tree):
-            # Find Agent class definitions
-            if isinstance(node, ast.ClassDef):
-                self._check_agent_class(node, file_path)
+            if isinstance(node, ast.Assign):
+                # Check if this is an agent assignment
+                if isinstance(node.value, ast.Call) and hasattr(node.value.func, 'id') and node.value.func.id == 'Agent':
+                    for target in node.targets:
+                        if isinstance(target, ast.Name):
+                            var_name = target.id
+                            # Extract agent info
+                            args = {}
+                            agent_tools = []
+                            
+                            for keyword in node.value.keywords:
+                                if keyword.arg in ['role', 'goal', 'backstory']:
+                                    if isinstance(keyword.value, ast.Constant):
+                                        args[keyword.arg] = keyword.value.value
+                                elif keyword.arg == 'tools':
+                                    # Extract tools list
+                                    if isinstance(keyword.value, ast.List):
+                                        for elt in keyword.value.elts:
+                                            if isinstance(elt, ast.Call) and hasattr(elt.func, 'id'):
+                                                tool_name = elt.func.id
+                                                agent_tools.append(tool_name)
+                                                # Add to global tools list if not already present
+                                                tool_exists = any(t['name'] == tool_name for t in self.tools)
+                                                if not tool_exists:
+                                                    self.tools.append({
+                                                        'name': tool_name,
+                                                        'type': 'tool_instance',
+                                                        'file': str(file_path),
+                                                        'line': elt.lineno if hasattr(elt, 'lineno') else node.lineno,
+                                                        'used_by_agent': var_name
+                                                    })
+                            
+                            if agent_tools:
+                                args['tools'] = agent_tools
+                            
+                            agent_name = f'Agent_{len(self.agents)+1}'
+                            agent_variables[var_name] = agent_name
+                            
+                            self.agents.append({
+                                'name': agent_name,
+                                'type': 'instance',
+                                'file': str(file_path),
+                                'line': node.lineno,
+                                'arguments': args,
+                                'variable_name': var_name
+                            })
+                
+                # Check if this is a task assignment
+                elif isinstance(node.value, ast.Call) and hasattr(node.value.func, 'id') and node.value.func.id == 'Task':
+                    for target in node.targets:
+                        if isinstance(target, ast.Name):
+                            var_name = target.id
+                            task_name = f'Task_{len(self.tasks)+1}'
+                            task_variables[var_name] = task_name
+                            
+                            # Extract task arguments including agent assignment and dependencies
+                            task_args = {}
+                            assigned_agent = None
+                            assigned_agent_name = None
+                            dependencies = []
+                            
+                            for keyword in node.value.keywords:
+                                if keyword.arg in ['description', 'expected_output']:
+                                    if isinstance(keyword.value, ast.Constant):
+                                        task_args[keyword.arg] = keyword.value.value
+                                    elif isinstance(keyword.value, ast.JoinedStr):
+                                        # Handle f-strings by extracting the string parts
+                                        task_args[keyword.arg] = self._extract_fstring_content(keyword.value)
+                                elif keyword.arg == 'agent':
+                                    # Extract agent assignment - could be a variable name
+                                    if isinstance(keyword.value, ast.Name):
+                                        assigned_agent_name = keyword.value.id
+                                        # Look up the agent from our variable assignments
+                                        assigned_agent = agent_variables.get(assigned_agent_name)
+                                elif keyword.arg == 'context':
+                                    # Extract context dependencies
+                                    if isinstance(keyword.value, ast.List):
+                                        for elt in keyword.value.elts:
+                                            if isinstance(elt, ast.Name):
+                                                dependencies.append(elt.id)
+                                        task_args['context'] = dependencies
+                            
+                            self.tasks.append({
+                                'name': task_name,
+                                'type': 'instance',
+                                'file': str(file_path),
+                                'line': node.lineno,
+                                'arguments': task_args,
+                                'assigned_agent': assigned_agent,
+                                'assigned_agent_variable': assigned_agent_name,
+                                'variable_name': var_name,
+                                'dependencies': dependencies  # Add explicit dependencies field
+                            })
+                            
+                            # Store task variable mapping for dependency resolution
+                            self.task_variables[var_name] = task_name
+        
+        # Second pass: collect other function calls (Crew instantiation, standalone tools)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                # Handle Crew instantiation
+                if hasattr(node.func, 'id') and node.func.id == 'Crew':
+                    self.crews.append({
+                        'name': f'Crew_{len(self.crews)+1}',
+                        'type': 'instance',
+                        'file': str(file_path),
+                        'line': node.lineno
+                    })
+                
+                # Handle standalone tool instantiation
+                elif hasattr(node.func, 'id') and node.func.id.endswith('Tool'):
+                    tool_exists = any(t['name'] == node.func.id for t in self.tools)
+                    if not tool_exists:
+                        self.tools.append({
+                            'name': node.func.id,
+                            'type': 'standalone_instance',
+                            'file': str(file_path),
+                            'line': node.lineno
+                        })
+        
+        # Third pass: find imports that might be tools
+        imported_tools = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom):
+                if node.module == 'tools' or (node.module and 'tools' in node.module):
+                    for alias in node.names:
+                        if alias.name.endswith('Tool'):
+                            imported_tools.append(alias.name)
             
-            # Find function calls
-            elif isinstance(node, ast.Call):
-                self._check_function_call(node, file_path)
-            
-            # Find variable assignments
-            elif isinstance(node, ast.Assign):
-                self._check_assignment(node, file_path)
+            # Find tool class definitions
+            elif isinstance(node, ast.ClassDef):
+                self._check_tool_class(node, file_path)
     
     def _analyze_with_regex(self, content: str, file_path: Path):
         """Analyze code using regular expressions"""
@@ -158,61 +289,28 @@ class AgentSystemScanner:
                     'line': content[:match.start()].count('\n') + 1
                 })
     
-    def _check_agent_class(self, node: ast.ClassDef, file_path: Path):
-        """Check if it's an Agent class"""
-        # Check base classes
+    def _check_tool_class(self, node: ast.ClassDef, file_path: Path):
+        """Check if it's a Tool class"""
+        # Check base classes for BaseTool
         for base in node.bases:
-            if hasattr(base, 'id') and 'Agent' in base.id:
-                self.agents.append({
+            if hasattr(base, 'id') and 'Tool' in base.id:
+                self.tools.append({
                     'name': node.name,
                     'type': 'class_definition',
                     'file': str(file_path),
                     'line': node.lineno
                 })
                 break
-    
-    def _check_function_call(self, node: ast.Call, file_path: Path):
-        """Check function calls"""
-        # Agent instantiation
-        if hasattr(node.func, 'id') and node.func.id == 'Agent':
-            # Extract arguments
-            args = {}
-            for keyword in node.keywords:
-                if keyword.arg in ['role', 'goal', 'backstory']:
-                    if isinstance(keyword.value, ast.Constant):
-                        args[keyword.arg] = keyword.value.value
-            
-            self.agents.append({
-                'name': f'Agent_{len(self.agents)+1}',
-                'type': 'instance',
-                'file': str(file_path),
-                'line': node.lineno,
-                'arguments': args
-            })
-        
-        # Crew instantiation
-        elif hasattr(node.func, 'id') and node.func.id == 'Crew':
-            self.crews.append({
-                'name': f'Crew_{len(self.crews)+1}',
-                'type': 'instance',
-                'file': str(file_path),
-                'line': node.lineno
-            })
-        
-        # Task instantiation
-        elif hasattr(node.func, 'id') and node.func.id == 'Task':
-            self.tasks.append({
-                'name': f'Task_{len(self.tasks)+1}',
-                'type': 'instance',
-                'file': str(file_path),
-                'line': node.lineno
-            })
-    
-    def _check_assignment(self, node: ast.Assign, file_path: Path):
-        """Check variable assignments"""
-        # Check Agent/Tool/Crew/Task assignments
-        if isinstance(node.value, ast.Call):
-            self._check_function_call(node.value, file_path)
+        # Check if class name ends with Tool (alternative check)
+        if node.name.endswith('Tool'):
+            # Only add if not already added by base class check
+            if not any(t['name'] == node.name and t['file'] == str(file_path) for t in self.tools):
+                self.tools.append({
+                    'name': node.name,
+                    'type': 'class_definition',
+                    'file': str(file_path),
+                    'line': node.lineno
+                })
     
     def _generate_report(self, directory_path: Path) -> Dict[str, Any]:
         """Generate scan report"""
@@ -260,6 +358,34 @@ class AgentSystemScanner:
             'crews': self.crews,
             'tasks': self.tasks
         }
+    
+    def _extract_fstring_content(self, node: ast.JoinedStr) -> str:
+        """Extract content from f-string for basic description capture"""
+        parts = []
+        for value in node.values:
+            if isinstance(value, ast.Constant):
+                parts.append(str(value.value))
+            elif isinstance(value, ast.FormattedValue):
+                # For formatted values, just add a placeholder
+                parts.append("[formatted_value]")
+        return "".join(parts)
+    
+    def _resolve_task_dependencies(self):
+        """Resolve task dependencies after scanning"""
+        for task in self.tasks:
+            dependencies = task.get('dependencies', [])
+            resolved_dependencies = []
+            
+            for dep_var in dependencies:
+                # Look up the task name from variable name
+                dep_task_name = self.task_variables.get(dep_var)
+                if dep_task_name:
+                    resolved_dependencies.append({
+                        'variable_name': dep_var,
+                        'task_name': dep_task_name
+                    })
+            
+            task['resolved_dependencies'] = resolved_dependencies
 
 
 # Convenience functions

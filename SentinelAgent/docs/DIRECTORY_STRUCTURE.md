@@ -1,10 +1,10 @@
 # SentinelAgent Directory Structure
 
-This document describes the reorganized directory structure of SentinelAgent.
+This document describes the clean, reorganized directory structure of SentinelAgent.
 
 ## Overview
 
-The SentinelAgent project has been reorganized into a clean, maintainable structure that follows Python packaging best practices.
+The SentinelAgent project has been reorganized into a clean, maintainable structure that follows Python packaging best practices and separates development artifacts from core functionality.
 
 ## Directory Structure
 
@@ -36,6 +36,26 @@ SentinelAgent/
 │       ├── __init__.py
 │       ├── main.py               # Main CLI entry point
 │       └── start_web_ui.py       # Web UI launcher
+├── scripts/                      # Development and utility scripts
+│   ├── analysis/                 # Analysis scripts
+│   │   ├── run_improved_path_analysis.py
+│   │   ├── run_path_analysis.py
+│   │   ├── test_optimization.py
+│   │   └── validate_task_dependencies.py
+│   ├── demo/                     # Demo scripts
+│   │   ├── demo_inspector_usage.py
+│   │   └── inspector_usage_guide.py
+│   └── utilities/                # Utility scripts
+│       ├── generate_analysis_summary.py
+│       ├── generate_comparative_report.py
+│       ├── generate_path_visualization.py
+│       ├── graph_visualizer.py
+│       └── quick_path_viewer.py
+├── data/                         # Data storage (excluded from git)
+│   ├── demo/                     # Demo data files
+│   ├── uploads/                  # User uploaded files
+│   ├── generated_outputs/        # Generated scan results, graphs, and outputs
+│   └── analysis_results/         # Analysis reports and summaries
 ├── examples/                     # Usage examples
 │   ├── example.py                # Basic usage examples
 │   └── demos/                    # Demo scripts
@@ -43,11 +63,6 @@ SentinelAgent/
 │       ├── graph_demo.py         # Advanced graph analysis demo
 │       ├── path_demo.py          # Security-focused path analysis demo
 │       └── log_analysis_demo.py  # Specialized log analysis demo
-├── docs/                         # Documentation
-│   ├── DEMO_GUIDE.md             # Comprehensive demo guide and instructions
-│   ├── PROJECT_REORGANIZATION_COMPLETE.md
-│   ├── QUICK_START.md            # Quick start guide
-│   └── deployment/               # Deployment documentation
 │       └── DOCKER_DEPLOYMENT.md
 ├── scripts/                      # Utility scripts
 │   ├── install.sh                # Installation script
@@ -64,8 +79,6 @@ SentinelAgent/
 ├── MANIFEST.in                   # Package manifest
 ├── requirements.txt              # Python dependencies
 ├── README.md                     # Project README
-├── launch.py                     # Convenient launcher script
-├── sentinel_agent                # Main executable entry point
 ├── Dockerfile                    # Docker configuration
 └── docker-compose.yml           # Docker Compose configuration
 ```
@@ -78,8 +91,8 @@ SentinelAgent/
 - Organized code into logical modules: `core`, `utils`, `web`, `cli`
 
 ### 2. **Entry Points**
-- `launch.py` - Convenient launcher with multiple commands
-- `sentinel_agent` - Main executable entry point
+- `python -m sentinelagent.cli.main` - Main CLI interface
+- `python -m sentinelagent.cli.start_web_ui` - Web UI launcher
 - `setup.py` - Proper Python package setup with console scripts
 
 ### 3. **Documentation Organization**
@@ -109,16 +122,16 @@ pip install -r requirements.txt
 
 ### Running SentinelAgent
 
-#### Method 1: Using the launcher script
+#### Method 1: Using Python modules
 ```bash
 # Start web UI
-python launch.py web
+python -m sentinelagent.cli.start_web_ui
 
 # Scan a directory
-python launch.py scan /path/to/analyze
+python -m sentinelagent.cli.main /path/to/analyze
 
-# Run complete demo
-python launch.py demo --type complete
+# Run examples
+python examples/example.py
 ```
 
 #### Method 2: Using console scripts (after pip install)

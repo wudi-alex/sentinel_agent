@@ -110,7 +110,7 @@ done
 ```
 
 ### Export Results
-All analysis results are automatically saved in the `data/output/` directory, supporting:
+All analysis results are automatically saved in the `data/generated_outputs/` directory, supporting:
 - JSON format results
 - Graph visualization exports
 - Path analysis reports
@@ -127,7 +127,7 @@ Edit `config/sentinel_agent.conf` to customize:
 
 ## 📚 More Documentation
 
-- [User Guide](USER_GUIDE.md)
-- [API Reference](API_REFERENCE.md)
-- [Configuration Guide](CONFIGURATION.md)
-- [Development Guide](DEVELOPMENT.md)
+- [Installation Guide](INSTALLATION.md) - Detailed installation instructions
+- [CLI Usage Guide](CLI_USAGE.md) - Complete command-line reference
+- [Docker Deployment](DOCKER_DEPLOYMENT.md) - Container deployment guide
+- [Directory Structure](DIRECTORY_STRUCTURE.md) - Project organization overview

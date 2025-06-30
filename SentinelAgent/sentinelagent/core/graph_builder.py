@@ -48,6 +48,7 @@ class AgentSystemGraphBuilder:
             # Find crews and tasks related to this agent
             agent_crews = self._find_related_crews(agent, scan_result.get('crews', []))
             agent_tasks = self._find_related_tasks(agent, scan_result.get('tasks', []))
+            agent_tools = agent.get('arguments', {}).get('tools', [])
             
             self.nodes[node_id] = {
                 'id': node_id,
@@ -59,6 +60,7 @@ class AgentSystemGraphBuilder:
                     'role': agent.get('arguments', {}).get('role', ''),
                     'goal': agent.get('arguments', {}).get('goal', ''),
                     'backstory': agent.get('arguments', {}).get('backstory', ''),
+                    'tools': agent_tools,  # Add configured tools
                     'crews': agent_crews,  # Crews this agent belongs to
                     'tasks': agent_tasks   # Tasks this agent executes
                 }
@@ -75,17 +77,16 @@ class AgentSystemGraphBuilder:
                 'line': tool.get('line', 0),
                 'metadata': {
                     'description': tool.get('description', ''),
-                    'function_name': tool.get('function_name', '')
+                    'function_name': tool.get('function_name', ''),
+                    'tool_type': tool.get('type', ''),
+                    'used_by_agent': tool.get('used_by_agent', '')  # Which agent uses this tool
                 }
             }
     
     def _build_edges_from_scan(self, scan_result: Dict[str, Any]):
         """Build edges based on scan result analysis"""
-        # Analyze relationships based on file locations
-        self._analyze_file_relationships(scan_result)
-        
-        # Analyze relationships based on naming conventions
-        self._analyze_naming_relationships()
+        # Skip file proximity and naming similarity analysis - they don't represent actual execution relationships
+        # Only analyze content relationships for more accurate graph representing real execution flows
         
         # Analyze relationships based on code content (if detailed code analysis available)
         self._analyze_content_relationships(scan_result)
@@ -130,7 +131,7 @@ class AgentSystemGraphBuilder:
                 if self._names_similar(agent_name, tool_name):
                     self._add_edge(agent_id, tool_id, 'name_similarity', 0.6)
         
-        # Add relationships between agents based on crew and task information
+        # Add relationships between agents based on crew information (but respect task dependencies)
         for agent_id in agent_nodes:
             agent = self.nodes[agent_id]
             agent_crews = agent['metadata'].get('crews', [])
@@ -144,48 +145,103 @@ class AgentSystemGraphBuilder:
                     # Check if there are common crews
                     common_crews = self._find_common_crews(agent_crews, other_crews)
                     if common_crews:
-                        self._add_edge(agent_id, other_agent_id, 'same_crew_collaboration', 0.7)
-    
-    def _find_common_crews(self, crews1: List[Dict], crews2: List[Dict]) -> List[Dict]:
-        """Find common crews between two agents"""
-        common = []
-        for c1 in crews1:
-            for c2 in crews2:
-                if (c1.get('file') == c2.get('file') and 
-                    c1.get('line') == c2.get('line')):
-                    common.append(c1)
-        return common
+                        # Check if there's already a task dependency edge between these agents
+                        has_dependency = any(
+                            edge['source'] in [agent_id, other_agent_id] and 
+                            edge['target'] in [agent_id, other_agent_id] and 
+                            edge['relationship'] == 'task_dependency'
+                            for edge in self.edges
+                        )
+                        
+                        if not has_dependency:
+                            # Only add collaborative edge if no dependency exists
+                            # Lower weight for crew collaboration as task_dependency is more authoritative
+                            self._add_edge(agent_id, other_agent_id, 'same_crew_collaboration', 0.4)
     
     def _analyze_content_relationships(self, scan_result: Dict[str, Any]):
         """Analyze relationships based on code content"""
-        # More complex code analysis logic can be added here
-        # For example: analyze function calls, imports, etc.
-        
-        # If specific tool references are scanned, add stronger connections
-        for agent in scan_result.get('agents', []):
-            agent_file = agent.get('file', '')
-            agent_id = None
+        # Analyze explicit tool usage relationships
+        for i, agent in enumerate(scan_result.get('agents', [])):
+            agent_id = f"agent_{i}"
+            agent_tools = agent.get('arguments', {}).get('tools', [])
             
-            # Find corresponding agent node
-            for nid, node in self.nodes.items():
-                if node['type'] == 'agent' and node['file'] == agent_file:
-                    agent_id = nid
-                    break
-            
-            if agent_id:
-                # Check for tool references
-                for tool in scan_result.get('tools', []):
-                    tool_name = tool.get('name', '')
-                    if tool_name and agent.get('arguments', {}).get('tools'):
-                        # If agent explicitly uses a specific tool
-                        tool_id = None
-                        for nid, node in self.nodes.items():
-                            if node['type'] == 'tool' and node['name'] == tool_name:
-                                tool_id = nid
-                                break
-                        
-                        if tool_id:
+            # Create explicit relationships between agents and their configured tools
+            if agent_tools:
+                for tool_name in agent_tools:
+                    # Find the corresponding tool node
+                    for j, tool in enumerate(scan_result.get('tools', [])):
+                        if tool.get('name') == tool_name:
+                            tool_id = f"tool_{j}"
+                            # Add explicit usage relationship
                             self._add_edge(agent_id, tool_id, 'explicit_usage', 0.9)
+                            print(f"🔗 Added explicit usage: {agent_id} uses {tool_id} ({tool_name})")
+                            break
+        
+        # Analyze task assignment relationships
+        for i, task in enumerate(scan_result.get('tasks', [])):
+            assigned_agent = task.get('assigned_agent')
+            if assigned_agent:
+                # Find the agent node that matches the assigned agent
+                for j, agent in enumerate(scan_result.get('agents', [])):
+                    if agent.get('name') == assigned_agent:
+                        agent_id = f"agent_{j}"
+                        # Create a conceptual task-agent assignment relationship
+                        print(f"🔗 Task assignment: {task.get('name')} -> {assigned_agent} ({agent_id})")
+                        break
+        
+        # Analyze task dependency relationships
+        self._analyze_task_dependencies(scan_result)
+        
+        # Analyze same crew collaboration relationships
+        self._analyze_crew_collaboration(scan_result)
+    
+    def _analyze_task_dependencies(self, scan_result: Dict[str, Any]):
+        """Analyze task dependencies and create temporal ordering edges"""
+        tasks = scan_result.get('tasks', [])
+        task_name_to_agent = {}
+        
+        # Create mapping from task name to assigned agent
+        for task in tasks:
+            task_name = task.get('name')
+            assigned_agent = task.get('assigned_agent')
+            if task_name and assigned_agent:
+                task_name_to_agent[task_name] = assigned_agent
+        
+        # Analyze dependencies and create temporal edges between agents
+        for task in tasks:
+            current_task_name = task.get('name')
+            current_agent = task.get('assigned_agent')
+            resolved_deps = task.get('resolved_dependencies', [])
+            
+            if resolved_deps and current_agent:
+                # Find current agent node
+                current_agent_id = None
+                for i, agent in enumerate(scan_result.get('agents', [])):
+                    if agent.get('name') == current_agent:
+                        current_agent_id = f"agent_{i}"
+                        break
+                
+                if current_agent_id:
+                    for dep in resolved_deps:
+                        dep_task_name = dep.get('task_name')
+                        dep_agent = task_name_to_agent.get(dep_task_name)
+                        
+                        if dep_agent and dep_agent != current_agent:
+                            # Find dependency agent node
+                            dep_agent_id = None
+                            for i, agent in enumerate(scan_result.get('agents', [])):
+                                if agent.get('name') == dep_agent:
+                                    dep_agent_id = f"agent_{i}"
+                                    break
+                            
+                            if dep_agent_id:
+                                # Create temporal dependency edge (predecessor -> successor)
+                                self._add_edge(dep_agent_id, current_agent_id, 'task_dependency', 0.95)
+                                print(f"🔗 Task dependency: {dep_agent_id} ({dep_agent}) must execute before {current_agent_id} ({current_agent})")
+                        
+                        elif dep_agent == current_agent:
+                            # Same agent has sequential tasks - this is important for path analysis
+                            print(f"📋 Sequential task: {current_agent} executes {dep_task_name} before {current_task_name}")
     
     def _find_related_crews(self, agent: Dict[str, Any], crews: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Find crews related to the agent"""
@@ -204,18 +260,30 @@ class AgentSystemGraphBuilder:
         return related_crews
     
     def _find_related_tasks(self, agent: Dict[str, Any], tasks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Find tasks related to the agent"""
+        """Find tasks specifically assigned to this agent"""
         related_tasks = []
-        agent_file = agent.get('file', '')
+        agent_name = agent.get('name', '')
         
         for task in tasks:
-            # If task and agent are in the same file, consider them related
-            if task.get('file', '') == agent_file:
-                related_tasks.append({
+            # Check if task is specifically assigned to this agent
+            assigned_agent = task.get('assigned_agent')
+            if assigned_agent == agent_name:
+                task_info = {
                     'name': task.get('name', ''),
                     'file': task.get('file', ''),
-                    'line': task.get('line', 0)
-                })
+                    'line': task.get('line', 0),
+                    'assigned_agent': assigned_agent,
+                    'variable_name': task.get('variable_name', ''),
+                    'description': task.get('arguments', {}).get('description', '')[:100] + '...' if task.get('arguments', {}).get('description') else ''
+                }
+                
+                # Add dependency information
+                resolved_deps = task.get('resolved_dependencies', [])
+                if resolved_deps:
+                    task_info['dependencies'] = [dep.get('task_name') for dep in resolved_deps]
+                    task_info['dependency_variables'] = [dep.get('variable_name') for dep in resolved_deps]
+                
+                related_tasks.append(task_info)
         
         return related_tasks
 

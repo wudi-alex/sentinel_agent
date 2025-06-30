@@ -183,19 +183,19 @@ SentinelAgent includes comprehensive demo scripts to explore features:
 - **Path Analysis Demo**: Security-focused path analysis and vulnerability detection
 - **Log Analysis Demo**: Specialized log analysis and anomaly detection
 
-**🚀 Get started**: See the [Demo Guide](docs/DEMO_GUIDE.md) for step-by-step instructions.
+**🚀 Get started**: See the [Quick Start Guide](docs/QUICK_START.md) for step-by-step instructions.
 
 ## 📖 Documentation
 
-- [🎯 Quick Start](docs/QUICK_START.md)
-- [🎮 Demo Guide](docs/DEMO_GUIDE.md) - **Step-by-step demo instructions**
-- [📚 CLI Usage Guide](docs/CLI_USAGE.md)
-- [🐳 Docker Deployment](docs/deployment/DOCKER_DEPLOYMENT.md)
-- [📁 Directory Structure](docs/DIRECTORY_STRUCTURE.md)
+- [🎯 Quick Start](docs/QUICK_START.md) - **Get started quickly**
+- [⚙️ Installation Guide](docs/INSTALLATION.md) - **Detailed setup instructions**
+- [📚 CLI Usage Guide](docs/CLI_USAGE.md) - **Command-line reference**
+- [🐳 Docker Deployment](docs/DOCKER_DEPLOYMENT.md) - **Container deployment**
+- [📁 Directory Structure](docs/DIRECTORY_STRUCTURE.md) - **Project organization**
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) (coming soon).
+We welcome contributions! Please feel free to submit issues and pull requests.
 
 ## 📄 License
 

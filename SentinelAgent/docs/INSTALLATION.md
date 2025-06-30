@@ -100,7 +100,7 @@ docker run -p 5002:5002 sentinelagent
 docker-compose up -d
 ```
 
-See [Docker Deployment Guide](deployment/DOCKER_DEPLOYMENT.md) for details.
+See [Docker Deployment Guide](DOCKER_DEPLOYMENT.md) for details.
 
 ## Verification
 
@@ -280,7 +280,7 @@ pip install -r requirements.txt --upgrade
 ```
 
 ### Migration Notes
-- Check [CHANGELOG.md](../CHANGELOG.md) for breaking changes
+- Check the project documentation for any updates
 - Backup your data directory before major updates
 - Test in development environment first
 
@@ -300,7 +300,7 @@ rm -rf venv
 ### Remove Data (Optional)
 ```bash
 # Remove analysis results
-rm -rf data/output/*
+rm -rf data/generated_outputs/*
 
 # Remove logs
 rm -rf logs/*

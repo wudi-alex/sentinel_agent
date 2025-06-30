@@ -8,6 +8,9 @@ env/
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+*.pyo
+*.pyd
 
 # C extensions
 *.so
@@ -137,10 +140,25 @@ dmypy.json
 # SentinelAgent specific
 data/uploads/*
 !data/uploads/.gitkeep
-data/output/*
-!data/output/.gitkeep
+data/generated_outputs/*
+!data/generated_outputs/.gitkeep
+data/analysis_results/*
+!data/analysis_results/.gitkeep
 *.log
 logs/
+# Temporary analysis files in root (exclude generated files but keep essential ones)
+step*.json
+scan_result.json
+enhanced_graph.json
+adaptive_*.json
+basic_analysis.json
+intelligent_scan.json
+graph_*.json
+inspection_*.json
+*.png
+paths_visualization.txt
+!requirements.txt
+!README.md
 
 # IDE files
 .vscode/

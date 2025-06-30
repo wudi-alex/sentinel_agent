@@ -177,7 +177,7 @@ class PathAnalyzer:
             self.node_states[node_id] = NodeState.SUSPICIOUS
     
     def _analyze_edge_states(self):
-        """analyzeedgestate"""
+        """Analyze edge states"""
         for i, edge in enumerate(self.edges):
             relationship = edge.get('relationship')
             weight = edge.get('weight', 0)
@@ -186,15 +186,18 @@ class PathAnalyzer:
             if relationship == 'explicit_usage' and weight > 0.8:
                 # High-weight explicit usage relationship, normal
                 self.edge_states[i] = EdgeState.NORMAL
-            elif relationship == 'file_proximity' and weight < 0.4:
-                # Low-weight file proximity relationship, normal
+            elif relationship == 'task_dependency' and weight > 0.9:
+                # High-weight task dependency, very normal - this is the intended execution flow
                 self.edge_states[i] = EdgeState.NORMAL
+            elif relationship == 'same_crew_collaboration':
+                # Same crew collaboration with lower weight, normal but less critical than task dependencies
+                if weight > 0.5:
+                    self.edge_states[i] = EdgeState.SUSPICIOUS  # Higher crew collaboration might bypass intended flow
+                else:
+                    self.edge_states[i] = EdgeState.NORMAL
             elif weight > 0.9:
                 # Abnormally high weight may indicate anomaly
                 self.edge_states[i] = EdgeState.SUSPICIOUS
-            elif relationship == 'same_crew_collaboration':
-                # Same crew collaboration, normal
-                self.edge_states[i] = EdgeState.NORMAL
             else:
                 # Other cases, judge by weight
                 if weight > 0.7:
@@ -203,17 +206,62 @@ class PathAnalyzer:
                     self.edge_states[i] = EdgeState.NORMAL
     
     def _discover_paths(self):
-        """Discover all paths in the graph"""
+        """Discover all paths in the graph with task dependency awareness"""
         self.paths = []
         
         # Find all possible starting nodes (agent nodes)
         agent_nodes = [nid for nid, node in self.nodes.items() if node['type'] == 'agent']
         
+        # Discover temporal execution paths based on task dependencies
+        self._discover_temporal_paths()
+        
+        # Discover regular collaboration paths
         for start_node in agent_nodes:
             # Start discovery from each agent
             visited = set()
             current_path = [start_node]
             self._dfs_paths(start_node, visited, current_path, max_depth=5)
+    
+    def _discover_temporal_paths(self):
+        """Discover paths based on task dependencies (temporal ordering)"""
+        # Find dependency edges
+        dependency_edges = [e for e in self.edges if e['relationship'] == 'task_dependency']
+        
+        if not dependency_edges:
+            return
+        
+        # Build temporal graph
+        temporal_graph = {}
+        for edge in dependency_edges:
+            source = edge['source']
+            target = edge['target']
+            if source not in temporal_graph:
+                temporal_graph[source] = []
+            temporal_graph[source].append(target)
+        
+        # Find all temporal paths
+        for start_node in temporal_graph:
+            self._explore_temporal_path(start_node, temporal_graph, [start_node])
+    
+    def _explore_temporal_path(self, current_node: str, temporal_graph: Dict[str, List[str]], current_path: List[str]):
+        """Explore temporal execution paths"""
+        if current_node in temporal_graph:
+            for next_node in temporal_graph[current_node]:
+                new_path = current_path + [next_node]
+                
+                # Record this temporal path
+                path_info = {
+                    'path': new_path,
+                    'length': len(new_path),
+                    'path_type': 'temporal_execution',
+                    'risk_score': self._calculate_temporal_path_risk(new_path),
+                    'is_temporal': True,
+                    'execution_order': new_path.copy()
+                }
+                self.paths.append(path_info)
+                
+                # Continue exploring
+                self._explore_temporal_path(next_node, temporal_graph, new_path)
     
     def _dfs_paths(self, current_node: str, visited: Set[str], current_path: List[str], max_depth: int):
         """Depth-first search to discover paths"""
@@ -248,6 +296,11 @@ class PathAnalyzer:
         if len(path) < 2:
             return "trivial"
         
+        # Check if this is a temporal dependency path
+        is_temporal = self._is_temporal_path(path)
+        if is_temporal:
+            return "temporal_execution"
+        
         # Check node types in path
         node_types = [self.nodes[nid]['type'] for nid in path]
         
@@ -260,16 +313,45 @@ class PathAnalyzer:
         else:
             return "unknown"
     
+    def _is_temporal_path(self, path: List[str]) -> bool:
+        """Check if path follows temporal dependencies"""
+        if len(path) < 2:
+            return False
+        
+        for i in range(len(path) - 1):
+            current_node = path[i]
+            next_node = path[i + 1]
+            
+            # Check if there's a task dependency edge
+            has_dependency = any(
+                e['source'] == current_node and e['target'] == next_node 
+                and e['relationship'] == 'task_dependency'
+                for e in self.edges
+            )
+            
+            if has_dependency:
+                return True
+        
+        return False
+    
     def _calculate_path_risk(self, path: List[str]) -> float:
         """Calculate path risk score"""
         if len(path) < 2:
             return 0.0
+        
+        # Check if this is a temporal path (lower base risk)
+        if self._is_temporal_path(path):
+            return self._calculate_temporal_path_risk(path)
         
         risk_score = 0.0
         
         # Based on path length
         if len(path) > 4:
             risk_score += 0.3
+        
+        # Check for reverse temporal order (higher risk)
+        reverse_temporal_violations = self._check_reverse_temporal_order(path)
+        risk_score += reverse_temporal_violations * 0.4
         
         # Based on node states
         for node_id in path:
@@ -293,6 +375,66 @@ class PathAnalyzer:
                     risk_score += 1.0
         
         return min(risk_score, 1.0)  # Limit to 0-1 range
+    
+    def _calculate_temporal_path_risk(self, path: List[str]) -> float:
+        """Calculate risk score for temporal execution paths"""
+        if len(path) < 2:
+            return 0.0
+        
+        risk_score = 0.0
+        
+        # Temporal paths are generally safer since they follow proper dependencies
+        base_score = 0.1
+        
+        # Check for correct execution order
+        for i in range(len(path) - 1):
+            current_node = path[i]
+            next_node = path[i + 1]
+            
+            # Check if there's a proper dependency edge
+            dependency_edge = next(
+                (e for e in self.edges 
+                 if e['source'] == current_node and e['target'] == next_node 
+                 and e['relationship'] == 'task_dependency'), 
+                None
+            )
+            
+            if not dependency_edge:
+                # Missing proper dependency - increase risk
+                risk_score += 0.3
+        
+        # Based on node states
+        for node_id in path:
+            if self.node_states[node_id] == NodeState.SUSPICIOUS:
+                risk_score += 0.2  # Lower penalty for temporal paths
+            elif self.node_states[node_id] == NodeState.CRITICAL:
+                risk_score += 0.5
+        
+        # Path length consideration (temporal paths can be longer safely)
+        if len(path) > 6:
+            risk_score += 0.2
+        
+        return min(base_score + risk_score, 1.0)
+    
+    def _check_reverse_temporal_order(self, path: List[str]) -> int:
+        """Check for violations of temporal order in path"""
+        violations = 0
+        
+        for i in range(len(path) - 1):
+            current_node = path[i]
+            next_node = path[i + 1]
+            
+            # Check if there's a reverse dependency (next_node should execute before current_node)
+            reverse_dependency = any(
+                e['source'] == next_node and e['target'] == current_node 
+                and e['relationship'] == 'task_dependency'
+                for e in self.edges
+            )
+            
+            if reverse_dependency:
+                violations += 1
+        
+        return violations
     
     def _find_edge_index(self, source: str, target: str) -> Optional[int]:
         """Find edge index connecting two nodes"""
