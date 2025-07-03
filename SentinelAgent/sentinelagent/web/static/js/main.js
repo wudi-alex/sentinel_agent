@@ -1,6 +1,4 @@
 // SentinelAgent Web UI JavaScript
-console.log('🤖 SentinelAgent UI - Initialization started');
-
 const { createApp } = Vue;
 const { ElMessage, ElMessageBox } = ElementPlus;
 
@@ -10,13 +8,14 @@ const {
     Upload, Download, RefreshRight, View, Delete 
 } = ElementPlusIconsVue;
 
-console.log('✅ Vue components and icons loaded successfully');
-
 const app = createApp({
     data() {
         return {
             // Currently active tab
             activeTab: 'scanner',
+            
+            // Active result tab
+            activeResultTab: 'agents',
             
             // Display status
             showAbout: false,
@@ -50,6 +49,9 @@ const app = createApp({
                 graphFile: ''
             },
             
+            // JSON日志可视化相关
+            logViewMode: 'overview',
+            
             // Result data
             scanResult: null,
             graphResult: null,
@@ -62,15 +64,23 @@ const app = createApp({
             
             // Currently viewing result
             currentResult: null,
-            currentResultData: null
+            currentResultData: null,
+            
+            // File browser related
+            showFileBrowser: false,
+            fileBrowserTitle: 'Select File',
+            fileBrowserMode: 'file',  // 'file' or 'directory'
+            fileBrowserFilter: '',    // File extension filter
+            fileBrowserCallback: null, // Callback function when file is selected
+            currentBrowserPath: '',
+            browserItems: [],
+            browserLoading: false,
         };
     },
     
     mounted() {
-        console.log('🚀 Vue application mounted - SentinelAgent UI started');
         this.loadExamples();
         this.loadResults();
-        console.log('📊 Initial data loading completed');
     },
     
     methods: {
@@ -92,21 +102,21 @@ const app = createApp({
         
         // Load example project
         loadExample(example) {
-            this.scanForm.path = example.path;
-            this.scanForm.type = 'directory';
+            // For CrewAI examples, load the specific file
+            if (example.type === 'crewai') {
+                this.scanForm.path = example.resolved_path + '/email_assistant_agent_system.py';
+                this.scanForm.type = 'file';
+            } else {
+                this.scanForm.path = example.resolved_path;
+                this.scanForm.type = 'directory';
+            }
             this.activeTab = 'scanner';
             ElMessage.success(`Example loaded: ${example.name}`);
         },
         
-        // Path selection (simplified version, can integrate file selector)
+        // Path selection with file browser - now handled by browseForScanPath()
         selectPath() {
-            ElMessageBox.prompt('Enter path', 'Select Path', {
-                confirmButtonText: 'OK',
-                cancelButtonText: 'Cancel',
-                inputValue: this.scanForm.path
-            }).then(({ value }) => {
-                this.scanForm.path = value;
-            }).catch(() => {});
+            this.browseForScanPath();
         },
         
         // Execute scan
@@ -134,21 +144,8 @@ const app = createApp({
                 if (data.success) {
                     this.scanResult = data.result;
                     
-                    // Show result summary - optimized for agent systems
-                    const summary = this.scanResult.scan_summary || {};
-                    let summaryText = `Scan completed!\n`;
-                    summaryText += `- Agents: ${summary.total_agents || 0}\n`;
-                    summaryText += `- Tools: ${summary.total_tools || 0}\n`;
-                    summaryText += `- Crews: ${summary.total_crews || 0}\n`;
-                    summaryText += `- Tasks: ${summary.total_tasks || 0}\n`;
-                    summaryText += `- Python files: ${summary.python_files || 0}`;
-                    
-                    ElMessage({
-                        message: summaryText,
-                        type: 'success',
-                        duration: 5000,
-                        showClose: true
-                    });
+                    // Show enhanced result summary
+                    this.displayEnhancedScanResult(this.scanResult);
                 } else {
                     ElMessage.error(data.error || 'Scan failed');
                 }
@@ -352,7 +349,27 @@ const app = createApp({
                 
                 if (data.success) {
                     this.pathsResult = data.result;
-                    ElMessage.success('Path analysis completed');
+                    
+                    // Show enhanced result summary
+                    const assessment = this.pathsResult.overall_assessment || {};
+                    const pathAnalysis = this.pathsResult.path_analysis || {};
+                    
+                    let summaryText = `Path analysis completed!\n`;
+                    summaryText += `- Total paths: ${assessment.total_paths_analyzed || 0}\n`;
+                    summaryText += `- Risk level: ${assessment.risk_level || 'unknown'}\n`;
+                    summaryText += `- Risk score: ${assessment.total_risk_score || 0}\n`;
+                    
+                    // Show temporal paths if available
+                    const temporalPaths = (this.pathsResult.execution_paths || []).filter(p => p.is_temporal);
+                    if (temporalPaths.length > 0) {
+                        summaryText += `- Temporal execution paths: ${temporalPaths.length}`;
+                    }
+                    
+                    ElMessage({
+                        message: summaryText,
+                        type: 'success',
+                        duration: 5000
+                    });
                 } else {
                     ElMessage.error(data.error || 'Path analysis failed');
                 }
@@ -587,12 +604,471 @@ const app = createApp({
             } catch (error) {
                 ElMessage.error(`Failed to load demo ${resultType} result: ` + error.message);
             }
+        },
+        
+        // JSON日志处理方法
+        
+        // 检查是否为JSON格式的日志结果
+        isJsonLogResult(logsResult) {
+            return logsResult && logsResult.metadata && logsResult.execution_log;
+        },
+        
+        // 获取Agent执行条目
+        getAgentExecutions(logsResult) {
+            if (!logsResult.execution_log) return [];
+            return logsResult.execution_log.filter(entry => entry.entry_type === 'agent_execution');
+        },
+        
+        // 获取工具执行条目
+        getToolExecutions(logsResult) {
+            if (!logsResult.execution_log) return [];
+            return logsResult.execution_log.filter(entry => entry.entry_type === 'tool_execution');
+        },
+        
+        // 获取唯一的Agent列表
+        getUniqueAgents(logsResult) {
+            if (!logsResult.execution_log) return [];
+            const agents = new Set();
+            logsResult.execution_log.forEach(entry => {
+                if (entry.agent?.role) {
+                    agents.add(entry.agent.role);
+                }
+            });
+            return Array.from(agents);
+        },
+        
+        // 获取条目标签类型
+        getEntryTagType(entryType) {
+            const types = {
+                'agent_execution': 'primary',
+                'tool_execution': 'success',
+                'other': 'info'
+            };
+            return types[entryType] || 'info';
+        },
+        
+        // 获取时间线类型
+        getTimelineType(entryType) {
+            const types = {
+                'agent_execution': 'primary',
+                'tool_execution': 'success',
+                'other': 'info'
+            };
+            return types[entryType] || 'info';
+        },
+        
+        // 格式化时间
+        formatTime(timestamp) {
+            if (!timestamp) return 'N/A';
+            try {
+                const date = new Date(timestamp);
+                return date.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            } catch (error) {
+                return timestamp;
+            }
+        },
+        
+        // 截断文本
+        truncateText(text, maxLength) {
+            if (!text) return '';
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        },
+        
+        // 加载JSON日志
+        async loadJsonLogs() {
+            try {
+                // 创建文件选择对话框
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = async (event) => {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    
+                    // 显示加载状态
+                    this.logsLoading = true;
+                    
+                    try {
+                        // 读取文件内容
+                        const text = await file.text();
+                        const jsonData = JSON.parse(text);
+                        
+                        // 验证JSON格式
+                        if (!jsonData.execution_log || !jsonData.metadata) {
+                            ElMessage.error('Invalid JSON log format. Please select a converted CrewAI log file.');
+                            return;
+                        }
+                        
+                        // 设置结果数据
+                        this.logsResult = jsonData;
+                        this.logsForm.logFile = file.name;
+                        this.logsForm.format = 'json';
+                        
+                        ElMessage.success('JSON log loaded successfully');
+                        
+                    } catch (error) {
+                        ElMessage.error('Failed to parse JSON file: ' + error.message);
+                    } finally {
+                        this.logsLoading = false;
+                    }
+                };
+                
+                // 触发文件选择
+                input.click();
+                
+            } catch (error) {
+                ElMessage.error('Failed to load JSON logs: ' + error.message);
+                this.logsLoading = false;
+            }
+        },
+        
+        // File browser methods
+        async openFileBrowser(title, mode, filter, callback) {
+            this.fileBrowserTitle = title;
+            this.fileBrowserMode = mode; // 'file' or 'directory'
+            this.fileBrowserFilter = filter || '';
+            this.fileBrowserCallback = callback;
+            this.currentBrowserPath = this.currentBrowserPath || '/Users/xuhe/Documents/agent_experiments';
+            this.showFileBrowser = true;
+            await this.loadBrowserItems();
+        },
+        
+        async loadBrowserItems(path = null) {
+            if (path) {
+                this.currentBrowserPath = path;
+            }
+            
+            this.browserLoading = true;
+            try {
+                const response = await fetch('/api/browse-files', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        path: this.currentBrowserPath,
+                        filter: this.fileBrowserFilter
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    this.currentBrowserPath = data.current_path;
+                    this.browserItems = data.items;
+                } else {
+                    ElMessage.error(data.error || 'Failed to load directory');
+                }
+            } catch (error) {
+                ElMessage.error('Failed to browse files: ' + error.message);
+            } finally {
+                this.browserLoading = false;
+            }
+        },
+        
+        async onBrowserItemClick(item) {
+            if (item.type === 'directory') {
+                await this.loadBrowserItems(item.path);
+            } else if (item.type === 'file' && this.fileBrowserMode === 'file') {
+                this.selectBrowserItem(item);
+            }
+        },
+        
+        selectBrowserItem(item) {
+            if (this.fileBrowserCallback) {
+                this.fileBrowserCallback(item.path);
+            }
+            this.closeBrowser();
+        },
+        
+        selectCurrentDirectory() {
+            if (this.fileBrowserMode === 'directory' && this.fileBrowserCallback) {
+                this.fileBrowserCallback(this.currentBrowserPath);
+            }
+            this.closeBrowser();
+        },
+        
+        closeBrowser() {
+            this.showFileBrowser = false;
+            this.fileBrowserCallback = null;
+        },
+
+        // Enhanced path selection methods
+        browseForScanPath() {
+            this.openFileBrowser(
+                'Select File or Directory to Scan',
+                'file',
+                '.py',
+                (path) => {
+                    this.scanForm.path = path;
+                    // Auto-detect type based on path
+                    if (path.endsWith('.py')) {
+                        this.scanForm.type = 'file';
+                    } else {
+                        this.scanForm.type = 'directory';
+                    }
+                }
+            );
+        },
+        
+        browseForGraphFile() {
+            this.openFileBrowser(
+                'Select Graph File',
+                'file',
+                '.json',
+                (path) => {
+                    this.pathsForm.graphFile = path;
+                }
+            );
+        },
+        
+        browseForLogFile() {
+            this.openFileBrowser(
+                'Select Log File',
+                'file',
+                '',
+                (path) => {
+                    this.logsForm.logFile = path;
+                    // Auto-detect format based on file extension
+                    if (path.endsWith('.json')) {
+                        this.logsForm.format = 'json';
+                    } else if (path.endsWith('.csv')) {
+                        this.logsForm.format = 'csv';
+                    } else {
+                        this.logsForm.format = 'auto';
+                    }
+                }
+            );
+        },
+        
+        // Path analysis helper methods
+        getTemporalOrder(path) {
+            if (!path || !path.path) return '';
+            if (path.is_temporal && path.temporal_order) {
+                return path.temporal_order.join(' → ');
+            }
+            return this.getPathString(path);
+        },
+        
+        getPathString(path) {
+            if (!path || !path.path) return '';
+            if (Array.isArray(path.path)) {
+                return path.path.join(' → ');
+            }
+            return String(path.path);
+        },
+        
+        getRiskScore(path) {
+            if (!path) return 0;
+            if (typeof path.risk_score === 'number') {
+                return path.risk_score.toFixed(3);
+            }
+            if (typeof path.score === 'number') {
+                return path.score.toFixed(3);
+            }
+            return '0.000';
+        },
+        
+        // Enhanced scan result display helper methods
+        getDetailedScanSummary(scanResult) {
+            if (!scanResult || !scanResult.scan_summary) return {};
+            
+            const summary = scanResult.scan_summary;
+            const detailed = {
+                basic: {
+                    total_agents: summary.total_agents || 0,
+                    total_tools: summary.total_tools || 0,
+                    total_crews: summary.total_crews || 0,
+                    total_tasks: summary.total_tasks || 0,
+                    total_files: summary.total_files || 0,
+                    python_files: summary.python_files || 0
+                },
+                agents: {
+                    by_type: this.groupByType(scanResult.agents),
+                    with_roles: this.getAgentsWithRoles(scanResult.agents),
+                    with_tools: this.getAgentsWithTools(scanResult.agents)
+                },
+                tools: {
+                    by_type: this.groupByType(scanResult.tools),
+                    class_definitions: this.getToolClasses(scanResult.tools),
+                    instances: this.getToolInstances(scanResult.tools)
+                },
+                crews: {
+                    by_type: this.groupByType(scanResult.crews),
+                    total: scanResult.crews ? scanResult.crews.length : 0
+                },
+                tasks: {
+                    by_type: this.groupByType(scanResult.tasks),
+                    with_agents: this.getTasksWithAgents(scanResult.tasks),
+                    with_dependencies: this.getTasksWithDependencies(scanResult.tasks)
+                },
+                file_structure: scanResult.file_structure || {}
+            };
+            
+            return detailed;
+        },
+        
+        groupByType(items) {
+            if (!items || !Array.isArray(items)) return {};
+            return items.reduce((acc, item) => {
+                const type = item.type || 'unknown';
+                acc[type] = (acc[type] || 0) + 1;
+                return acc;
+            }, {});
+        },
+        
+        getAgentsWithRoles(agents) {
+            if (!agents || !Array.isArray(agents)) return [];
+            return agents.filter(agent => agent.arguments && agent.arguments.role);
+        },
+        
+        getAgentsWithTools(agents) {
+            if (!agents || !Array.isArray(agents)) return [];
+            return agents.filter(agent => 
+                agent.arguments && agent.arguments.tools && agent.arguments.tools.length > 0
+            );
+        },
+        
+        getToolClasses(tools) {
+            if (!tools || !Array.isArray(tools)) return [];
+            return tools.filter(tool => tool.type === 'class_definition');
+        },
+        
+        getToolInstances(tools) {
+            if (!tools || !Array.isArray(tools)) return [];
+            return tools.filter(tool => tool.type === 'instance');
+        },
+        
+        getTasksWithAgents(tasks) {
+            if (!tasks || !Array.isArray(tasks)) return [];
+            return tasks.filter(task => task.assigned_agent);
+        },
+        
+        getTasksWithDependencies(tasks) {
+            if (!tasks || !Array.isArray(tasks)) return [];
+            return tasks.filter(task => task.dependencies && task.dependencies.length > 0);
+        },
+        
+        // Format file path for display
+        formatFilePath(filePath) {
+            if (!filePath) return '';
+            const parts = filePath.split('/');
+            if (parts.length > 3) {
+                return '.../' + parts.slice(-3).join('/');
+            }
+            return filePath;
+        },
+        
+        // Get agent type color
+        getAgentTypeColor(agent) {
+            if (!agent) return 'info';
+            if (agent.arguments && agent.arguments.role) {
+                return 'primary';
+            }
+            if (agent.type === 'regex_detected') {
+                return 'warning';
+            }
+            return 'info';
+        },
+        
+        // Get tool type color
+        getToolTypeColor(tool) {
+            if (!tool) return 'info';
+            switch (tool.type) {
+                case 'class_definition': return 'success';
+                case 'instance': return 'primary';
+                case 'standalone_instance': return 'warning';
+                default: return 'info';
+            }
+        },
+        
+        // Get task type color
+        getTaskTypeColor(task) {
+            if (!task) return 'info';
+            if (task.assigned_agent) {
+                return 'primary';
+            }
+            if (task.dependencies && task.dependencies.length > 0) {
+                return 'warning';
+            }
+            return 'info';
+        },
+        
+        // Enhanced scan result display
+        displayEnhancedScanResult(scanResult) {
+            if (!scanResult) return;
+            
+            const detailed = this.getDetailedScanSummary(scanResult);
+            
+            // Update the scan summary display
+            const summaryText = this.buildEnhancedSummaryText(detailed);
+            
+            ElMessage({
+                message: summaryText,
+                type: 'success',
+                duration: 8000,
+                showClose: true
+            });
+        },
+        
+        buildEnhancedSummaryText(detailed) {
+            let text = `📊 Scan completed successfully!\n\n`;
+            
+            // Basic statistics
+            text += `📈 Basic Statistics:\n`;
+            text += `- Agents: ${detailed.basic.total_agents}\n`;
+            text += `- Tools: ${detailed.basic.total_tools}\n`;
+            text += `- Crews: ${detailed.basic.total_crews}\n`;
+            text += `- Tasks: ${detailed.basic.total_tasks}\n`;
+            text += `- Files: ${detailed.basic.total_files} (${detailed.basic.python_files} Python)\n\n`;
+            
+            // Agent details
+            if (detailed.basic.total_agents > 0) {
+                text += `🤖 Agent Details:\n`;
+                text += `- With roles: ${detailed.agents.with_roles.length}\n`;
+                text += `- With tools: ${detailed.agents.with_tools.length}\n`;
+                const agentTypes = Object.entries(detailed.agents.by_type);
+                if (agentTypes.length > 0) {
+                    text += `- Types: ${agentTypes.map(([type, count]) => `${type}(${count})`).join(', ')}\n`;
+                }
+                text += `\n`;
+            }
+            
+            // Tool details
+            if (detailed.basic.total_tools > 0) {
+                text += `🔧 Tool Details:\n`;
+                text += `- Classes: ${detailed.tools.class_definitions.length}\n`;
+                text += `- Instances: ${detailed.tools.instances.length}\n`;
+                const toolTypes = Object.entries(detailed.tools.by_type);
+                if (toolTypes.length > 0) {
+                    text += `- Types: ${toolTypes.map(([type, count]) => `${type}(${count})`).join(', ')}\n`;
+                }
+                text += `\n`;
+            }
+            
+            // Task details
+            if (detailed.basic.total_tasks > 0) {
+                text += `📋 Task Details:\n`;
+                text += `- With agents: ${detailed.tasks.with_agents.length}\n`;
+                text += `- With dependencies: ${detailed.tasks.with_dependencies.length}\n`;
+                const taskTypes = Object.entries(detailed.tasks.by_type);
+                if (taskTypes.length > 0) {
+                    text += `- Types: ${taskTypes.map(([type, count]) => `${type}(${count})`).join(', ')}\n`;
+                }
+            }
+            
+            return text;
         }
     }
 });
 
 // Register icon components
-console.log('🎨 Registering icon components...');
 app.component('Search', Search);
 app.component('Connection', Connection);
 app.component('Guide', Guide);
@@ -605,6 +1081,4 @@ app.component('View', View);
 app.component('Delete', Delete);
 
 // Use Element Plus and mount application
-console.log('🔧 Mounting Vue application to #app...');
 app.use(ElementPlus).mount('#app');
-console.log('✅ SentinelAgent Web UI initialization completed!');

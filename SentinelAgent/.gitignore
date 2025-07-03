@@ -144,6 +144,8 @@ data/generated_outputs/*
 !data/generated_outputs/.gitkeep
 data/analysis_results/*
 !data/analysis_results/.gitkeep
+data/output/*
+!data/output/.gitkeep
 *.log
 logs/
 # Temporary analysis files in root (exclude generated files but keep essential ones)

@@ -26,14 +26,14 @@ __version__ = "1.0.0"
 __author__ = "Watchdog Team"
 
 # Import main classes for easy access
-from .inspector import InspectorAgent
 from .scanner import AgentSystemScanner
 from .graph_builder import AgentSystemGraphBuilder
 from .path_analyzer import PathAnalyzer
+from .log_analyzer import ExecutionLogAnalyzer
 
 __all__ = [
-    "InspectorAgent",
     "AgentSystemScanner", 
     "AgentSystemGraphBuilder",
-    "PathAnalyzer"
+    "PathAnalyzer",
+    "ExecutionLogAnalyzer"
 ]

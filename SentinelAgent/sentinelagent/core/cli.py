@@ -32,7 +32,7 @@ def print_usage():
     print("  -a, --all        Perform full analysis (scan + graph build + path analysis)")
     print("  --analyze-graph  Analyze an existing graph file")
     print("  --analyze-logs   Analyze execution log file")
-    print("  --log-format     Specify log format (csv/txt/auto, default: auto)")
+    print("  --log-format     Specify log format (csv/txt/json/auto, default: auto)")
     print("  --log-output     Specify log analysis output file")
     print("  -v, --verbose    Show detailed information")
     print("  -h, --help       Show this help message")

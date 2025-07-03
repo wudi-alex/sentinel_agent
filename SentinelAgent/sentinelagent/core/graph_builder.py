@@ -357,7 +357,41 @@ class AgentSystemGraphBuilder:
             json.dump(graph_data, f, indent=2, ensure_ascii=False)
         
         print(f"Graph data saved to: {output_path}")
-
+    
+    def _analyze_crew_collaboration(self, scan_result: Dict[str, Any]):
+        """Analyze crew collaboration relationships"""
+        crews = scan_result.get('crews', [])
+        agents = scan_result.get('agents', [])
+        
+        for crew in crews:
+            # Find agents mentioned in this crew
+            crew_agents = []
+            
+            # Get crew members from arguments
+            crew_args = crew.get('arguments', {})
+            if 'agents' in crew_args:
+                # Extract agent references from crew arguments
+                agents_arg = crew_args['agents']
+                if isinstance(agents_arg, list):
+                    for agent_ref in agents_arg:
+                        if isinstance(agent_ref, str):
+                            # Find matching agent by variable name
+                            for i, agent in enumerate(agents):
+                                if agent.get('variable_name') == agent_ref:
+                                    crew_agents.append(f"agent_{i}")
+                                    break
+            
+            # Create collaboration edges between crew members
+            for i in range(len(crew_agents)):
+                for j in range(i + 1, len(crew_agents)):
+                    agent1_id = crew_agents[i]
+                    agent2_id = crew_agents[j]
+                    
+                    # Bidirectional collaboration edges
+                    self._add_edge(agent1_id, agent2_id, 'crew_collaboration', 0.7)
+                    self._add_edge(agent2_id, agent1_id, 'crew_collaboration', 0.7)
+                    
+                    print(f"🤝 Crew collaboration: {agent1_id} ↔ {agent2_id}")
 
 # Convenience functions
 def build_graph_from_scan(scan_result: Dict[str, Any]) -> Dict[str, Any]:
@@ -373,12 +407,17 @@ def build_and_save_graph(scan_result: Dict[str, Any], output_path: str) -> Dict[
     return graph_data
 
 
-def scan_and_build_graph(directory_path: str, output_path: str = None) -> Dict[str, Any]:
-    """Scan directory and build graph"""
-    from .scanner import scan_directory
+def scan_and_build_graph(path: str, output_path: str = None) -> Dict[str, Any]:
+    """Scan path (directory or file) and build graph"""
+    from .scanner import scan_directory, scan_file
+    from pathlib import Path
     
-    # Execute scan
-    scan_result = scan_directory(directory_path)
+    # Execute scan based on path type
+    path_obj = Path(path)
+    if path_obj.is_file():
+        scan_result = scan_file(path)
+    else:
+        scan_result = scan_directory(path)
     
     # Build graph
     graph_data = build_graph_from_scan(scan_result)

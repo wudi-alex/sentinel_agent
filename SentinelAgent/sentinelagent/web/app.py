@@ -208,8 +208,12 @@ def api_analyze_logs():
             
         if not os.path.exists(log_file):
             return jsonify({'error': f'Log file does not exist: {log_file}'}), 400
+        
+        # 检查是否为JSON格式的CrewAI日志
+        if log_format == 'json' or (log_format == 'auto' and log_file.endswith('.json')):
+            return handle_json_log_analysis(log_file)
             
-        # Create log analyzer
+        # Create log analyzer for traditional formats
         analyzer = ExecutionLogAnalyzer()
         
         # Load graph data (if provided)
@@ -245,6 +249,88 @@ def api_analyze_logs():
         
     except Exception as e:
         logger.error(f"Log analysis error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+def handle_json_log_analysis(json_file_path):
+    """Handle JSON format log analysis using unified JSON analyzer"""
+    try:
+        # 使用统一的JSON分析器
+        from sentinelagent.core.log_analyzer import ExecutionLogAnalyzer
+        
+        analyzer = ExecutionLogAnalyzer()
+        analysis_result = analyzer.analyze_log_file(json_file_path, file_type="json")
+        
+        # 保存分析结果
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(app.config['OUTPUT_DIR'], f'json_log_analysis_{timestamp}.json')
+        
+        # 转换为字典格式
+        analysis_dict = {
+            'analysis_timestamp': timestamp,
+            'analysis_type': 'json_log_analysis',
+            'source_file': json_file_path,
+            'format': 'json',
+            'log_summary': {
+                'total_entries': len(analysis_result.log_entries),
+                'total_paths': len(analysis_result.execution_paths),
+                'total_errors': len(analysis_result.errors),
+                'unique_agents': len(analysis_result.statistics.get('agent_usage', {})),
+                'format_type': analysis_result.statistics.get('format_type', 'unknown')
+            },
+            'execution_paths': [
+                {
+                    'path_id': path.path_id,
+                    'nodes': path.nodes,
+                    'edges': path.edges,
+                    'start_time': path.start_time.isoformat() if path.start_time else None,
+                    'end_time': path.end_time.isoformat() if path.end_time else None,
+                    'status': path.status if isinstance(path.status, str) else path.status.value,
+                    'log_entries_count': len(path.log_entries)
+                }
+                for path in analysis_result.execution_paths
+            ],
+            'errors': [
+                {
+                    'error_type': error.error_type,
+                    'severity': error.severity.value,
+                    'description': error.description,
+                    'node_or_edge': error.node_or_edge,
+                    'suggested_fix': error.suggested_fix
+                }
+                for error in analysis_result.errors
+            ],
+            'warnings': analysis_result.warnings,
+            'statistics': analysis_result.statistics,
+            'recommendations': analysis_result.recommendations,
+            'summary': analysis_result.summary,
+            'detailed_log_entries': [
+                {
+                    'agent_name': entry.agent_name,
+                    'content': entry.content,
+                    'timestamp': entry.timestamp.isoformat() if entry.timestamp else None,
+                    'message_type': entry.message_type.value if hasattr(entry.message_type, 'value') else str(entry.message_type),
+                    'tools_used': entry.tools_used,
+                    'input_data': entry.input_data,
+                    'output_data': entry.output_data
+                }
+                for entry in analysis_result.log_entries
+            ]
+        }
+        
+        # 保存分析结果
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(analysis_dict, f, indent=2, ensure_ascii=False)
+            
+        return jsonify({
+            'success': True,
+            'result': analysis_dict,
+            'output_file': output_file,
+            'format': 'json'
+        })
+        
+    except Exception as e:
+        logger.error(f"JSON log analysis error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 
@@ -930,6 +1016,77 @@ def api_demo_result_detail(result_type):
         })
     else:
         return jsonify({'error': 'Unknown result type'}), 404
+
+
+@app.route('/api/browse-files', methods=['POST'])
+def api_browse_files():
+    """Browse files and directories"""
+    try:
+        data = request.get_json()
+        current_path = data.get('path', os.path.expanduser('~'))  # Default to home directory
+        file_filter = data.get('filter', '')  # File filter (e.g., '.py', '.json')
+        
+        # Ensure path exists and is accessible
+        if not os.path.exists(current_path):
+            current_path = os.path.expanduser('~')
+        
+        # Get directory contents
+        items = []
+        try:
+            # Add parent directory link (except for root)
+            parent_path = os.path.dirname(current_path)
+            if parent_path != current_path:  # Not at root
+                items.append({
+                    'name': '..',
+                    'path': parent_path,
+                    'type': 'directory',
+                    'is_parent': True
+                })
+            
+            # List directory contents
+            for item_name in sorted(os.listdir(current_path)):
+                if item_name.startswith('.') and item_name not in ['..']:
+                    continue  # Skip hidden files
+                    
+                item_path = os.path.join(current_path, item_name)
+                
+                if os.path.isdir(item_path):
+                    items.append({
+                        'name': item_name,
+                        'path': item_path,
+                        'type': 'directory',
+                        'is_parent': False
+                    })
+                elif os.path.isfile(item_path):
+                    # Apply file filter if specified
+                    if file_filter and not item_name.endswith(file_filter):
+                        continue
+                    
+                    # Get file size and modification time
+                    stat = os.stat(item_path)
+                    items.append({
+                        'name': item_name,
+                        'path': item_path,
+                        'type': 'file',
+                        'size': stat.st_size,
+                        'modified': datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                        'is_parent': False
+                    })
+        
+        except PermissionError:
+            return jsonify({'error': 'Permission denied to access this directory'}), 403
+        except Exception as e:
+            return jsonify({'error': f'Failed to browse directory: {str(e)}'}), 500
+        
+        return jsonify({
+            'success': True,
+            'current_path': current_path,
+            'items': items
+        })
+        
+    except Exception as e:
+        logger.error(f"Browse files error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':

@@ -675,6 +675,7 @@ class PathAnalyzer:
                 'risk_score_distribution': risk_distribution,
                 'detailed_paths': self.paths
             },
+            'execution_paths': self.paths,  # 添加这个字段以保持兼容性
             'suspicious_patterns': self.suspicious_patterns,
             'recommendations': self._generate_recommendations()
         }

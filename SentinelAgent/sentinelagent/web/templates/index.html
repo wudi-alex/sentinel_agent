@@ -2,8 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SentinelAgent - AI Agent System Analysis & Monitoring Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1                                        <el-statistic title="Agents" :value="scanResult.scan_summary && scanResult.scan_summar                                            :value="pathsResult.analysis_summary && pathsResult.analysis_summary.total_paths || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic 
+                                            title="Critical Paths" 
+                                            :value="pathsResult.analysis_summary && pathsResult.analysis_summary.critical_paths || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic 
+                                            title="Average Length" 
+                                            :value="pathsResult.analysis_summary && pathsResult.analysis_summary.average_length || 0" nts || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic title="Tools" :value="scanResult.scan_summary && scanResult.scan_summary.total_tools || 0" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic title="Files" :value="scanResult.scan_summary && scanResult.scan_summary.total_files || 0" />  <title>SentinelAgent - AI Agent System Analysis & Monitoring Platform</title>
     
     <!-- Vue.js 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -106,7 +121,7 @@
                                         placeholder="Enter directory or file path to scan"
                                         class="path-input">
                                         <template #append>
-                                            <el-button @click="selectPath">Browse</el-button>
+                                            <el-button @click="browseForScanPath" icon="Folder">Browse</el-button>
                                         </template>
                                     </el-input>
                                 </el-form-item>
@@ -133,30 +148,170 @@
                             <!-- 扫描结果 -->
                             <div v-if="scanResult" class="result-section">
                                 <h3>Scan Results</h3>
+                                
+                                <!-- 基本统计信息 -->
                                 <el-row :gutter="20">
-                                    <el-col :span="8">
-                                        <el-statistic title="Agents" :value="scanResult.scan_summary?.total_agents || 0" />
+                                    <el-col :span="4">
+                                        <el-statistic title="Agents" :value="{% raw %}(scanResult.scan_summary && scanResult.scan_summary.total_agents) || 0{% endraw %}" />
                                     </el-col>
-                                    <el-col :span="8">
-                                        <el-statistic title="Tools" :value="scanResult.scan_summary?.total_tools || 0" />
+                                    <el-col :span="4">
+                                        <el-statistic title="Tools" :value="{% raw %}(scanResult.scan_summary && scanResult.scan_summary.total_tools) || 0{% endraw %}" />
                                     </el-col>
-                                    <el-col :span="8">
-                                        <el-statistic title="Files" :value="scanResult.scan_summary?.total_files || 0" />
+                                    <el-col :span="4">
+                                        <el-statistic title="Crews" :value="{% raw %}(scanResult.scan_summary && scanResult.scan_summary.total_crews) || 0{% endraw %}" />
+                                    </el-col>
+                                    <el-col :span="4">
+                                        <el-statistic title="Tasks" :value="{% raw %}(scanResult.scan_summary && scanResult.scan_summary.total_tasks) || 0{% endraw %}" />
+                                    </el-col>
+                                    <el-col :span="4">
+                                        <el-statistic title="Files" :value="{% raw %}(scanResult.scan_summary && scanResult.scan_summary.total_files) || 0{% endraw %}" />
+                                    </el-col>
+                                    <el-col :span="4">
+                                        <el-statistic title="Python Files" :value="{% raw %}(scanResult.scan_summary && scanResult.scan_summary.python_files) || 0{% endraw %}" />
                                     </el-col>
                                 </el-row>
 
-                                <el-divider />
-
-                                <!-- Agents列表 -->
-                                <div v-if="scanResult.agents && scanResult.agents.length > 0">
-                                    <h4>Discovered Agents</h4>
-                                    <el-table :data="scanResult.agents" style="width: 100%">
-                                        <el-table-column prop="name" label="Name" width="150" />
-                                        <el-table-column prop="arguments.role" label="Role" width="200" />
-                                        <el-table-column prop="file" label="File" show-overflow-tooltip />
-                                        <el-table-column prop="line" label="Line" width="80" />
-                                    </el-table>
-                                </div>
+                                <!-- 详细信息选项卡 -->
+                                <el-tabs v-model="activeResultTab" style="margin-top: 20px;">
+                                    <!-- Agents列表 -->
+                                    <el-tab-pane label="Agents" name="agents" v-if="scanResult.agents && scanResult.agents.length > 0">
+                                        <el-table :data="scanResult.agents" style="width: 100%" max-height="400">
+                                            <el-table-column prop="name" label="Name" width="150" />
+                                            <el-table-column label="Type" width="120">
+                                                <template #default="scope">
+                                                    <el-tag :type="getAgentTypeColor(scope.row)" size="small">
+                                                        {% raw %}{{ scope.row.type }}{% endraw %}
+                                                    </el-tag>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column prop="arguments.role" label="Role" width="200" />
+                                            <el-table-column prop="arguments.goal" label="Goal" show-overflow-tooltip />
+                                            <el-table-column label="File" show-overflow-tooltip>
+                                                <template #default="scope">
+                                                    <el-tooltip :content="scope.row.file">
+                                                        <span>{% raw %}{{ formatFilePath(scope.row.file) }}{% endraw %}</span>
+                                                    </el-tooltip>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column prop="line" label="Line" width="80" />
+                                        </el-table>
+                                    </el-tab-pane>
+                                    
+                                    <!-- Tools列表 -->
+                                    <el-tab-pane label="Tools" name="tools" v-if="scanResult.tools && scanResult.tools.length > 0">
+                                        <el-table :data="scanResult.tools" style="width: 100%" max-height="400">
+                                            <el-table-column prop="name" label="Name" width="200" />
+                                            <el-table-column label="Type" width="150">
+                                                <template #default="scope">
+                                                    <el-tag :type="getToolTypeColor(scope.row)" size="small">
+                                                        {% raw %}{{ scope.row.type }}{% endraw %}
+                                                    </el-tag>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column label="File" show-overflow-tooltip>
+                                                <template #default="scope">
+                                                    <el-tooltip :content="scope.row.file">
+                                                        <span>{% raw %}{{ formatFilePath(scope.row.file) }}{% endraw %}</span>
+                                                    </el-tooltip>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column prop="line" label="Line" width="80" />
+                                        </el-table>
+                                    </el-tab-pane>
+                                    
+                                    <!-- Crews列表 -->
+                                    <el-tab-pane label="Crews" name="crews" v-if="scanResult.crews && scanResult.crews.length > 0">
+                                        <el-table :data="scanResult.crews" style="width: 100%" max-height="400">
+                                            <el-table-column prop="name" label="Name" width="150" />
+                                            <el-table-column label="Type" width="120">
+                                                <template #default="scope">
+                                                    <el-tag type="primary" size="small">
+                                                        {% raw %}{{ scope.row.type }}{% endraw %}
+                                                    </el-tag>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column label="File" show-overflow-tooltip>
+                                                <template #default="scope">
+                                                    <el-tooltip :content="scope.row.file">
+                                                        <span>{% raw %}{{ formatFilePath(scope.row.file) }}{% endraw %}</span>
+                                                    </el-tooltip>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column prop="line" label="Line" width="80" />
+                                        </el-table>
+                                    </el-tab-pane>
+                                    
+                                    <!-- Tasks列表 -->
+                                    <el-tab-pane label="Tasks" name="tasks" v-if="scanResult.tasks && scanResult.tasks.length > 0">
+                                        <el-table :data="scanResult.tasks" style="width: 100%" max-height="400">
+                                            <el-table-column prop="name" label="Name" width="150" />
+                                            <el-table-column label="Type" width="120">
+                                                <template #default="scope">
+                                                    <el-tag :type="getTaskTypeColor(scope.row)" size="small">
+                                                        {% raw %}{{ scope.row.type }}{% endraw %}
+                                                    </el-tag>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column prop="assigned_agent" label="Assigned Agent" width="150" />
+                                            <el-table-column label="Dependencies" width="200">
+                                                <template #default="scope">
+                                                    <el-tag v-for="dep in scope.row.dependencies" :key="dep" size="small" style="margin-right: 4px;">
+                                                        {% raw %}{{ dep }}{% endraw %}
+                                                    </el-tag>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column label="File" show-overflow-tooltip>
+                                                <template #default="scope">
+                                                    <el-tooltip :content="scope.row.file">
+                                                        <span>{% raw %}{{ formatFilePath(scope.row.file) }}{% endraw %}</span>
+                                                    </el-tooltip>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column prop="line" label="Line" width="80" />
+                                        </el-table>
+                                    </el-tab-pane>
+                                    
+                                    <!-- 文件结构 -->
+                                    <el-tab-pane label="File Structure" name="fileStructure">
+                                        <el-row :gutter="20">
+                                            <el-col :span="12">
+                                                <el-card>
+                                                    <template #header>
+                                                        <span>File Statistics</span>
+                                                    </template>
+                                                    <el-descriptions :column="1" size="small">
+                                                        <el-descriptions-item label="Total Files">
+                                                            {% raw %}{{ scanResult.file_structure && scanResult.file_structure.total_files || 0 }}{% endraw %}
+                                                        </el-descriptions-item>
+                                                        <el-descriptions-item label="Python Files">
+                                                            {% raw %}{{ scanResult.file_structure && scanResult.file_structure.python_files || 0 }}{% endraw %}
+                                                        </el-descriptions-item>
+                                                        <el-descriptions-item label="Directories">
+                                                            {% raw %}{{ scanResult.file_structure && scanResult.file_structure.directories || 0 }}{% endraw %}
+                                                        </el-descriptions-item>
+                                                    </el-descriptions>
+                                                </el-card>
+                                            </el-col>
+                                            <el-col :span="12">
+                                                <el-card>
+                                                    <template #header>
+                                                        <span>File Types</span>
+                                                    </template>
+                                                    <div style="max-height: 300px; overflow-y: auto;">
+                                                        <el-tag 
+                                                            v-for="(count, type) in scanResult.file_structure && scanResult.file_structure.file_types" 
+                                                            :key="type" 
+                                                            size="small" 
+                                                            style="margin: 2px;"
+                                                        >
+                                                            {% raw %}{{ type || 'no-ext' }}: {{ count }}{% endraw %}
+                                                        </el-tag>
+                                                    </div>
+                                                </el-card>
+                                            </el-col>
+                                        </el-row>
+                                    </el-tab-pane>
+                                </el-tabs>
                             </div>
                         </el-card>
                     </div>
@@ -200,16 +355,16 @@
                                 <!-- 图统计信息 -->
                                 <el-row :gutter="20" class="graph-stats">
                                     <el-col :span="6">
-                                        <el-statistic title="Nodes" :value="graphResult.metadata?.total_nodes || 0" />
+                                        <el-statistic title="Nodes" :value="graphResult.metadata && graphResult.metadata.total_nodes || 0" />
                                     </el-col>
                                     <el-col :span="6">
-                                        <el-statistic title="Edges" :value="graphResult.metadata?.total_edges || 0" />
+                                        <el-statistic title="Edges" :value="graphResult.metadata && graphResult.metadata.total_edges || 0" />
                                     </el-col>
                                     <el-col :span="6">
-                                        <el-statistic title="Components" :value="graphResult.metadata?.components || 0" />
+                                        <el-statistic title="Components" :value="graphResult.metadata && graphResult.metadata.components || 0" />
                                     </el-col>
                                     <el-col :span="6">
-                                        <el-statistic title="Density" :value="graphResult.metadata?.density || 0" :precision="3" />
+                                        <el-statistic title="Density" :value="graphResult.metadata && graphResult.metadata.density || 0" :precision="3" />
                                     </el-col>
                                 </el-row>
                             </div>
@@ -232,7 +387,11 @@
                                 </el-form-item>
                                 
                                 <el-form-item v-if="pathsForm.dataSource === 'file'" label="Graph File">
-                                    <el-input v-model="pathsForm.graphFile" placeholder="Enter graph file path" />
+                                    <el-input v-model="pathsForm.graphFile" placeholder="Enter graph file path">
+                                        <template #append>
+                                            <el-button @click="browseForGraphFile" icon="Folder">Browse</el-button>
+                                        </template>
+                                    </el-input>
                                 </el-form-item>
                                 
                                 <el-form-item>
@@ -253,40 +412,76 @@
                                 
                                 <!-- 路径统计 -->
                                 <el-row :gutter="20">
-                                    <el-col :span="8">
+                                    <el-col :span="6">
                                         <el-statistic 
                                             title="Total Paths" 
-                                            :value="pathsResult.analysis_summary?.total_paths || 0" />
+                                            :value="{% raw %}(pathsResult.overall_assessment && pathsResult.overall_assessment.total_paths_analyzed) || 0{% endraw %}" />
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="6">
                                         <el-statistic 
-                                            title="Critical Paths" 
-                                            :value="pathsResult.analysis_summary?.critical_paths || 0" />
+                                            title="Risk Level" 
+                                            :value="{% raw %}(pathsResult.overall_assessment && pathsResult.overall_assessment.risk_level) || 'unknown'{% endraw %}" />
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="6">
                                         <el-statistic 
-                                            title="Average Length" 
-                                            :value="pathsResult.analysis_summary?.average_length || 0" 
-                                            :precision="2" />
+                                            title="Risk Score" 
+                                            :value="{% raw %}(pathsResult.overall_assessment && pathsResult.overall_assessment.total_risk_score) || 0{% endraw %}" 
+                                            :precision="3" />
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-statistic 
+                                            title="Suspicious Patterns" 
+                                            :value="{% raw %}(pathsResult.overall_assessment && pathsResult.overall_assessment.suspicious_patterns_found) || 0{% endraw %}" />
                                     </el-col>
                                 </el-row>
 
-                                <!-- 关键路径列表 -->
-                                <div v-if="pathsResult.critical_paths">
-                                    <h4>Critical Paths</h4>
+                                <!-- 执行路径列表 -->
+                                <div v-if="pathsResult.execution_paths && pathsResult.execution_paths.length > 0">
+                                    <h4>Execution Paths</h4>
                                     <el-collapse>
                                         <el-collapse-item 
-                                            v-for="(path, index) in pathsResult.critical_paths.slice(0, 10)" 
+                                            v-for="(path, index) in pathsResult.execution_paths.slice(0, 15)" 
                                             :key="index"
-                                            :title="`Path ${index + 1} - Length: ${path.length}`">
-                                            <el-tag 
-                                                v-for="(node, nodeIndex) in path.path" 
-                                                :key="nodeIndex"
-                                                class="path-node"
-                                                v-text="node">
-                                            </el-tag>
+                                            title="Path Details">
+                                            <div class="path-details">
+                                                <p><strong>Type:</strong> <span v-text="path.path_type"></span></p>
+                                                <p v-if="path.is_temporal"><strong>Temporal Execution Order:</strong> <span v-text="getTemporalOrder(path)"></span></p>
+                                                <p v-else><strong>Path:</strong> <span v-text="getPathString(path)"></span></p>
+                                                <p><strong>Risk Score:</strong> <span v-text="getRiskScore(path)"></span></p>
+                                                <div class="path-nodes">
+                                                    <el-tag 
+                                                        v-for="(node, nodeIndex) in path.path" 
+                                                        :key="nodeIndex"
+                                                        class="path-node"
+                                                        :type="path.is_temporal ? 'success' : 'info'"
+                                                        v-text="node">
+                                                    </el-tag>
+                                                </div>
+                                            </div>
                                         </el-collapse-item>
                                     </el-collapse>
+                                </div>
+
+                                <!-- 路径类型分布 -->
+                                <div v-if="pathsResult.path_analysis && pathsResult.path_analysis.path_type_distribution">
+                                    <h4>Path Type Distribution</h4>
+                                    <el-row :gutter="10">
+                                        <el-col :span="6" v-for="(count, type) in pathsResult.path_analysis.path_type_distribution" :key="type">
+                                            <el-statistic 
+                                                :title="type.replace('_', ' ').toUpperCase()" 
+                                                :value="count" />
+                                        </el-col>
+                                    </el-row>
+                                </div>
+
+                                <!-- 推荐建议 -->
+                                <div v-if="pathsResult.recommendations && pathsResult.recommendations.length > 0">
+                                    <h4>Recommendations</h4>
+                                    <ul class="recommendations-list">
+                                        <li v-for="(rec, index) in pathsResult.recommendations" :key="index"
+                                            v-text="rec">
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </el-card>
@@ -301,7 +496,11 @@
                             
                             <el-form :model="logsForm" label-width="120px">
                                 <el-form-item label="Log File">
-                                    <el-input v-model="logsForm.logFile" placeholder="Enter log file path" />
+                                    <el-input v-model="logsForm.logFile" placeholder="Enter log file path">
+                                        <template #append>
+                                            <el-button @click="browseForLogFile" icon="Folder">Browse</el-button>
+                                        </template>
+                                    </el-input>
                                 </el-form-item>
                                 
                                 <el-form-item label="Log Format">
@@ -309,6 +508,7 @@
                                         <el-option label="Auto Detect" value="auto" />
                                         <el-option label="CSV Format" value="csv" />
                                         <el-option label="Text Format" value="txt" />
+                                        <el-option label="JSON Format (CrewAI)" value="json" />
                                     </el-select>
                                 </el-form-item>
                                 
@@ -324,6 +524,7 @@
                                         Analyze Logs
                                     </el-button>
                                     <el-button type="info" @click="loadDemoLogs">Load Demo Logs</el-button>
+                                    <el-button type="success" @click="loadJsonLogs">Load JSON Logs</el-button>
                                 </el-form-item>
                             </el-form>
 
@@ -331,51 +532,162 @@
                             <div v-if="logsResult" class="logs-result">
                                 <h3>Log Analysis Results</h3>
                                 
-                                <!-- 执行统计 -->
-                                <el-row :gutter="20">
-                                    <el-col :span="6">
-                                        <el-statistic 
-                                            title="Total Entries" 
-                                            :value="logsResult.log_summary?.total_entries || 0" />
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-statistic 
-                                            title="Execution Paths" 
-                                            :value="logsResult.execution_paths?.length || 0" />
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-statistic 
-                                            title="Anomalies" 
-                                            :value="logsResult.anomalies?.length || 0" />
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-statistic 
-                                            title="Success Rate" 
-                                            :value="calculateSuccessRate(logsResult)" 
-                                            suffix="%" />
-                                    </el-col>
-                                </el-row>
-
-                                <!-- 异常列表 -->
-                                <div v-if="logsResult.anomalies && logsResult.anomalies.length > 0">
-                                    <h4>Detected Anomalies</h4>
-                                    <el-alert 
-                                        v-for="(anomaly, index) in logsResult.anomalies" 
-                                        :key="index"
-                                        :title="anomaly.type"
-                                        :description="anomaly.description"
-                                        type="warning"
-                                        class="anomaly-alert" />
+                                <!-- JSON格式日志的特殊显示 -->
+                                <div v-if="isJsonLogResult(logsResult)" class="json-log-visualization">
+                                    <el-tabs v-model="logViewMode" type="border-card">
+                                        <el-tab-pane label="Overview" name="overview">
+                                            <!-- 执行统计 -->
+                                            <el-row :gutter="20" class="stats-row">
+                                                <el-col :span="6">
+                                                    <el-statistic 
+                                                        title="Total Entries" 
+                                                        :value="{% raw %}(logsResult.metadata && logsResult.metadata.total_entries) || 0{% endraw %}" />
+                                                </el-col>
+                                                <el-col :span="6">
+                                                    <el-statistic 
+                                                        title="Agent Executions" 
+                                                        :value="{% raw %}getAgentExecutions(logsResult).length{% endraw %}" />
+                                                </el-col>
+                                                <el-col :span="6">
+                                                    <el-statistic 
+                                                        title="Tool Calls" 
+                                                        :value="getToolExecutions(logsResult).length" />
+                                                </el-col>
+                                                <el-col :span="6">
+                                                    <el-statistic 
+                                                        title="Unique Agents" 
+                                                        :value="getUniqueAgents(logsResult).length" />
+                                                </el-col>
+                                            </el-row>
+                                        </el-tab-pane>
+                                        
+                                        <el-tab-pane label="Execution Flow" name="flow">
+                                            <div class="execution-flow">
+                                                <div v-for="(entry, index) in logsResult.execution_log" :key="index" 
+                                                     class="execution-entry" :class="entry.entry_type">
+                                                    <div class="entry-header">
+                                                        <el-tag :type="{% raw %}getEntryTagType(entry.entry_type){% endraw %}">
+                                                            {% raw %}{{ entry.entry_type.replace('_', ' ').toUpperCase() }}{% endraw %}
+                                                        </el-tag>
+                                                        <span class="entry-id">{% raw %}{{ entry.example_id }}{% endraw %}</span>
+                                                        <span class="entry-time">{% raw %}{{ formatTime(entry.timestamp) }}{% endraw %}</span>
+                                                    </div>
+                                                    
+                                                    <div v-if="entry.agent && entry.agent.role" class="agent-info">
+                                                        <h4>🤖 {% raw %}{{ entry.agent.role }}{% endraw %}</h4>
+                                                        <p><strong>Goal:</strong> {% raw %}{{ entry.agent.goal }}{% endraw %}</p>
+                                                        <p><strong>Backstory:</strong> {% raw %}{{ entry.agent.backstory }}{% endraw %}</p>
+                                                    </div>
+                                                    
+                                                    <div v-if="entry.task && entry.task.from" class="email-info">
+                                                        <h4>📧 Email Task</h4>
+                                                        <p><strong>From:</strong> {% raw %}{{ entry.task.from }}{% endraw %}</p>
+                                                        <p><strong>Subject:</strong> {% raw %}{{ entry.task.subject }}{% endraw %}</p>
+                                                        <div v-if="entry.task.body" class="email-body">
+                                                            <strong>Content:</strong>
+                                                            <p>{% raw %}{{ entry.task.body }}{% endraw %}</p>
+                                                        </div>
+                                                        <div v-if="entry.task.classification_rules && entry.task.classification_rules.length" class="classification-rules">
+                                                            <strong>Classification Rules:</strong>
+                                                            <ul>
+                                                                <li v-for="rule in entry.task.classification_rules" :key="rule.category">
+                                                                    <strong>{% raw %}{{ rule.category }}{% endraw %}:</strong> {% raw %}{{ rule.description }}{% endraw %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div v-if="entry.output && entry.output.raw" class="output-info">
+                                                        <h4>📤 Output</h4>
+                                                        <pre class="output-content">{% raw %}{{ entry.output.raw }}{% endraw %}</pre>
+                                                    </div>
+                                                    
+                                                    <div v-if="entry.tools && entry.tools.length" class="tools-info">
+                                                        <h4>🔧 Tools Used</h4>
+                                                        <el-tag v-for="tool in entry.tools" :key="tool.name" class="tool-tag">
+                                                            {% raw %}{{ tool.name }}{% endraw %}
+                                                        </el-tag>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                        
+                                        <el-tab-pane label="Agent Timeline" name="timeline">
+                                            <div class="agent-timeline">
+                                                <el-timeline>
+                                                    <el-timeline-item 
+                                                        v-for="(entry, index) in logsResult.execution_log" 
+                                                        :key="index"
+                                                        :timestamp="{% raw %}formatTime(entry.timestamp){% endraw %}"
+                                                        :type="{% raw %}getTimelineType(entry.entry_type){% endraw %}">
+                                                        <div class="timeline-content">
+                                                            <h4>{% raw %}{{ (entry.agent && entry.agent.role) || 'System' }}{% endraw %}</h4>
+                                                            <p v-if="{% raw %}entry.task && entry.task.subject{% endraw %}">📧 {% raw %}{{ entry.task.subject }}{% endraw %}</p>
+                                                            <p v-if="{% raw %}entry.output && entry.output.raw{% endraw %}" class="output-preview">
+                                                                {% raw %}{{ truncateText(entry.output.raw, 100) }}{% endraw %}
+                                                            </p>
+                                                        </div>
+                                                    </el-timeline-item>
+                                                </el-timeline>
+                                            </div>
+                                        </el-tab-pane>
+                                        
+                                        <el-tab-pane label="Raw Data" name="raw">
+                                            <div class="raw-data">
+                                                <pre class="json-display">{% raw %}{{ JSON.stringify(logsResult, null, 2) }}{% endraw %}</pre>
+                                            </div>
+                                        </el-tab-pane>
+                                    </el-tabs>
                                 </div>
+                                
+                                <!-- 传统格式日志的显示 -->
+                                <div v-else class="traditional-log-result">
+                                    <!-- 执行统计 -->
+                                    <el-row :gutter="20">
+                                        <el-col :span="6">
+                                            <el-statistic 
+                                                title="Total Entries" 
+                                                :value="{% raw %}(logsResult.log_summary && logsResult.log_summary.total_entries) || 0{% endraw %}" />
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <el-statistic 
+                                                title="Execution Paths" 
+                                                :value="{% raw %}(logsResult.execution_paths && logsResult.execution_paths.length) || 0{% endraw %}" />
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <el-statistic 
+                                                title="Anomalies" 
+                                                :value="{% raw %}(logsResult.anomalies && logsResult.anomalies.length) || 0{% endraw %}" />
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <el-statistic 
+                                                title="Success Rate" 
+                                                :value="calculateSuccessRate(logsResult)" 
+                                                suffix="%" />
+                                        </el-col>
+                                    </el-row>
 
-                                <!-- 建议 -->
-                                <div v-if="logsResult.recommendations && logsResult.recommendations.length > 0">
-                                    <h4>Optimization Recommendations</h4>
-                                    <ul class="recommendations-list">
-                                        <li v-for="(rec, index) in logsResult.recommendations" :key="index"
-                                            v-text="rec">
-                                        </li>
-                                    </ul>
+                                    <!-- 异常列表 -->
+                                    <div v-if="logsResult.anomalies && logsResult.anomalies.length > 0">
+                                        <h4>Detected Anomalies</h4>
+                                        <el-alert 
+                                            v-for="(anomaly, index) in logsResult.anomalies" 
+                                            :key="index"
+                                            :title="anomaly.type"
+                                            :description="anomaly.description"
+                                            type="warning"
+                                            class="anomaly-alert" />
+                                    </div>
+
+                                    <!-- 建议 -->
+                                    <div v-if="logsResult.recommendations && logsResult.recommendations.length > 0">
+                                        <h4>Optimization Recommendations</h4>
+                                        <ul class="recommendations-list">
+                                            <li v-for="(rec, index) in logsResult.recommendations" :key="index"
+                                                v-text="rec">
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </el-card>
@@ -452,8 +764,74 @@
         </el-dialog>
 
         <!-- 结果查看对话框 -->
-        <el-dialog v-model="showResultDialog" :title="currentResult?.filename" width="80%">
+        <el-dialog v-model="showResultDialog" :title="{% raw %}(currentResult && currentResult.filename) || 'Result'{% endraw %}" width="80%">
             <pre class="result-content" v-text="JSON.stringify(currentResultData, null, 2)"></pre>
+        </el-dialog>
+
+        <!-- 文件浏览器对话框 -->
+        <el-dialog 
+            v-model="showFileBrowser" 
+            :title="fileBrowserTitle" 
+            width="70%"
+            @close="closeBrowser">
+            <div class="file-browser">
+                <div class="browser-header">
+                    <el-breadcrumb separator="/">
+                        <el-breadcrumb-item v-text="currentBrowserPath"></el-breadcrumb-item>
+                    </el-breadcrumb>
+                    <div v-if="fileBrowserMode === 'directory'" style="margin-top: 10px;">
+                        <el-button type="primary" @click="selectCurrentDirectory">Select This Directory</el-button>
+                    </div>
+                </div>
+                
+                <el-table 
+                    :data="browserItems" 
+                    v-loading="browserLoading"
+                    @row-click="onBrowserItemClick"
+                    style="width: 100%; margin-top: 15px; cursor: pointer;">
+                    <el-table-column prop="name" label="Name" min-width="200">
+                        <template #default="scope">
+                            <div style="display: flex; align-items: center;">
+                                <el-icon v-if="scope.row.type === 'directory'" style="margin-right: 8px; color: #409EFF;">
+                                    <Folder />
+                                </el-icon>
+                                <el-icon v-else style="margin-right: 8px; color: #67C23A;">
+                                    <Document />
+                                </el-icon>
+                                <span v-text="scope.row.name"></span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type" label="Type" width="100">
+                        <template #default="scope">
+                            <el-tag :type="scope.row.type === 'directory' ? 'primary' : 'success'" size="small">
+                                <span v-text="scope.row.type"></span>
+                            </el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="size" label="Size" width="100">
+                        <template #default="scope">
+                            <span v-if="scope.row.type === 'file'" v-text="formatFileSize(scope.row.size)"></span>
+                            <span v-else>-</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="modified" label="Modified" width="180">
+                        <template #default="scope">
+                            <span v-if="scope.row.type === 'file'" v-text="formatDate(scope.row.modified)"></span>
+                            <span v-else>-</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button @click="closeBrowser">Cancel</el-button>
+                    <el-button v-if="fileBrowserMode === 'directory'" type="primary" @click="selectCurrentDirectory">
+                        Select Directory
+                    </el-button>
+                </div>
+            </template>
         </el-dialog>
     </div>
 

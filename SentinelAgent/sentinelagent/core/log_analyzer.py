@@ -42,6 +42,13 @@ class ErrorSeverity(Enum):
     HIGH = "high"
     CRITICAL = "critical"
 
+class PathStatus(Enum):
+    """Execution path status"""
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    INTERRUPTED = "interrupted"
+
 @dataclass
 class LogEntry:
     """Log entry data structure"""
@@ -78,8 +85,11 @@ class ErrorInfo:
     context: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
+@dataclass
 class AnalysisResult:
     """Analysis result container"""
+    # 添加可选的log_entries字段以支持新的JSON分析器
+    log_entries: List[LogEntry] = field(default_factory=list)
     execution_paths: List[ExecutionPath] = field(default_factory=list)
     errors: List[ErrorInfo] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
@@ -142,7 +152,7 @@ class ExecutionLogAnalyzer:
         
         Args:
             log_file_path: Path to the log file
-            file_type: File type ("csv", "txt", "auto")
+            file_type: File type ("csv", "txt", "json", "auto")
             
         Returns:
             AnalysisResult: Analysis result
@@ -152,7 +162,13 @@ class ExecutionLogAnalyzer:
             if file_type == "auto":
                 file_type = self._detect_file_type(log_file_path)
             
-            # Parse log file
+            # 如果是JSON格式，使用JSON专用分析器
+            if file_type == "json":
+                from .json_log_analyzer import JSONLogAnalyzer
+                json_analyzer = JSONLogAnalyzer(self.system_graph)
+                return json_analyzer.analyze_json_log(log_file_path)
+            
+            # Parse log file (for CSV and TXT)
             log_entries = self._parse_log_file(log_file_path, file_type)
             
             # Extract execution paths
@@ -195,12 +211,16 @@ class ExecutionLogAnalyzer:
             return "csv"
         elif file_path.endswith('.txt') or file_path.endswith('.log'):
             return "txt"
+        elif file_path.endswith('.json'):
+            return "json"
         else:
             # Detect by file content
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     first_line = f.readline().strip()
-                    if ',' in first_line and ('input_messages' in first_line or 'role' in first_line):
+                    if first_line.startswith('{') or first_line.startswith('['):
+                        return "json"
+                    elif ',' in first_line and ('input_messages' in first_line or 'role' in first_line):
                         return "csv"
                     else:
                         return "txt"
